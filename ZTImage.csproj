@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8E9A9F36-9C58-4E5D-A14F-1D2C38A17E95}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZTImage</RootNamespace>
+    <AssemblyName>ZTImage</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ZTImage.Reflection, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ZTImage.Reflection.1.0.1\lib\net45\ZTImage.Reflection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\EnumableStringExistenion.cs" />
+    <Compile Include="Collections\MutilList.cs" />
+    <Compile Include="Collections\MutilObject.cs" />
+    <Compile Include="Collections\TreeEx.cs" />
+    <Compile Include="Collections\Tree\KubiuNode.cs" />
+    <Compile Include="Collections\Tree\KubiuTree.cs" />
+    <Compile Include="HttpEx.cs" />
+    <Compile Include="Log\FileLogOutput.cs" />
+    <Compile Include="Log\ILogOutput.cs" />
+    <Compile Include="Log\Log.cs" />
+    <Compile Include="Log\LogLevel.cs" />
+    <Compile Include="NumberEx\NumberUtils.cs" />
+    <Compile Include="TypeConverter.cs" />
+    <Compile Include="Common\Utils.cs" />
+    <Compile Include="ZTObject.cs" />
+    <Compile Include="Diagnostics\CodeTimer.cs" />
+    <Compile Include="Diagnostics\DumpHelper.cs" />
+    <Compile Include="Exception\DatabaseException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Cryptography\BlowFish.cs" />
+    <Compile Include="Security\Cryptography\HMAC.cs" />
+    <Compile Include="Security\Cryptography\MD5.cs" />
+    <Compile Include="Security\Cryptography\SHA1.cs" />
+    <Compile Include="Security\DiscuzAuth.cs" />
+    <Compile Include="Text\Coding.cs" />
+    <Compile Include="Text\StringExtension.cs" />
+    <Compile Include="Text\TextUtils.cs" />
+    <Compile Include="Text\Valid.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DateTimeEx\" />
+    <Folder Include="Reflection\" />
+    <Folder Include="StreamEx\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
