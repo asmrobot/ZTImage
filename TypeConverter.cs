@@ -721,7 +721,29 @@ namespace ZTImage
             }
             return null;
         }
-
         
+
+        /// <summary>
+        /// 对象转GUID
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="defValue"></param>
+        /// <returns></returns>
+        public static Guid ObjectToGuid(object value)
+        {
+            if (value == null)
+            {
+                return Guid.Empty;
+            }
+            Guid v;
+            if (Guid.TryParse(value.ToString(), out v))
+            {
+                return v;
+            }
+            return Guid.Empty;
+        }
+
+
+
     }
 }

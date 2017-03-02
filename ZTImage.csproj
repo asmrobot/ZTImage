@@ -46,8 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\EnumableStringExistenion.cs" />
-    <Compile Include="Collections\MutilList.cs" />
-    <Compile Include="Collections\MutilObject.cs" />
+    <Compile Include="Collections\MultiList.cs" />
+    <Compile Include="Collections\MultiObject.cs" />
     <Compile Include="Collections\TreeEx.cs" />
     <Compile Include="Collections\Tree\KubiuNode.cs" />
     <Compile Include="Collections\Tree\KubiuTree.cs" />

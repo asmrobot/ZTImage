@@ -184,7 +184,7 @@ namespace ZTImage.Text
         /// <returns>转换后的int类型结果</returns>
         public static int ToInt(this string str,int defaultVal=0)
         {
-            return TypeConverter.StringToInt(str, defaultVal);
+            return ZTImage.TypeConverter.StringToInt(str, defaultVal);
         }
 
 
@@ -197,7 +197,7 @@ namespace ZTImage.Text
         /// <returns>转换后的int类型结果</returns>
         public static float ToFloat(this string strValue, float defaultVal = 0)
         {
-            return TypeConverter.StringToFloat(strValue, defaultVal);
+            return ZTImage.TypeConverter.StringToFloat(strValue, defaultVal);
         }
         #endregion
 

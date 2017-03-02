@@ -8,13 +8,13 @@ namespace ZTImage.Collections
     /// <summary>
     /// 聚合对象
     /// </summary>
-    public class MutilObject<T1, T2>
+    public class MultiObject<T1, T2>
     {
-        public MutilObject()
+        public MultiObject()
         {
 
         }
-        public MutilObject(T1 item1, T2 item2)
+        public MultiObject(T1 item1, T2 item2)
         {
             this.Item1 = item1;
             this.Item2 = item2;
@@ -29,13 +29,13 @@ namespace ZTImage.Collections
     /// <summary>
     /// 聚合对象
     /// </summary>
-    public class MutilObject<T1, T2, T3>
+    public class MultiObject<T1, T2, T3>
     {
-        public MutilObject()
+        public MultiObject()
         {
 
         }
-        public MutilObject(T1 item1, T2 item2, T3 item3)
+        public MultiObject(T1 item1, T2 item2, T3 item3)
         {
             this.Item1 = item1;
             this.Item2 = item2;
@@ -55,13 +55,13 @@ namespace ZTImage.Collections
     /// <summary>
     /// 聚合对象
     /// </summary>
-    public class MutilObject<T1, T2, T3, T4>
+    public class MultiObject<T1, T2, T3, T4>
     {
-        public MutilObject()
+        public MultiObject()
         {
 
         }
-        public MutilObject(T1 item1, T2 item2, T3 item3, T4 item4)
+        public MultiObject(T1 item1, T2 item2, T3 item3, T4 item4)
         {
             this.Item1 = item1;
             this.Item2 = item2;
@@ -82,13 +82,13 @@ namespace ZTImage.Collections
     /// <summary>
     /// 聚合对象
     /// </summary>
-    public class MutilObject<T1, T2, T3, T4, T5>
+    public class MultiObject<T1, T2, T3, T4, T5>
     {
-        public MutilObject()
+        public MultiObject()
         {
 
         }
-        public MutilObject(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5)
+        public MultiObject(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5)
         {
             this.Item1 = item1;
             this.Item2 = item2;
