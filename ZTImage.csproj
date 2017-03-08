@@ -39,8 +39,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZTImage.Reflection, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ZTImage.Reflection.1.0.1\lib\net45\ZTImage.Reflection.dll</HintPath>
+    <Reference Include="ZTImage.Reflection, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ZTImage.Reflection.1.0.2\lib\net45\ZTImage.Reflection.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
