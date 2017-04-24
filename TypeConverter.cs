@@ -65,6 +65,10 @@ namespace ZTImage
             for (int i = 0; i < values.Length; i++)
             {
                 builder.Append("0x" + values[i].ToString("X2"));
+                if (i < values.Length-1)
+                {
+                    builder.Append(",");
+                }
             }
             return builder.ToString();
         }
