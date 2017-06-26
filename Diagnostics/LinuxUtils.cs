@@ -16,7 +16,7 @@ namespace ZTImage.Diagnostics
         /// 守护方式运行
         /// </summary>
         /// <param name="args"></param>
-        public static void DaemonRun(ThreadStart thread)
+        public static void DaemonRun(Action<string[]> thread)
         {
             /*usage
             if (Environment.OSVersion.Platform == PlatformID.Unix)
@@ -33,25 +33,34 @@ namespace ZTImage.Diagnostics
 
                 if (isDaemon)
                 {
-                    LinuxUtils.DaemonRun(new ThreadStart(Dowork));
+                    LinuxUtils.DaemonRun(Dowork);
                     return;
                 }
             }
 
-            Dowork();
+            Dowork(args);
             return;
              */
-             
+
+
             if (Environment.OSVersion.Platform != PlatformID.Unix)
             {
                 return;
             }
-            
+
+            string[] paras = new string[Environment.GetCommandLineArgs().Length-1];
+            if (paras.Length > 0)
+            {
+                Array.Copy(Environment.GetCommandLineArgs(), 1, paras, 0, paras.Length);
+            }
+
             // 判断是否已经进入Daemon状态，如果是，就直接执行后台主函数
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable(DAEMON_TAG)))
             {
                 Environment.SetEnvironmentVariable(DAEMON_TAG, null);
-                (new Thread(thread) { IsBackground = true }).Start();
+                (new Thread(()=>{
+                    thread(paras);
+                }) { IsBackground = true }).Start();
                 (new AutoResetEvent(false)).WaitOne();//阻止daemon进程退出
                 return;
             }
@@ -74,19 +83,15 @@ namespace ZTImage.Diagnostics
             Environment.SetEnvironmentVariable(DAEMON_TAG, "yes");
 
             //为execp参数重组参数
-            var args = Environment.GetCommandLineArgs().Length <= 1 ? new string[2] : new string[Environment.GetCommandLineArgs().Length + 1];
+            var args = paras.Length <=0 ? new string[2] : new string[paras.Length+2];
 
             args[0] = "ztimage_daemon";
             args[1] = Path.Combine(Environment.CurrentDirectory, Thread.GetDomain().FriendlyName);
-
-
-            if (args.Length > 2)
+            for (var i = 0; i < paras.Length; i++)
             {
-                for (var i = 2; i < args.Length; i++)
-                {
-                    args[i] = Environment.GetCommandLineArgs()[i - 1];
-                }
+                args[i + 2] = paras[i];
             }
+            
 
             //守护状态下重新加载和运行本程序
             execvp("mono", args);
