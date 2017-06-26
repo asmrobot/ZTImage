@@ -54,10 +54,14 @@
     <Compile Include="Diagnostics\LinuxUtils.cs" />
     <Compile Include="HttpEx.cs" />
     <Compile Include="IdWorkder.cs" />
-    <Compile Include="Log\FileLogOutput.cs" />
-    <Compile Include="Log\ILogOutput.cs" />
-    <Compile Include="Log\Log.cs" />
+    <Compile Include="Log\ConsoleListener.cs" />
+    <Compile Include="Log\DiagnosticListener.cs" />
+    <Compile Include="Log\FileListener.cs" />
+    <Compile Include="Log\ITraceListener.cs" />
+    <Compile Include="Log\ListenerWrapper.cs" />
     <Compile Include="Log\LogLevel.cs" />
+    <Compile Include="Log\LogSplitType.cs" />
+    <Compile Include="Log\Trace.cs" />
     <Compile Include="NumberEx\NumberUtils.cs" />
     <Compile Include="TypeConverter.cs" />
     <Compile Include="Common\Utils.cs" />
