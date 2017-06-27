@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 namespace ZTImage.Security
 {
     /// <summary>
-    /// 图像加密类
+    /// logistic映射
+    /// 可用于图像加密
     /// </summary>
-    public class ImageHelper
+    public class Logistic
     {
+        private const double CONST_U = 3.62;
+        private const double CONST_X0 = 0.314159;
 
         public static byte[] Encrypt(byte[] data)
         {
-            return Encrypt(data, 3.62, 0.314159);
+            return Encrypt(data, CONST_U, CONST_X0);
         }
         
         /// <summary>
@@ -32,10 +35,9 @@ namespace ZTImage.Security
 
             for (int i = 0; i < data.Length; i++)
             {
-                x = logistic(u, x, 5);
-                res[i] = Convert.ToByte(Convert.ToInt32(Math.Floor(x * 1000)) % 256 ^ data[i]);//取x小数点后3位来生成密钥
+                x = logistic(u, x, 5);                
+                res[i] = Convert.ToByte((Int32)Math.Floor(x * 1000) % 256 ^ data[i]);//取x小数点后3位来生成密钥
             }
-
             return res;
         }
 
