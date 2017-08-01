@@ -114,9 +114,9 @@ namespace ZTImage.Algorithm
             private int cap;
             private int seed;
 
-            public SimpleHash(int cap, int seed)
+            public SimpleHash(int capacity, int seed)
             {
-                this.cap = cap;
+                this.cap = capacity;
                 this.seed = seed;
             }
 

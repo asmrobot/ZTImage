@@ -31,5 +31,20 @@ namespace ZTImage.Security.Cryptography
             return EnText.ToString();
         }
 
+
+
+        /// <summary>
+        /// 编码
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static byte[] EncryptToBytes(string value)
+        {
+            byte[] StrRes = Encoding.Default.GetBytes(value);
+            HashAlgorithm iSHA = new SHA1CryptoServiceProvider();
+            StrRes = iSHA.ComputeHash(StrRes);
+            return StrRes;
+        }
+
     }
 }
