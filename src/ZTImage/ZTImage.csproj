@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--<TargetFramework>net45</TargetFramework>-->
+    <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
+    <Title>ZTImage utils library</Title>
+    <Description>combine any operate and more.</Description>
+    <Copyright>Copyright 2016–2017 asmrobot</Copyright>
+    <Authors>asmrobot</Authors>
+    <AssemblyName>ZTImage</AssemblyName>
+    <PackageId>ZTImage</PackageId>
+    <PackageTags>ztimage;utils;netcore</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+    <DefineConstants>NET45</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>1.1.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+</Project>

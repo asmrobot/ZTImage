@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <Version>2.1.0</Version>
+    <Description>Database Access Helper</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Database Access Helper</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/asmrobot/ZTImage-Core</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/asmrobot/ZTImage-Core/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Apache License 2.0</Copyright>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+    <DefineConstants>NET45</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="DBProvider\AccessProvider.cs" />
+    <Compile Remove="Helper\MySQLDB.cs" />
+    <Compile Remove="Helper\SqlServerDB.cs" />
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Helper\MySQLDB.cs" />
+    <None Include="Helper\SqlServerDB.cs" />
+  </ItemGroup>
+
+
+  <!--<ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
+    --><!--<PackageReference Include="MySql.Data" Version="6.10.5" />--><!--
+    <PackageReference Include="MySqlConnector" Version="0.26.4" />
+  </ItemGroup>-->
+  
+  
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
+    <PackageReference Include="MySql.Data" Version="6.10.5" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <PackageReference Include="MySql.Data" Version="6.9.10" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.106" />
+  </ItemGroup>
+  
+  <ItemGroup>    
+    
+    <PackageReference Include="ZTImage" Version="1.1.0" />
+  </ItemGroup>
+  
+
+</Project>
