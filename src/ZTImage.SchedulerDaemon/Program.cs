@@ -9,6 +9,7 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using ZTImage.Configuration;
+using System.Threading;
 
 namespace ZTImage.SchedulerDaemon
 {
@@ -24,10 +25,23 @@ namespace ZTImage.SchedulerDaemon
             mEngine.Initialize();
 
             mEngine.Start();
+            ThreadPool.QueueUserWorkItem(Do);
+
+            Console.WriteLine("starting");
             Console.ReadKey();
             mEngine.Stop(true);
 
+
+            
             new System.Threading.ManualResetEvent(true).WaitOne();
+        }
+
+
+        static void Do(object val)
+        {
+            Thread.Sleep(3000);
+
+            mEngine.GetJobList();
         }
         
         

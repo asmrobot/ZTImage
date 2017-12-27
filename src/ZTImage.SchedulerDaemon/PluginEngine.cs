@@ -1,5 +1,7 @@
 ﻿using Quartz;
+using Quartz.Collection;
 using Quartz.Impl;
+using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -88,9 +90,16 @@ namespace ZTImage.SchedulerDaemon
         /// <summary>
         /// 得到任务列表
         /// </summary>
-        public void GetJobList()
+        public List<IJobDetail> GetJobList()
         {
-            
+            List<IJobDetail> details = new List<IJobDetail>();
+            Quartz.Collection.ISet<JobKey> jobs=scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
+            foreach (var item in jobs)
+            {
+                IJobDetail detail=scheduler.GetJobDetail(item);
+                details.Add(detail);
+            }
+            return details;
         }
 
 
