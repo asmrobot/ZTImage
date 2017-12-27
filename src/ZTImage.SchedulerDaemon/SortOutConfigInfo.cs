@@ -11,6 +11,9 @@ namespace ZTImage.SchedulerDaemon
     [ConfigPath("configs","sortout.config")]
     public class SortOutConfigInfo
     {
+        /// <summary>
+        /// 任务列表
+        /// </summary>
         [XmlArray]
         public JobInfo[] Jobs
         {
@@ -37,6 +40,15 @@ namespace ZTImage.SchedulerDaemon
                 }
                 throw new ArgumentNullException("jobs return ");
             }
+        }
+
+        /// <summary>
+        /// 对外服务端口号
+        /// </summary>
+        public Int32 Port
+        {
+            get;
+            set;
         }
     }
 

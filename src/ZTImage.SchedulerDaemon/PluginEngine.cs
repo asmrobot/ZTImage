@@ -22,7 +22,9 @@ namespace ZTImage.SchedulerDaemon
         private Int32 InitializeState = 0;
         private ISchedulerFactory factory;
         private IScheduler scheduler;
-        
+        private SortOutConfigInfo mConfig;
+
+        #region 周期操作
         /// <summary>
         /// 初始化任务
         /// </summary>
@@ -81,7 +83,17 @@ namespace ZTImage.SchedulerDaemon
         {
             scheduler.ResumeAll();
         }
-        
+        #endregion
+
+        /// <summary>
+        /// 得到任务列表
+        /// </summary>
+        public void GetJobList()
+        {
+            
+        }
+
+
         /// <summary>
         /// 加载程序集
         /// </summary>
@@ -148,28 +160,28 @@ namespace ZTImage.SchedulerDaemon
             scheduler = factory.GetScheduler();
 
 
-            var info = ConfigHelper.GetInstance<SortOutConfigInfo>();
-            for (int j = 0; j < info.Jobs.Length; j++)
+            mConfig = ConfigHelper.GetInstance<SortOutConfigInfo>();
+            for (int j = 0; j < mConfig.Jobs.Length; j++)
             {
-                JobInfo job = info.Jobs[j];
+                JobInfo job = mConfig.Jobs[j];
                 Type type = null;
                 try
                 {
                     Assembly asm = GetAssembly(job.JobAssembly);
                     if (asm == null)
                     {
-                        throw new ArgumentException("程序集未找到");
+                        throw new ArgumentException("程序集未找到:"+job.JobAssembly);
                     }
 
                     type = asm.GetType(job.JobType);
                     if (type == null)
                     {
-                        throw new ArgumentException("类型未找到");
+                        throw new ArgumentException("类型未找到:"+job.JobType);
                     }
                 }
                 catch (Exception ex)
                 {
-                    ZTImage.Log.Trace.Error("查找类型失败");
+                    ZTImage.Log.Trace.Error("查找类型失败:"+job.JobType);
                     continue;
                 }
 
@@ -180,7 +192,7 @@ namespace ZTImage.SchedulerDaemon
                     jobDetail.JobDataMap.Put("data", job.Data);
 
                     ITrigger trigger = TriggerBuilder.Create()
-                       .WithIdentity("trigger1", TriggerKey.DefaultGroup)
+                       .WithIdentity(job.Name+"_trigger", TriggerKey.DefaultGroup)
                        .WithCronSchedule(job.Cron)
                        .Build();
 
@@ -188,7 +200,7 @@ namespace ZTImage.SchedulerDaemon
                 }
                 catch (Exception ex)
                 {
-                    ZTImage.Log.Trace.Error("添加任务调度失败");
+                    ZTImage.Log.Trace.Error("添加任务调度失败:"+job.Name,ex);
                     continue;
                 }
             }
