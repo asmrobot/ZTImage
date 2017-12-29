@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoNetCore", "DemoNetCore\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Database", "ZTImage.Database\ZTImage.Database.csproj", "{830DDEB3-AB25-457C-B249-27BF4BC38427}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.SchedulerDaemon", "ZTImage.SchedulerDaemon\ZTImage.SchedulerDaemon.csproj", "{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.SchedulerDaemon", "ZTImage.SchedulerDaemon\ZTImage.SchedulerDaemon.csproj", "{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

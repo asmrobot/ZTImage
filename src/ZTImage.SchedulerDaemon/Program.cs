@@ -22,8 +22,7 @@ namespace ZTImage.SchedulerDaemon
             ZTImage.Log.Trace.EnableConsole();
             
             mEngine = new PluginEngine();
-            mEngine.Initialize();
-
+            
             mEngine.Start();
             ThreadPool.QueueUserWorkItem(Do);
 
