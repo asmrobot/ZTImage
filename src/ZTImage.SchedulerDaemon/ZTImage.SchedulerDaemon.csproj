@@ -26,13 +26,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Plugins\ClassLibrary2\**" />
+	  <EmbeddedResource Remove="Plugins\ClassLibrary2\**" />
+	  <None Remove="Plugins\ClassLibrary2\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="ZTImage" Version="1.1.0" />
 	</ItemGroup>
 
   <ItemGroup>
-    <None Update="configs\db.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="configs\sortout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -42,10 +45,6 @@
     <None Update="Plugins\Readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Plugins\ClassLibrary2\" />
   </ItemGroup>
 
 </Project>
