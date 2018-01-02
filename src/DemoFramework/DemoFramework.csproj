@@ -40,9 +40,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZTImage, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ZTImage.1.1.0\lib\net45\ZTImage.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -50,12 +47,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="configs\nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZTImage.Database\ZTImage.Database.csproj">
       <Project>{830ddeb3-ab25-457c-b249-27bf4bc38427}</Project>
       <Name>ZTImage.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZTImage.Log\ZTImage.Log.csproj">
+      <Project>{24eb2ca7-de3a-4a51-be69-e6914258b78a}</Project>
+      <Name>ZTImage.Log</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

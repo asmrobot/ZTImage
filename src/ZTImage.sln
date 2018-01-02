@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Database", "ZTImage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.SchedulerDaemon", "ZTImage.SchedulerDaemon\ZTImage.SchedulerDaemon.csproj", "{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.Log", "ZTImage.Log\ZTImage.Log.csproj", "{24EB2CA7-DE3A-4A51-BE69-E6914258B78A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24EB2CA7-DE3A-4A51-BE69-E6914258B78A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24EB2CA7-DE3A-4A51-BE69-E6914258B78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24EB2CA7-DE3A-4A51-BE69-E6914258B78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24EB2CA7-DE3A-4A51-BE69-E6914258B78A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

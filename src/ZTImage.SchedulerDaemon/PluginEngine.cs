@@ -23,10 +23,11 @@ namespace ZTImage.SchedulerDaemon
         static PluginEngine()
         {
             IgnoreDlls.Add("sni.dll".ToUpper(), true);
-
+            IgnoreDlls.Add("NLog.dll".ToUpper(), true);
             IgnoreDlls.Add("Quartz.dll".ToUpper(), true);
             IgnoreDlls.Add("ZTImage.dll".ToUpper(), true);
 
+            IgnoreDlls.Add("ZTImage.Log.dll".ToUpper(), true);
             IgnoreDlls.Add("Common.Logging.dll".ToUpper(), true);
             IgnoreDlls.Add("Common.Logging.Core.dll".ToUpper(), true);
 
