@@ -12,19 +12,15 @@ namespace DemoFramework
     {
         static void Main(string[] args)
         {
+            Trace.EnableListener(NLog.Instance);
+            
+            Trace.Debug("Debug");
+            Trace.Info("Info");
+            Trace.Warn("Warn");
+            Trace.Error("Error");
+            Trace.Fatal("Fatal");
 
             Console.WriteLine("complete");
-            NLog.Debug("ok");
-            //ZTImage.Database.HelperBase.SQLDBHelper helper = null;
-            //if (helper != null)
-            //{
-            //    helper.ExecuteNonQuery("ok");
-            //}
-
-            //object obj = 1;
-
-            //Console.WriteLine(ZTImage.TypeConverter.ObjectToInt(obj, 0));
-            //Console.WriteLine(ZTImage.ZTID.Instance.NextId());
 
             Console.ReadKey();
         }
