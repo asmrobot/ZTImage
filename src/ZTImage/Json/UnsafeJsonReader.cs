@@ -348,9 +348,9 @@ namespace ZTImage.Json
                 {
                     _str[_index++] = new string(_p, 0, _position);
                 }
-                else
+                if (_index >= 3)
                 {
-                    _str[0] = string.Concat(_str[0], _str[1], _str[2], new string(_p, 0, _position));
+                    _str[0] = string.Concat(_str[0], _str[1], _str[2]);
                     _index = 1;
                 }
                 _position = 0;
@@ -534,6 +534,11 @@ namespace ZTImage.Json
                 }
             } while (_Current != quot);//是否是结束字符
 
+            if (datetime[2] == -1 && numindex == 2)
+            {
+                datetime[numindex++] = number;
+            }
+
             if (datetime[2] == -1 && datetime[10] >= 0)
             {
                 datetime[2] = datetime[1];
@@ -575,8 +580,13 @@ namespace ZTImage.Json
             {
                 MoveNext();
             }
+
             var str = new string(_P, index, _Position - index);
-            return DateTime.Parse(str);
+            MoveNext();
+            DateTime dt = DateTime.MinValue;
+            DateTime.TryParse(str, out dt);
+            return dt;
+
         }
 
         /// <summary> 获取时间中的英文字符,返回127 = GMT, 大于0 表示月份, 小于0 表示星期
