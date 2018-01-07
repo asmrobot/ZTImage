@@ -394,6 +394,14 @@ namespace ZTImage.Json
                     return Enum.Parse(type, reader.ReadString());
                 }
                 quot = reader.Current;
+                if (quot != '\"' && quot != '\'')
+                {
+                    ThrowMissingCharException(quot);
+                }
+                if (reader.SkipChar(quot) == false)
+                {
+                    ThrowMissingCharException(quot);
+                }
                 var val = Convert.ChangeType(reader.ReadConsts(), type);
                 if (reader.SkipChar(quot) == false)
                 {
@@ -409,13 +417,20 @@ namespace ZTImage.Json
                     str = reader.ReadString();
                     if (type == typeof(Guid))
                     {
-                        if (str.Length > 30)//这个是从fastJson学来的 =^_^=
+                        try
                         {
-                            return new Guid(str);
+                            if (str.Length > 30)
+                            {
+                                return new Guid(str);
+                            }
+                            else
+                            {
+                                return new Guid(Convert.FromBase64String(str));
+                            }
                         }
-                        else
+                        catch
                         {
-                            return new Guid(Convert.FromBase64String(str));
+                            return Guid.Empty;
                         }
                     }
                     else if (type == typeof(Object))

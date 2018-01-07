@@ -73,7 +73,7 @@ namespace ZTImage
                 HttpWebRequest request = WebRequest.CreateHttp(url);
                 request.Method = "GET";
                 WebResponse response = request.GetResponse();
-
+                
                 HttpWebResponse r = response as HttpWebResponse;
                 if (r.StatusCode == HttpStatusCode.OK)
                 {
@@ -84,7 +84,7 @@ namespace ZTImage
                     return Stream.Null;
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 return Stream.Null;
             }

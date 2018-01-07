@@ -10,6 +10,7 @@ using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using ZTImage.Configuration;
 using System.Threading;
+using ZTImage.Log;
 
 namespace ZTImage.SchedulerDaemon
 {
@@ -19,19 +20,15 @@ namespace ZTImage.SchedulerDaemon
 
         static void Main(string[] args)
         {
-            ZTImage.Log.Trace.EnableConsole();
+            Trace.EnableConsole();
             
-            mEngine = new PluginEngine();
-            mEngine.Initialize();
-
+            mEngine = new PluginEngine();            
             mEngine.Start();
             ThreadPool.QueueUserWorkItem(Do);
 
             Console.WriteLine("starting");
             Console.ReadKey();
             mEngine.Stop(true);
-
-
             
             new System.Threading.ManualResetEvent(true).WaitOne();
         }

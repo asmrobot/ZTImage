@@ -118,6 +118,12 @@ namespace ZTImage.Text
             return reg.IsMatch(input);
         }
 
+        public static bool IsMobilePhone(string input)
+        {
+            Regex reg = new Regex(@"^1\d{10,10}$", RegexOptions.IgnoreCase);
+            return reg.IsMatch(input);
+        }
+
         // 邮编
         public static bool IsZip(string input)
         {
