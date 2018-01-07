@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage", "ZTImage\ZTImage.csproj", "{957AC055-A1F5-421D-AE3C-08E250104634}"
 EndProject
@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoNetCore", "DemoNetCore\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Database", "ZTImage.Database\ZTImage.Database.csproj", "{830DDEB3-AB25-457C-B249-27BF4BC38427}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.SchedulerDaemon", "ZTImage.SchedulerDaemon\ZTImage.SchedulerDaemon.csproj", "{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.SchedulerDaemon", "ZTImage.SchedulerDaemon\ZTImage.SchedulerDaemon.csproj", "{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.HttpParser", "ZTImage.HttpParser\ZTImage.HttpParser.csproj", "{21AE8167-100F-445E-854E-6E2ABF3A388F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
