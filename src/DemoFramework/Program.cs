@@ -7,6 +7,14 @@ using ZTImage.Log;
 
 namespace DemoFramework
 {
+    public enum flag:byte
+    {
+        one=0x01<<0,
+        two=0x01<<1,
+        three=0x01<<2
+    }
+
+
     public class InoneagentRequestModel
     {
         ///<summary>
@@ -43,10 +51,24 @@ namespace DemoFramework
     {
         static void Main(string[] args)
         {
-            string json = "{\"ap\":\"09de6c06-d81e-4027-a176-e379c0e5b66b\",\"createbegin\":\"1515046734\"}";
-            var model = ZTImage.Json.JsonParser.ToObject<InoneagentRequestModel>(json);
+            //string json = "{\"ap\":\"09de6c06-d81e-4027-a176-e379c0e5b66b\",\"createbegin\":\"1515046734\"}";
+            //var model = ZTImage.Json.JsonParser.ToObject<InoneagentRequestModel>(json);
 
-            Console.WriteLine(model.ap);
+            //Console.WriteLine(model.ap);
+
+            flag f = flag.one|flag.two;
+
+            Console.WriteLine(((byte)f).ToString());
+
+            if ((f & flag.two)==flag.two)
+            {
+                Console.WriteLine("one");
+            }
+            else
+            {
+                Console.WriteLine("two");
+            }
+
 
             Console.ReadKey();
         }

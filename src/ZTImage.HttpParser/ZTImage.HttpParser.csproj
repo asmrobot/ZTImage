@@ -43,9 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultParserCallback.cs" />
     <Compile Include="flags.cs" />
     <Compile Include="header_states.cs" />
+    <Compile Include="HttpFrame.cs" />
+    <Compile Include="IParserCallback.cs" />
     <Compile Include="http_errno.cs" />
+    <Compile Include="http_errstr.cs" />
     <Compile Include="http_host_state.cs" />
     <Compile Include="http_method.cs" />
     <Compile Include="http_parser_url.cs" />

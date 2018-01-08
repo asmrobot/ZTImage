@@ -9,9 +9,11 @@ namespace ZTImage.HttpParser
 
     class Program
     {
-        static void Main(string[] args)
+        static unsafe  void Main(string[] args)
         {
             ParserEngine engine = new ParserEngine();
+            HttpFrame frame = new HttpFrame();
+            
 
             string request = @"GET /profile?jsoncallback=jQuery1112040917624099260497_1515290208116&ct=1001&iid=744592160&aid=300578&cid=96&lid=0&ouid=0&_=1515290208117 HTTP/1.1
 Host: service.danmu.youku.com
@@ -32,14 +34,20 @@ Connection: keep-alive
 Service-Host: youku-danmu-service011139056192.na61
 Server: Tengine/Aserver
 Timing-Allow-Origin: *
-";
 
-            byte[] RequestData = System.Text.Encoding.UTF8.GetBytes(request);
+fdsafdsafdsafdsafdsafdsafdsa=fdsafdsafdsa";
+
             byte[] ResponseDatas = System.Text.Encoding.UTF8.GetBytes(response);
 
-            Int32 count=engine.Execute(RequestData, RequestData.Length);
+            byte[] RequestData = System.Text.Encoding.UTF8.GetBytes(request);
 
-            Console.WriteLine("complete" + UInt32.MaxValue + ":" + (Math.Pow(2, 32) - 1));
+            fixed (byte* data = &ResponseDatas[0])
+            {
+                Int32 count = engine.Execute(frame,data, ResponseDatas.Length);
+            }
+            
+
+            Console.WriteLine("complete");
             Console.ReadKey();
 
         }
