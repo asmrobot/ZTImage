@@ -25,6 +25,14 @@ namespace ZTImage.HttpParser
             this.http_errno = http_errno.HPE_OK;
         }
 
+        /// <summary>
+        /// 重置复用
+        /// </summary>
+        public void Reset()
+        {
+
+        }
+
         public http_parser_type type;//enum http_parser_type : 2bits
 
         public flags flags; // F_* values from 'flags' enum; semi-public :8bits
