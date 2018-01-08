@@ -8,9 +8,10 @@ namespace ZTImage.HttpParser
 {
     public class DefaultParserCallback : IParserCallback
     {
-        public unsafe int on_body(HttpFrame frame, byte* data)
+        public unsafe int on_body(HttpFrame frame, ArraySegment<byte> datas)
         {
-            Console.WriteLine("on_body");
+            string str = Encoding.ASCII.GetString(datas.Array, datas.Offset, datas.Count);
+            Console.WriteLine("on_body,body:{0}|" , str);
             return 0;
         }
 
@@ -32,15 +33,17 @@ namespace ZTImage.HttpParser
             return 0;
         }
 
-        public unsafe int on_header_field(HttpFrame frame, byte* data)
+        public unsafe int on_header_field(HttpFrame frame, ArraySegment<byte> datas)
         {
-            Console.WriteLine("on_header_field");
+            string field = Encoding.ASCII.GetString(datas.Array, datas.Offset, datas.Count);
+            Console.WriteLine("on_header_field,field:{0}|" , field);
             return 0;
         }
 
-        public unsafe int on_header_value(HttpFrame frame, byte* data)
+        public unsafe int on_header_value(HttpFrame frame, ArraySegment<byte> datas)
         {
-            Console.WriteLine("on_header_value");
+            string fieldValue = Encoding.ASCII.GetString(datas.Array, datas.Offset, datas.Count);
+            Console.WriteLine("on_header_value:{0}|" , fieldValue);
             return 0;
         }
 
@@ -57,17 +60,20 @@ namespace ZTImage.HttpParser
         }
         
 
-        public unsafe int on_status(HttpFrame frame, byte* data)
+        public unsafe int on_status(HttpFrame frame, Int32 statusCode,  ArraySegment<byte> datas)
         {
-            Console.WriteLine("on_status");
+            string statusDescription = Encoding.ASCII.GetString(datas.Array, datas.Offset, datas.Count);
+            Console.WriteLine("on_status,statusCode:{0},descript:{1}|",statusCode,statusDescription);
             return 0;
         }
         
 
-        public unsafe int on_url(HttpFrame frame, byte* data)
+        public unsafe int on_uri(HttpFrame frame, ArraySegment<byte> datas)
         {
-            Console.WriteLine("on_url");
+            string uri = Encoding.ASCII.GetString(datas.Array, datas.Offset, datas.Count);
+            Console.WriteLine("on_url,uri:{0}|" , uri);
             return 0;
         }
+        
     }
 }

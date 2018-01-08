@@ -21,8 +21,8 @@ namespace ZTImage.HttpParser
 
         private void Init()
         {
-            //this.state = (this.type == http_parser_type.HTTP_REQUEST ? state.s_start_req : (this.type == http_parser_type.HTTP_RESPONSE ? state.s_start_res : state.s_start_req_or_res));
-            //this.http_errno = http_errno.HPE_OK;
+            this.state = (this.type == http_parser_type.HTTP_REQUEST ? state.s_start_req : (this.type == http_parser_type.HTTP_RESPONSE ? state.s_start_res : state.s_start_req_or_res));
+            this.http_errno = http_errno.HPE_OK;
         }
 
         public http_parser_type type;//enum http_parser_type : 2bits
@@ -30,10 +30,10 @@ namespace ZTImage.HttpParser
         public flags flags; // F_* values from 'flags' enum; semi-public :8bits
 
 
-        public state state; //enum state from http_parser.c :7 bits
-        public header_states header_state; // enum header_state from http_parser.c :7bits
-        public byte index;//index into current matcher :7bits
-        public bool lenient_http_headers = false;//http header 宽容模式 1bits
+        internal state state; //enum state from http_parser.c :7 bits
+        internal header_states header_state; // enum header_state from http_parser.c :7bits
+        internal byte index;//index into current matcher :7bits
+        internal bool lenient_http_headers = false;//http header 宽容模式 1bits
 
         public UInt32 nread;          /* # bytes read in various scenarios */
         public UInt64 content_length; /* # bytes in body (0 if no Content-Length header) */

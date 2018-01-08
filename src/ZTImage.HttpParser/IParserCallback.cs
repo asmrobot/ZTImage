@@ -10,19 +10,19 @@ namespace ZTImage.HttpParser
     {
         Int32 on_message_begin(HttpFrame frame);
 
-        Int32 on_url(HttpFrame frame,byte* data);
+        Int32 on_uri(HttpFrame frame,ArraySegment<byte> uri);
 
-        Int32 on_status(HttpFrame frame,byte* data);
+        Int32 on_status(HttpFrame frame,Int32 statusCode, ArraySegment<byte> status);
 
-        Int32 on_header_field(HttpFrame frame,byte* data);
+        Int32 on_header_field(HttpFrame frame, ArraySegment<byte> fieldName);
 
 
 
-        Int32 on_header_value(HttpFrame frame,byte* data);
+        Int32 on_header_value(HttpFrame frame, ArraySegment<byte> fieldValue);
 
         Int32 on_headers_complete(HttpFrame frame);
 
-        Int32 on_body(HttpFrame frame,byte* data);
+        Int32 on_body(HttpFrame frame, ArraySegment<byte> body);
 
 
         Int32 on_message_complete(HttpFrame frame);

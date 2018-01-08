@@ -2,16 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ZTImage.HttpParser
 {
-    public unsafe delegate Int32 http_data_cb(ParserEngine engine, byte* data);
-
-    public delegate Int32 http_cb(ParserEngine engine);
-    
-
     public class ParserEngine
     {
 
@@ -38,7 +34,7 @@ namespace ZTImage.HttpParser
         {
             this.callback = callback;
         }
-
+        
         private const Int32 HTTP_MAX_HEADER_SIZE = 80 * 1024;//头部最大长度
         private readonly string[] method_strings = {
             "DELETE",
@@ -92,17 +88,17 @@ namespace ZTImage.HttpParser
             }
         }
 
-        private void SET_ERRNO(HttpFrame frame,http_errno e)
+        private void SET_ERRNO(HttpFrame frame, http_errno e)
         {
             frame.http_errno = e;
         }
 
-        private bool COUNT_HEADER_SIZE(HttpFrame frame,UInt32 V)
+        private bool COUNT_HEADER_SIZE(HttpFrame frame, UInt32 V)
         {
             frame.nread += (V);
             if (frame.nread > HTTP_MAX_HEADER_SIZE)
             {
-                SET_ERRNO(frame,http_errno.HPE_HEADER_OVERFLOW);
+                SET_ERRNO(frame, http_errno.HPE_HEADER_OVERFLOW);
                 return false;
             }
             return true;
@@ -113,17 +109,17 @@ namespace ZTImage.HttpParser
             return (Int32)(currentPTR - sourcePTR);
         }
 
-        private void UPDATE_STATE(HttpFrame frame,state state)
+        private void UPDATE_STATE(HttpFrame frame, state state)
         {
             frame.state = state;
         }
 
 #if HTTP_PARSER_STRICT
-        private bool STRICT_CHECK(HttpFrame frame,bool condition)
+        private bool STRICT_CHECK(HttpFrame frame, bool condition)
         {
             if (condition)
             {
-                SET_ERRNO(frame,http_errno.HPE_STRICT);
+                SET_ERRNO(frame, http_errno.HPE_STRICT);
                 return true;
             }
             return false;
@@ -223,7 +219,7 @@ namespace ZTImage.HttpParser
           ,-1,10,11,12,13,14,15,-1,-1,-1,-1,-1,-1,-1,-1,-1
           ,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
           };
-        
+
 
 
         private readonly byte[] normal_url_char = {
@@ -266,18 +262,15 @@ namespace ZTImage.HttpParser
 
         private bool STRICT_TOKEN(char c)
         {
-            return tokens[(byte)(c)]!=0;
-
+            return tokens[(byte)(c)] != 0;
         }
 
         private bool BIT_AT(byte[] a, byte i)
         {
-            //todo:logic is error
-            
             return (
-                (UInt32)((a)[(UInt32)(i) >> 3]) & 
+                (UInt32)((a)[(UInt32)(i) >> 3]) &
                 (1 << ((Int32)(i) & 7))
-                )!=0;
+                ) != 0;
         }
 
         /**
@@ -585,24 +578,51 @@ namespace ZTImage.HttpParser
         }
 
 
-        public unsafe Int32 Execute(HttpFrame frame,byte* data, Int32 len)
+        public Int32 Execute(HttpFrame frame, ArraySegment<byte> data)
         {
-            char ch;
-            char c;
+            return Execute(frame, data.Array, data.Offset, data.Count);
+        }
+
+        public unsafe Int32 Execute(HttpFrame frame, byte[] data)
+        {
+            return Execute(frame, data, 0, data.Length);
+        }
+
+
+        public unsafe Int32 Execute(HttpFrame frame, byte[] array, Int32 offset, Int32 count)
+        {
+            GCHandle handle=GCHandle.Alloc(array, GCHandleType.Pinned);
+            
+            try
+            {
+                byte* source = (byte*)handle.AddrOfPinnedObject().ToPointer();
+                return Execute(frame, array,offset, count, source);
+            }
+            finally
+            {
+                handle.Free();
+            }
+        }
+
+        private unsafe Int32 Execute(HttpFrame frame,byte[] array,Int32 offset, Int32 count, byte* data)
+        {
+            char ch,c;
             sbyte unhex_val;
             byte* p = data;
-            byte* header_field_mark = null;
-            byte* header_value_mark = null;
-            byte* url_mark = null;
-            byte* body_mark = null;
-            byte* status_mark = null;
+
+            Int32 header_field_mark = -1;
+            Int32 header_value_mark = -1;
+            Int32 url_mark = -1;
+            Int32 body_mark = -1;
+            Int32 status_mark = -1;
+
             bool lenient = frame.lenient_http_headers;
 
             if (frame.http_errno != http_errno.HPE_OK)
             {
                 return 0;
             }
-            if (len == 0)
+            if (count == 0)
             {
                 switch (frame.state)
                 {
@@ -621,19 +641,19 @@ namespace ZTImage.HttpParser
                     case state.s_start_req:
                         return 0;
                     default:
-                        SET_ERRNO(frame,http_errno.HPE_INVALID_EOF_STATE);
+                        SET_ERRNO(frame, http_errno.HPE_INVALID_EOF_STATE);
                         return 1;
                 }
             }
 
             if (frame.state == state.s_header_field)
             {
-                header_field_mark = data;
+                header_field_mark = offset;
             }
 
             if (frame.state == state.s_header_value)
             {
-                header_value_mark = data;
+                header_value_mark = offset;
             }
 
             switch (frame.state)
@@ -649,21 +669,21 @@ namespace ZTImage.HttpParser
                 case state.s_req_query_string:
                 case state.s_req_fragment_start:
                 case state.s_req_fragment:
-                    url_mark = data;
+                    url_mark = offset;
                     break;
                 case state.s_res_status:
-                    status_mark = data;
+                    status_mark = offset;
                     break;
                 default:
                     break;
             }
 
-            for (p = data; p != data + len; p++)
+            for (p = data; p != data + count; p++)
             {
                 ch = (char)*p;
                 if (frame.state <= state.s_headers_done)
                 {
-                    if (!COUNT_HEADER_SIZE(frame,1))
+                    if (!COUNT_HEADER_SIZE(frame, 1))
                     {
                         goto error;
                     }
@@ -678,7 +698,7 @@ namespace ZTImage.HttpParser
                         {
                             break;
                         }
-                        SET_ERRNO(frame,http_errno.HPE_CLOSED_CONNECTION);
+                        SET_ERRNO(frame, http_errno.HPE_CLOSED_CONNECTION);
                         goto error;
 
                     case state.s_start_req_or_res:
@@ -692,8 +712,8 @@ namespace ZTImage.HttpParser
 
                             if (ch == 'H')
                             {
-                                UPDATE_STATE(frame,state.s_res_or_resp_H);
-                                
+                                UPDATE_STATE(frame, state.s_res_or_resp_H);
+
                                 if (!RaiseMessageBegin(frame))
                                 {
                                     return RETURN(p, data);
@@ -702,7 +722,7 @@ namespace ZTImage.HttpParser
                             else
                             {
                                 frame.type = http_parser_type.HTTP_REQUEST;
-                                UPDATE_STATE(frame,state.s_start_req);
+                                UPDATE_STATE(frame, state.s_start_req);
                                 goto reexecute;
                             }
                             break;
@@ -711,20 +731,20 @@ namespace ZTImage.HttpParser
                         if (ch == 'T')
                         {
                             frame.type = http_parser_type.HTTP_RESPONSE;
-                            UPDATE_STATE(frame,state.s_res_HT);
+                            UPDATE_STATE(frame, state.s_res_HT);
                         }
                         else
                         {
                             if (ch != 'E')
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_CONSTANT);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_CONSTANT);
                                 goto error;
                             }
 
                             frame.type = http_parser_type.HTTP_REQUEST;
                             frame.method = http_method.HEAD;
                             frame.index = 2;
-                            UPDATE_STATE(frame,state.s_req_method);
+                            UPDATE_STATE(frame, state.s_req_method);
                         }
                         break;
                     case state.s_start_res:
@@ -735,7 +755,7 @@ namespace ZTImage.HttpParser
                             switch (ch)
                             {
                                 case 'H':
-                                    UPDATE_STATE(frame,state.s_res_H);
+                                    UPDATE_STATE(frame, state.s_res_H);
                                     break;
 
                                 case CR:
@@ -743,7 +763,7 @@ namespace ZTImage.HttpParser
                                     break;
 
                                 default:
-                                    SET_ERRNO(frame,http_errno.HPE_INVALID_CONSTANT);
+                                    SET_ERRNO(frame, http_errno.HPE_INVALID_CONSTANT);
                                     goto error;
                             }
 
@@ -754,80 +774,80 @@ namespace ZTImage.HttpParser
                             break;
                         }
                     case state.s_res_H:
-                        if (STRICT_CHECK(frame,ch != 'T'))
+                        if (STRICT_CHECK(frame, ch != 'T'))
                         {
                             goto error;
                         }
-                        UPDATE_STATE(frame,state.s_res_HT);
+                        UPDATE_STATE(frame, state.s_res_HT);
                         break;
 
                     case state.s_res_HT:
-                        if (STRICT_CHECK(frame,ch != 'T'))
+                        if (STRICT_CHECK(frame, ch != 'T'))
                         {
                             goto error;
                         }
-                        UPDATE_STATE(frame,state.s_res_HTT);
+                        UPDATE_STATE(frame, state.s_res_HTT);
                         break;
 
                     case state.s_res_HTT:
-                        if (STRICT_CHECK(frame,ch != 'P'))
+                        if (STRICT_CHECK(frame, ch != 'P'))
                         {
                             goto error;
                         }
-                        UPDATE_STATE(frame,state.s_res_HTTP);
+                        UPDATE_STATE(frame, state.s_res_HTTP);
                         break;
 
                     case state.s_res_HTTP:
-                        if (STRICT_CHECK(frame,ch != '/'))
+                        if (STRICT_CHECK(frame, ch != '/'))
                         {
                             goto error;
                         }
-                        UPDATE_STATE(frame,state.s_res_http_major);
+                        UPDATE_STATE(frame, state.s_res_http_major);
                         break;
 
                     case state.s_res_http_major:
                         if (!IS_NUM(ch))
                         {
-                            SET_ERRNO(frame,http_errno.HPE_INVALID_VERSION);
+                            SET_ERRNO(frame, http_errno.HPE_INVALID_VERSION);
                             goto error;
                         }
 
                         frame.http_major = (byte)(ch - '0');
-                        UPDATE_STATE(frame,state.s_res_http_dot);
+                        UPDATE_STATE(frame, state.s_res_http_dot);
                         break;
 
                     case state.s_res_http_dot:
                         {
                             if (ch != '.')
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_VERSION);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_VERSION);
                                 goto error;
                             }
 
-                            UPDATE_STATE(frame,state.s_res_http_minor);
+                            UPDATE_STATE(frame, state.s_res_http_minor);
                             break;
                         }
 
                     case state.s_res_http_minor:
                         if (!IS_NUM(ch))
                         {
-                            SET_ERRNO(frame,http_errno.HPE_INVALID_VERSION);
+                            SET_ERRNO(frame, http_errno.HPE_INVALID_VERSION);
                             goto error;
                         }
 
                         frame.http_minor = (byte)(ch - '0');
-                        UPDATE_STATE(frame,state.s_res_http_end);
+                        UPDATE_STATE(frame, state.s_res_http_end);
                         break;
 
                     case state.s_res_http_end:
                         {
                             if (ch != ' ')
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_VERSION);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_VERSION);
                                 goto error;
                             }
 
-                            UPDATE_STATE(frame,state.s_res_first_status_code);
+                            UPDATE_STATE(frame, state.s_res_first_status_code);
                             break;
                         }
 
@@ -840,11 +860,11 @@ namespace ZTImage.HttpParser
                                     break;
                                 }
 
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_STATUS);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_STATUS);
                                 goto error;
                             }
                             frame.status_code = (UInt16)(ch - '0');
-                            UPDATE_STATE(frame,state.s_res_status_code);
+                            UPDATE_STATE(frame, state.s_res_status_code);
                             break;
                         }
 
@@ -855,14 +875,14 @@ namespace ZTImage.HttpParser
                                 switch (ch)
                                 {
                                     case ' ':
-                                        UPDATE_STATE(frame,state.s_res_status_start);
+                                        UPDATE_STATE(frame, state.s_res_status_start);
                                         break;
                                     case CR:
                                     case LF:
-                                        UPDATE_STATE(frame,state.s_res_status_start);
+                                        UPDATE_STATE(frame, state.s_res_status_start);
                                         goto reexecute;
                                     default:
-                                        SET_ERRNO(frame,http_errno.HPE_INVALID_STATUS);
+                                        SET_ERRNO(frame, http_errno.HPE_INVALID_STATUS);
                                         goto error;
                                 }
                                 break;
@@ -873,7 +893,7 @@ namespace ZTImage.HttpParser
 
                             if (frame.status_code > 999)
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_STATUS);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_STATUS);
                                 goto error;
                             }
 
@@ -882,11 +902,11 @@ namespace ZTImage.HttpParser
 
                     case state.s_res_status_start:
                         {
-                            if (status_mark == null)
+                            if (status_mark == -1)
                             {
-                                status_mark = p;
+                                status_mark = (Int32)(p - data) + offset;
                             }
-                            UPDATE_STATE(frame,state.s_res_status);
+                            UPDATE_STATE(frame, state.s_res_status);
                             frame.index = 0;
 
                             if (ch == CR || ch == LF)
@@ -898,19 +918,19 @@ namespace ZTImage.HttpParser
                     case state.s_res_status:
                         if (ch == CR)
                         {
-                            UPDATE_STATE(frame,state.s_res_line_almost_done);
-                            if (!RaiseStatus(frame,p))
+                            UPDATE_STATE(frame, state.s_res_line_almost_done);
+                            if (!RaiseStatus(frame,array, ref status_mark, (Int32)(p - data) + offset))
                             {
                                 return RETURN(p, data);
                             }
-                            //CALLBACK_DATA(tatus);
+                            //CALLBACK_DATA(status);
                             break;
                         }
 
                         if (ch == LF)
                         {
-                            UPDATE_STATE(frame,state.s_header_field_start);
-                            if (!RaiseStatus(frame,p))
+                            UPDATE_STATE(frame, state.s_header_field_start);
+                            if (!RaiseStatus(frame,array, ref status_mark, (Int32)(p - data) + offset))
                             {
                                 return RETURN(p, data);
                             }
@@ -921,8 +941,8 @@ namespace ZTImage.HttpParser
                         break;
 
                     case state.s_res_line_almost_done:
-                        STRICT_CHECK(frame,ch != LF);
-                        UPDATE_STATE(frame,state.s_header_field_start);
+                        STRICT_CHECK(frame, ch != LF);
+                        UPDATE_STATE(frame, state.s_header_field_start);
                         break;
                     case state.s_start_req:
                         {
@@ -933,7 +953,7 @@ namespace ZTImage.HttpParser
 
                             if (!IS_ALPHA(ch))
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_METHOD);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_METHOD);
                                 goto error;
                             }
 
@@ -960,10 +980,10 @@ namespace ZTImage.HttpParser
                                 case 'T': frame.method = http_method.TRACE; break;
                                 case 'U': frame.method = http_method.UNLOCK; /* or UNSUBSCRIBE, UNBIND, UNLINK */ break;
                                 default:
-                                    SET_ERRNO(frame,http_errno.HPE_INVALID_METHOD);
+                                    SET_ERRNO(frame, http_errno.HPE_INVALID_METHOD);
                                     goto error;
                             }
-                            UPDATE_STATE(frame,state.s_req_method);
+                            UPDATE_STATE(frame, state.s_req_method);
                             if (!RaiseMessageBegin(frame))
                             {
                                 return RETURN(p, data);
@@ -976,14 +996,14 @@ namespace ZTImage.HttpParser
                         {
                             if (ch == '\0')
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_METHOD);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_METHOD);
                                 goto error;
                             }
 
                             string matcher = method_strings[(byte)frame.method];
                             if (ch == ' ' && frame.index >= matcher.Length)
                             {
-                                UPDATE_STATE(frame,state.s_req_spaces_before_url);
+                                UPDATE_STATE(frame, state.s_req_spaces_before_url);
                             }
                             else if (ch == matcher[frame.index])
                             {
@@ -1062,13 +1082,13 @@ namespace ZTImage.HttpParser
                                         break;
 
                                     default:
-                                        SET_ERRNO(frame,http_errno.HPE_INVALID_METHOD);
+                                        SET_ERRNO(frame, http_errno.HPE_INVALID_METHOD);
                                         goto error;
                                 }
                             }
                             else
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_METHOD);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_METHOD);
                                 goto error;
                             }
 
@@ -1079,20 +1099,20 @@ namespace ZTImage.HttpParser
                     case state.s_req_spaces_before_url:
                         {
                             if (ch == ' ') break;
-                            if (url_mark == null)
+                            if (url_mark == -1)
                             {
-                                url_mark = p;
+                                url_mark = (Int32)(p - data) + offset;
                             }
 
                             if (frame.method == http_method.CONNECT)
                             {
-                                UPDATE_STATE(frame,state.s_req_server_start);
+                                UPDATE_STATE(frame, state.s_req_server_start);
                             }
 
-                            UPDATE_STATE(frame,parse_url_char(frame.state, ch));
+                            UPDATE_STATE(frame, parse_url_char(frame.state, ch));
                             if (frame.state == state.s_dead)
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_URL);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_URL);
                                 goto error;
                             }
 
@@ -1110,13 +1130,13 @@ namespace ZTImage.HttpParser
                                 case ' ':
                                 case CR:
                                 case LF:
-                                    SET_ERRNO(frame,http_errno.HPE_INVALID_URL);
+                                    SET_ERRNO(frame, http_errno.HPE_INVALID_URL);
                                     goto error;
                                 default:
-                                    UPDATE_STATE(frame,parse_url_char(frame.state, ch));
+                                    UPDATE_STATE(frame, parse_url_char(frame.state, ch));
                                     if (frame.state == state.s_dead)
                                     {
-                                        SET_ERRNO(frame,http_errno.HPE_INVALID_URL);
+                                        SET_ERRNO(frame, http_errno.HPE_INVALID_URL);
                                         goto error;
                                     }
                                     break;
@@ -1136,8 +1156,8 @@ namespace ZTImage.HttpParser
                             switch (ch)
                             {
                                 case ' ':
-                                    UPDATE_STATE(frame,state.s_req_http_start);
-                                    if (!RaiseUrl(frame,url_mark))
+                                    UPDATE_STATE(frame, state.s_req_http_start);
+                                    if (!RaiseUrl(frame,array, ref url_mark, (Int32)(p - data) + offset))
                                     {
                                         return RETURN(p, data);
                                     }
@@ -1147,20 +1167,20 @@ namespace ZTImage.HttpParser
                                 case LF:
                                     frame.http_major = 0;
                                     frame.http_minor = 9;
-                                    UPDATE_STATE(frame,(ch == CR) ?
+                                    UPDATE_STATE(frame, (ch == CR) ?
                                       state.s_req_line_almost_done :
                                       state.s_header_field_start);
-                                    if (!RaiseUrl(frame,url_mark))
+                                    if (!RaiseUrl(frame,array, ref url_mark, (Int32)(p - data) + offset))
                                     {
                                         return RETURN(p, data);
                                     }
                                     //CALLBACK_DATA(url);
                                     break;
                                 default:
-                                    UPDATE_STATE(frame,parse_url_char(frame.state, ch));
+                                    UPDATE_STATE(frame, parse_url_char(frame.state, ch));
                                     if (frame.state == state.s_dead)
                                     {
-                                        SET_ERRNO(frame,http_errno.HPE_INVALID_URL);
+                                        SET_ERRNO(frame, http_errno.HPE_INVALID_URL);
                                         goto error;
                                     }
                                     break;
@@ -1172,85 +1192,85 @@ namespace ZTImage.HttpParser
                         switch (ch)
                         {
                             case 'H':
-                                UPDATE_STATE(frame,state.s_req_http_H);
+                                UPDATE_STATE(frame, state.s_req_http_H);
                                 break;
                             case ' ':
                                 break;
                             default:
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_CONSTANT);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_CONSTANT);
                                 goto error;
                         }
                         break;
 
                     case state.s_req_http_H:
-                        STRICT_CHECK(frame,ch != 'T');
-                        UPDATE_STATE(frame,state.s_req_http_HT);
+                        STRICT_CHECK(frame, ch != 'T');
+                        UPDATE_STATE(frame, state.s_req_http_HT);
                         break;
 
                     case state.s_req_http_HT:
-                        STRICT_CHECK(frame,ch != 'T');
-                        UPDATE_STATE(frame,state.s_req_http_HTT);
+                        STRICT_CHECK(frame, ch != 'T');
+                        UPDATE_STATE(frame, state.s_req_http_HTT);
                         break;
 
                     case state.s_req_http_HTT:
-                        STRICT_CHECK(frame,ch != 'P');
-                        UPDATE_STATE(frame,state.s_req_http_HTTP);
+                        STRICT_CHECK(frame, ch != 'P');
+                        UPDATE_STATE(frame, state.s_req_http_HTTP);
                         break;
 
                     case state.s_req_http_HTTP:
-                        STRICT_CHECK(frame,ch != '/');
-                        UPDATE_STATE(frame,state.s_req_http_major);
+                        STRICT_CHECK(frame, ch != '/');
+                        UPDATE_STATE(frame, state.s_req_http_major);
                         break;
 
                     case state.s_req_http_major:
                         if (!IS_NUM(ch))
                         {
-                            SET_ERRNO(frame,http_errno.HPE_INVALID_VERSION);
+                            SET_ERRNO(frame, http_errno.HPE_INVALID_VERSION);
                             goto error;
                         }
 
                         frame.http_major = (byte)(ch - '0');
-                        UPDATE_STATE(frame,state.s_req_http_dot);
+                        UPDATE_STATE(frame, state.s_req_http_dot);
                         break;
 
                     case state.s_req_http_dot:
                         {
                             if (ch != '.')
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_VERSION);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_VERSION);
                                 goto error;
                             }
 
-                            UPDATE_STATE(frame,state.s_req_http_minor);
+                            UPDATE_STATE(frame, state.s_req_http_minor);
                             break;
                         }
 
                     case state.s_req_http_minor:
                         if (!IS_NUM(ch))
                         {
-                            SET_ERRNO(frame,http_errno.HPE_INVALID_VERSION);
+                            SET_ERRNO(frame, http_errno.HPE_INVALID_VERSION);
                             goto error;
                         }
 
                         frame.http_minor = (byte)(ch - '0');
-                        UPDATE_STATE(frame,state.s_req_http_end);
+                        UPDATE_STATE(frame, state.s_req_http_end);
                         break;
 
                     case state.s_req_http_end:
                         {
                             if (ch == CR)
                             {
-                                UPDATE_STATE(frame,state.s_req_line_almost_done);
+                                UPDATE_STATE(frame, state.s_req_line_almost_done);
                                 break;
                             }
 
                             if (ch == LF)
                             {
-                                UPDATE_STATE(frame,state.s_header_field_start);
+                                UPDATE_STATE(frame, state.s_header_field_start);
                                 break;
                             }
 
-                            SET_ERRNO(frame,http_errno.HPE_INVALID_VERSION);
+                            SET_ERRNO(frame, http_errno.HPE_INVALID_VERSION);
                             goto error;
                             //break;
                         }
@@ -1260,11 +1280,11 @@ namespace ZTImage.HttpParser
                         {
                             if (ch != LF)
                             {
-                                SET_ERRNO(frame,http_errno.HPE_LF_EXPECTED);
+                                SET_ERRNO(frame, http_errno.HPE_LF_EXPECTED);
                                 goto error;
                             }
 
-                            UPDATE_STATE(frame,state.s_header_field_start);
+                            UPDATE_STATE(frame, state.s_header_field_start);
                             break;
                         }
 
@@ -1272,7 +1292,7 @@ namespace ZTImage.HttpParser
                         {
                             if (ch == CR)
                             {
-                                UPDATE_STATE(frame,state.s_headers_almost_done);
+                                UPDATE_STATE(frame, state.s_headers_almost_done);
                                 break;
                             }
 
@@ -1280,7 +1300,7 @@ namespace ZTImage.HttpParser
                             {
                                 /* they might be just sending \n instead of \r\n so this would be
                                  * the second \n to denote the end of headers*/
-                                UPDATE_STATE(frame,state.s_headers_almost_done);
+                                UPDATE_STATE(frame, state.s_headers_almost_done);
                                 goto reexecute;
                             }
 
@@ -1289,17 +1309,17 @@ namespace ZTImage.HttpParser
                             //todo:condition
                             if (c == 0)
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_HEADER_TOKEN);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_HEADER_TOKEN);
                                 goto error;
                             }
-                            if (header_field_mark == null)
+                            if (header_field_mark ==-1)
                             {
-                                header_field_mark = p;
+                                header_field_mark = (Int32)(p-data)+offset;
                             }
                             //MARK(header_field);
 
                             frame.index = 0;
-                            UPDATE_STATE(frame,state.s_header_field);
+                            UPDATE_STATE(frame, state.s_header_field);
 
                             switch (c)
                             {
@@ -1329,7 +1349,7 @@ namespace ZTImage.HttpParser
                     case state.s_header_field:
                         {
                             byte* start = p;
-                            for (; p != data + len; p++)
+                            for (; p != data + count; p++)
                             {
                                 ch = (char)*p;
                                 c = TOKEN(ch);
@@ -1456,9 +1476,9 @@ namespace ZTImage.HttpParser
                                 }
                             }
 
-                            COUNT_HEADER_SIZE(frame,(UInt32)(p - start));
+                            COUNT_HEADER_SIZE(frame, (UInt32)(p - start));
 
-                            if (p == data + len)
+                            if (p == data + count)
                             {
                                 --p;
                                 break;
@@ -1466,8 +1486,8 @@ namespace ZTImage.HttpParser
 
                             if (ch == ':')
                             {
-                                UPDATE_STATE(frame,state.s_header_value_discard_ws);
-                                if (!RaiseHeaderField(frame,header_field_mark))
+                                UPDATE_STATE(frame, state.s_header_value_discard_ws);
+                                if (!RaiseHeaderField(frame,array, ref header_field_mark, (Int32)(p - data) + offset))
                                 {
                                     return RETURN(p, data);
                                 }
@@ -1475,7 +1495,7 @@ namespace ZTImage.HttpParser
                                 break;
                             }
 
-                            SET_ERRNO(frame,http_errno.HPE_INVALID_HEADER_TOKEN);
+                            SET_ERRNO(frame, http_errno.HPE_INVALID_HEADER_TOKEN);
                             goto error;
                         }
 
@@ -1488,24 +1508,24 @@ namespace ZTImage.HttpParser
 
                                 if (ch == CR)
                                 {
-                                    UPDATE_STATE(frame,state.s_header_value_discard_ws_almost_done);
+                                    UPDATE_STATE(frame, state.s_header_value_discard_ws_almost_done);
                                     break;
                                 }
 
                                 if (ch == LF)
                                 {
-                                    UPDATE_STATE(frame,state.s_header_value_discard_lws);
+                                    UPDATE_STATE(frame, state.s_header_value_discard_lws);
                                     break;
                                 }
                             }
                             /* FALLTHROUGH */
-                            if (header_value_mark == null)
+                            if (header_value_mark == -1)
                             {
-                                header_value_mark = p;
+                                header_value_mark = (Int32)(p - data) + offset;
                             }
                             //MARK(header_value);
 
-                            UPDATE_STATE(frame,state.s_header_value);
+                            UPDATE_STATE(frame, state.s_header_value);
                             frame.index = 0;
 
                             c = LOWER(ch);
@@ -1532,13 +1552,13 @@ namespace ZTImage.HttpParser
                                 case header_states.h_content_length:
                                     if (!IS_NUM(ch))
                                     {
-                                        SET_ERRNO(frame,http_errno.HPE_INVALID_CONTENT_LENGTH);
+                                        SET_ERRNO(frame, http_errno.HPE_INVALID_CONTENT_LENGTH);
                                         goto error;
                                     }
 
                                     if ((frame.flags & flags.F_CONTENTLENGTH) == flags.F_CONTENTLENGTH)
                                     {
-                                        SET_ERRNO(frame,http_errno.HPE_UNEXPECTED_CONTENT_LENGTH);
+                                        SET_ERRNO(frame, http_errno.HPE_UNEXPECTED_CONTENT_LENGTH);
                                         goto error;
                                     }
 
@@ -1582,14 +1602,14 @@ namespace ZTImage.HttpParser
                         {
                             byte* start = p;
                             header_states h_state = frame.header_state;
-                            for (; p != data + len; p++)
+                            for (; p != data + count; p++)
                             {
                                 ch = (char)*p;
                                 if (ch == CR)
                                 {
-                                    UPDATE_STATE(frame,state.s_header_almost_done);
+                                    UPDATE_STATE(frame, state.s_header_almost_done);
                                     frame.header_state = h_state;
-                                    if (!RaiseHeaderValue(frame,header_value_mark))
+                                    if (!RaiseHeaderValue(frame,array, ref header_value_mark, (Int32)(p - data) + offset))
                                     {
                                         return RETURN(p, data);
                                     }
@@ -1599,11 +1619,11 @@ namespace ZTImage.HttpParser
 
                                 if (ch == LF)
                                 {
-                                    UPDATE_STATE(frame,state.s_header_almost_done);
-                                    COUNT_HEADER_SIZE(frame,(UInt32)(p - start));
+                                    UPDATE_STATE(frame, state.s_header_almost_done);
+                                    COUNT_HEADER_SIZE(frame, (UInt32)(p - start));
                                     frame.header_state = h_state;
                                     //CALLBACK_DATA_NOADVANCE(header_value);
-                                    if (!RaiseHeaderValue(frame,header_value_mark))
+                                    if (!RaiseHeaderValue(frame,array, ref header_value_mark, (Int32)(p - data) + offset))
                                     {
                                         return RETURN(p, data);
                                     }
@@ -1612,7 +1632,7 @@ namespace ZTImage.HttpParser
 
                                 if (!lenient && !IS_HEADER_CHAR(ch))
                                 {
-                                    SET_ERRNO(frame,http_errno.HPE_INVALID_HEADER_TOKEN);
+                                    SET_ERRNO(frame, http_errno.HPE_INVALID_HEADER_TOKEN);
                                     goto error;
                                 }
 
@@ -1624,7 +1644,7 @@ namespace ZTImage.HttpParser
                                         {
                                             byte* p_cr;
                                             byte* p_lf;
-                                            Int32 limit = (Int32)(data + len - p);
+                                            Int32 limit = (Int32)(data + count - p);
 
                                             limit = Math.Min(limit, HTTP_MAX_HEADER_SIZE);
 
@@ -1643,7 +1663,7 @@ namespace ZTImage.HttpParser
                                             }
                                             else
                                             {
-                                                p = data + len;
+                                                p = data + count;
                                             }
                                             --p;
 
@@ -1663,7 +1683,7 @@ namespace ZTImage.HttpParser
 
                                             if (!IS_NUM(ch))
                                             {
-                                                SET_ERRNO(frame,http_errno.HPE_INVALID_CONTENT_LENGTH);
+                                                SET_ERRNO(frame, http_errno.HPE_INVALID_CONTENT_LENGTH);
                                                 frame.header_state = h_state;
                                                 goto error;
                                             }
@@ -1679,7 +1699,7 @@ namespace ZTImage.HttpParser
                                             /* Overflow? Test against a conservative limit for simplicity. */
                                             if ((UInt64.MaxValue - 10) / 10 < frame.content_length)
                                             {
-                                                SET_ERRNO(frame,http_errno.HPE_INVALID_CONTENT_LENGTH);
+                                                SET_ERRNO(frame, http_errno.HPE_INVALID_CONTENT_LENGTH);
                                                 frame.header_state = h_state;
                                                 goto error;
                                             }
@@ -1811,16 +1831,16 @@ namespace ZTImage.HttpParser
                                         break;
 
                                     default:
-                                        UPDATE_STATE(frame,state.s_header_value);
+                                        UPDATE_STATE(frame, state.s_header_value);
                                         h_state = header_states.h_general;
                                         break;
                                 }
                             }
                             frame.header_state = h_state;
 
-                            COUNT_HEADER_SIZE(frame,(UInt32)(p - start));
+                            COUNT_HEADER_SIZE(frame, (UInt32)(p - start));
 
-                            if (p == data + len)
+                            if (p == data + count)
                                 --p;
                             break;
                         }
@@ -1829,11 +1849,11 @@ namespace ZTImage.HttpParser
                         {
                             if (ch != LF)
                             {
-                                SET_ERRNO(frame,http_errno.HPE_LF_EXPECTED);
+                                SET_ERRNO(frame, http_errno.HPE_LF_EXPECTED);
                                 goto error;
                             }
 
-                            UPDATE_STATE(frame,state.s_header_value_lws);
+                            UPDATE_STATE(frame, state.s_header_value_lws);
                             break;
                         }
 
@@ -1841,7 +1861,7 @@ namespace ZTImage.HttpParser
                         {
                             if (ch == ' ' || ch == '\t')
                             {
-                                UPDATE_STATE(frame,state.s_header_value_start);
+                                UPDATE_STATE(frame, state.s_header_value_start);
                                 goto reexecute;
                             }
 
@@ -1864,14 +1884,14 @@ namespace ZTImage.HttpParser
                                     break;
                             }
 
-                            UPDATE_STATE(frame,state.s_header_field_start);
+                            UPDATE_STATE(frame, state.s_header_field_start);
                             goto reexecute;
                         }
 
                     case state.s_header_value_discard_ws_almost_done:
                         {
-                            STRICT_CHECK(frame,ch != LF);
-                            UPDATE_STATE(frame,state.s_header_value_discard_lws);
+                            STRICT_CHECK(frame, ch != LF);
+                            UPDATE_STATE(frame, state.s_header_value_discard_lws);
                             break;
                         }
 
@@ -1879,7 +1899,7 @@ namespace ZTImage.HttpParser
                         {
                             if (ch == ' ' || ch == '\t')
                             {
-                                UPDATE_STATE(frame,state.s_header_value_discard_ws);
+                                UPDATE_STATE(frame, state.s_header_value_discard_ws);
                                 break;
                             }
                             else
@@ -1903,13 +1923,13 @@ namespace ZTImage.HttpParser
                                 }
 
                                 /* header value was empty */
-                                if (header_value_mark == null)
+                                if (header_value_mark == -1)
                                 {
-                                    header_value_mark = p;
+                                    header_value_mark = (Int32)(p - data) + offset;
                                 }
                                 //MARK(header_value);
-                                UPDATE_STATE(frame,state.s_header_field_start);
-                                if (!RaiseHeaderValue(frame,header_value_mark))
+                                UPDATE_STATE(frame, state.s_header_field_start);
+                                if (!RaiseHeaderValue(frame,array, ref header_value_mark, (Int32)(p - data) + offset))
                                 {
                                     return RETURN(p, data);
                                 }
@@ -1920,12 +1940,12 @@ namespace ZTImage.HttpParser
 
                     case state.s_headers_almost_done:
                         {
-                            STRICT_CHECK(frame,ch != LF);
+                            STRICT_CHECK(frame, ch != LF);
 
-                            if ((frame.flags & flags.F_TRAILING)==flags.F_TRAILING)
+                            if ((frame.flags & flags.F_TRAILING) == flags.F_TRAILING)
                             {
                                 /* End of a chunked request */
-                                UPDATE_STATE(frame,state.s_message_done);
+                                UPDATE_STATE(frame, state.s_message_done);
                                 //CALLBACK_NOTIFY_NOADVANCE(chunk_complete);
                                 if (!RaiseChunkComplete(frame))
                                 {
@@ -1936,24 +1956,24 @@ namespace ZTImage.HttpParser
 
                             /* Cannot use chunked encoding and a content-length header together
                                per the HTTP specification. */
-                            if (((frame.flags & flags.F_CHUNKED)==flags.F_CHUNKED) &&
-                                ((frame.flags & flags.F_CONTENTLENGTH)==flags.F_CONTENTLENGTH))
+                            if (((frame.flags & flags.F_CHUNKED) == flags.F_CHUNKED) &&
+                                ((frame.flags & flags.F_CONTENTLENGTH) == flags.F_CONTENTLENGTH))
                             {
-                                SET_ERRNO(frame,http_errno.HPE_UNEXPECTED_CONTENT_LENGTH);
+                                SET_ERRNO(frame, http_errno.HPE_UNEXPECTED_CONTENT_LENGTH);
                                 goto error;
                             }
 
-                            UPDATE_STATE(frame,state.s_headers_done);
+                            UPDATE_STATE(frame, state.s_headers_done);
 
                             /* Set this here so that on_headers_complete() callbacks can see it */
-                            if (((frame.flags & flags.F_UPGRADE)==flags.F_UPGRADE) &&
-                                ((frame.flags & flags.F_CONNECTION_UPGRADE)==flags.F_CONNECTION_UPGRADE))
+                            if (((frame.flags & flags.F_UPGRADE) == flags.F_UPGRADE) &&
+                                ((frame.flags & flags.F_CONNECTION_UPGRADE) == flags.F_CONNECTION_UPGRADE))
                             {
                                 /* For responses, "Upgrade: foo" and "Connection: upgrade" are
                                  * mandatory only when it is a 101 Switching Protocols response,
                                  * otherwise it is purely informational, to announce support.
                                  */
-                                frame.upgrade =(frame.type == http_parser_type.HTTP_REQUEST || frame.status_code == 101);
+                                frame.upgrade = (frame.type == http_parser_type.HTTP_REQUEST || frame.status_code == 101);
                             }
                             else
                             {
@@ -1969,7 +1989,7 @@ namespace ZTImage.HttpParser
                              * We'd like to use CALLBACK_NOTIFY_NOADVANCE() here but we cannot, so
                              * we have to simulate it by handling a change in errno below.
                              */
-                            
+
                             Int32 ret = callback.on_headers_complete(frame);
                             switch (ret)
                             {
@@ -1987,15 +2007,15 @@ namespace ZTImage.HttpParser
                                     break;
 
                                 default:
-                                    SET_ERRNO(frame,http_errno.HPE_CB_headers_complete);
+                                    SET_ERRNO(frame, http_errno.HPE_CB_headers_complete);
                                     //RETURN(p - data); /* Error */
                                     return RETURN(p, data);
                             }
-                            
+
 
 
                             //if (HTTP_PARSER_ERRNO(parser) != HPE_OK)
-                            if(frame.http_errno!=http_errno.HPE_OK)
+                            if (frame.http_errno != http_errno.HPE_OK)
                             {
                                 //RETURN(p - data);
                                 return RETURN(p, data);
@@ -2007,17 +2027,17 @@ namespace ZTImage.HttpParser
                     case state.s_headers_done:
                         {
                             bool hasBody;
-                            STRICT_CHECK(frame,ch != LF);
+                            STRICT_CHECK(frame, ch != LF);
 
                             frame.nread = 0;
 
-                            hasBody = ((frame.flags & flags.F_CHUNKED)==flags.F_CHUNKED) ||
+                            hasBody = ((frame.flags & flags.F_CHUNKED) == flags.F_CHUNKED) ||
                               (frame.content_length > 0 && frame.content_length != UInt64.MaxValue);
                             if (frame.upgrade && (frame.method == http_method.CONNECT ||
-                                                    ((frame.flags & flags.F_SKIPBODY)==flags.F_SKIPBODY) || !hasBody))
+                                                    ((frame.flags & flags.F_SKIPBODY) == flags.F_SKIPBODY) || !hasBody))
                             {
                                 /* Exit, the rest of the message is in a different protocol. */
-                                UPDATE_STATE(frame,NEW_MESSAGE(frame));
+                                UPDATE_STATE(frame, NEW_MESSAGE(frame));
                                 if (!RaiseMessageComplete(frame))
                                 {
                                     return RETURN(p, data);
@@ -2027,26 +2047,26 @@ namespace ZTImage.HttpParser
                                 return RETURN(p, data);
                             }
 
-                            if ((frame.flags & flags.F_SKIPBODY)==flags.F_SKIPBODY)
+                            if ((frame.flags & flags.F_SKIPBODY) == flags.F_SKIPBODY)
                             {
-                                UPDATE_STATE(frame,NEW_MESSAGE(frame));
+                                UPDATE_STATE(frame, NEW_MESSAGE(frame));
                                 if (!RaiseMessageComplete(frame))
                                 {
                                     return RETURN(p, data);
                                 }
                                 //CALLBACK_NOTIFY(message_complete);
                             }
-                            else if ((frame.flags & flags.F_CHUNKED)==flags.F_CHUNKED)
+                            else if ((frame.flags & flags.F_CHUNKED) == flags.F_CHUNKED)
                             {
                                 /* chunked encoding - ignore Content-Length header */
-                                UPDATE_STATE(frame,state.s_chunk_size_start);
+                                UPDATE_STATE(frame, state.s_chunk_size_start);
                             }
                             else
                             {
                                 if (frame.content_length == 0)
                                 {
                                     /* Content-Length header given but zero: Content-Length: 0\r\n */
-                                    UPDATE_STATE(frame,NEW_MESSAGE(frame));
+                                    UPDATE_STATE(frame, NEW_MESSAGE(frame));
                                     if (!RaiseMessageComplete(frame))
                                     {
                                         return RETURN(p, data);
@@ -2056,14 +2076,14 @@ namespace ZTImage.HttpParser
                                 else if (frame.content_length != UInt64.MaxValue)
                                 {
                                     /* Content-Length header given and non-zero */
-                                    UPDATE_STATE(frame,state.s_body_identity);
+                                    UPDATE_STATE(frame, state.s_body_identity);
                                 }
                                 else
                                 {
                                     if (!http_message_needs_eof(frame))
                                     {
                                         /* Assume content-length 0 - read the next */
-                                        UPDATE_STATE(frame,NEW_MESSAGE(frame));
+                                        UPDATE_STATE(frame, NEW_MESSAGE(frame));
                                         if (!RaiseMessageComplete(frame))
                                         {
                                             return RETURN(p, data);
@@ -2073,7 +2093,7 @@ namespace ZTImage.HttpParser
                                     else
                                     {
                                         /* Read body until EOF */
-                                        UPDATE_STATE(frame,state.s_body_identity_eof);
+                                        UPDATE_STATE(frame, state.s_body_identity_eof);
                                     }
                                 }
                             }
@@ -2083,8 +2103,7 @@ namespace ZTImage.HttpParser
 
                     case state.s_body_identity:
                         {
-                            UInt64 to_read = Math.Min(frame.content_length,
-                                                   (UInt64)((data + len) - p));
+                            UInt64 to_read = Math.Min(frame.content_length, (UInt64)((data + count) - p));
 
                             assert(frame.content_length != 0
                                 && frame.content_length != UInt64.MaxValue);
@@ -2094,9 +2113,9 @@ namespace ZTImage.HttpParser
                              * Further, if content_length ends up at 0, we want to see the last
                              * byte again for our message complete callback.
                              */
-                            if (body_mark == null)
+                            if (body_mark == -1)
                             {
-                                body_mark = p;
+                                body_mark = (Int32)(p - data) + offset;
                             }
                             //MARK(body);
                             frame.content_length -= to_read;
@@ -2104,7 +2123,7 @@ namespace ZTImage.HttpParser
 
                             if (frame.content_length == 0)
                             {
-                                UPDATE_STATE(frame,state.s_message_done);
+                                UPDATE_STATE(frame, state.s_message_done);
 
                                 /* Mimic CALLBACK_DATA_NOADVANCE() but with one extra byte.
                                  *
@@ -2116,7 +2135,7 @@ namespace ZTImage.HttpParser
                                  * important for applications, but let's keep it for now.
                                  */
                                 //CALLBACK_DATA_(body, p - body_mark + 1, p - data);
-                                if (!RaiseBody(frame,body_mark))
+                                if (!RaiseBody(frame,array, ref body_mark, (Int32)(p - data) + offset))
                                 {
                                     return RETURN(p, data);
                                 }
@@ -2128,17 +2147,17 @@ namespace ZTImage.HttpParser
 
                     /* read until EOF */
                     case state.s_body_identity_eof:
-                        if (body_mark == null)
+                        if (body_mark == -1)
                         {
-                            body_mark = p;
+                            body_mark = (Int32)(p - data) + offset;
                         }
                         //MARK(body);
-                        p = data + len - 1;
+                        p = data + count - 1;
 
                         break;
 
                     case state.s_message_done:
-                        UPDATE_STATE(frame,NEW_MESSAGE(frame));
+                        UPDATE_STATE(frame, NEW_MESSAGE(frame));
                         //CALLBACK_NOTIFY(message_complete);
                         if (!RaiseMessageComplete(frame))
                         {
@@ -2160,12 +2179,12 @@ namespace ZTImage.HttpParser
                             unhex_val = unhex[(byte)ch];
                             if (unhex_val == -1)
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_CHUNK_SIZE);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_CHUNK_SIZE);
                                 goto error;
                             }
 
                             frame.content_length = (byte)unhex_val;
-                            UPDATE_STATE(frame,state.s_chunk_size);
+                            UPDATE_STATE(frame, state.s_chunk_size);
                             break;
                         }
 
@@ -2177,7 +2196,7 @@ namespace ZTImage.HttpParser
 
                             if (ch == CR)
                             {
-                                UPDATE_STATE(frame,state.s_chunk_size_almost_done);
+                                UPDATE_STATE(frame, state.s_chunk_size_almost_done);
                                 break;
                             }
 
@@ -2187,11 +2206,11 @@ namespace ZTImage.HttpParser
                             {
                                 if (ch == ';' || ch == ' ')
                                 {
-                                    UPDATE_STATE(frame,state.s_chunk_parameters);
+                                    UPDATE_STATE(frame, state.s_chunk_parameters);
                                     break;
                                 }
 
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_CHUNK_SIZE);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_CHUNK_SIZE);
                                 goto error;
                             }
 
@@ -2202,7 +2221,7 @@ namespace ZTImage.HttpParser
                             /* Overflow? Test against a conservative limit for simplicity. */
                             if ((Int64.MaxValue - 16) / 16 < frame.content_length)
                             {
-                                SET_ERRNO(frame,http_errno.HPE_INVALID_CONTENT_LENGTH);
+                                SET_ERRNO(frame, http_errno.HPE_INVALID_CONTENT_LENGTH);
                                 goto error;
                             }
 
@@ -2217,7 +2236,7 @@ namespace ZTImage.HttpParser
                             /* just ignore this shit. TODO check for overflow */
                             if (ch == CR)
                             {
-                                UPDATE_STATE(frame,state.s_chunk_size_almost_done);
+                                UPDATE_STATE(frame, state.s_chunk_size_almost_done);
                                 break;
                             }
                             break;
@@ -2226,18 +2245,18 @@ namespace ZTImage.HttpParser
                     case state.s_chunk_size_almost_done:
                         {
                             assert((frame.flags & flags.F_CHUNKED) == flags.F_CHUNKED);
-                            STRICT_CHECK(frame,ch != LF);
+                            STRICT_CHECK(frame, ch != LF);
 
                             frame.nread = 0;
 
                             if (frame.content_length == 0)
                             {
                                 frame.flags |= flags.F_TRAILING;
-                                UPDATE_STATE(frame,state.s_header_field_start);
+                                UPDATE_STATE(frame, state.s_header_field_start);
                             }
                             else
                             {
-                                UPDATE_STATE(frame,state.s_chunk_data);
+                                UPDATE_STATE(frame, state.s_chunk_data);
                             }
                             if (!RaiseChunkHeader(frame))
                             {
@@ -2250,7 +2269,7 @@ namespace ZTImage.HttpParser
                     case state.s_chunk_data:
                         {
                             UInt64 to_read = Math.Min(frame.content_length,
-                                                   (UInt64)((data + len) - p));
+                                                   (UInt64)((data + count) - p));
 
                             assert((frame.flags & flags.F_CHUNKED) == flags.F_CHUNKED);
                             assert(frame.content_length != 0
@@ -2259,9 +2278,9 @@ namespace ZTImage.HttpParser
                             /* See the explanation in s_body_identity for why the content
                              * length and data pointers are managed this way.
                              */
-                            if (body_mark == null)
+                            if (body_mark == -1)
                             {
-                                body_mark = p;
+                                body_mark = (Int32)(p-data)+offset;
                             }
                             //MARK(body);
                             frame.content_length -= to_read;
@@ -2269,7 +2288,7 @@ namespace ZTImage.HttpParser
 
                             if (frame.content_length == 0)
                             {
-                                UPDATE_STATE(frame,state.s_chunk_data_almost_done);
+                                UPDATE_STATE(frame, state.s_chunk_data_almost_done);
                             }
 
                             break;
@@ -2278,9 +2297,9 @@ namespace ZTImage.HttpParser
                     case state.s_chunk_data_almost_done:
                         //assert(frame.flags & F_CHUNKED);
                         //assert(frame.content_length == 0);
-                        STRICT_CHECK(frame,ch != CR);
-                        UPDATE_STATE(frame,state.s_chunk_data_done);
-                        if (!RaiseBody(frame,body_mark))
+                        STRICT_CHECK(frame, ch != CR);
+                        UPDATE_STATE(frame, state.s_chunk_data_done);
+                        if (!RaiseBody(frame,array, ref body_mark, (Int32)(p - data) + offset))
                         {
                             return RETURN(p, data);
                         }
@@ -2289,9 +2308,9 @@ namespace ZTImage.HttpParser
 
                     case state.s_chunk_data_done:
                         //assert(frame.flags & F_CHUNKED);
-                        STRICT_CHECK(frame,ch != LF);
+                        STRICT_CHECK(frame, ch != LF);
                         frame.nread = 0;
-                        UPDATE_STATE(frame,state.s_chunk_size_start);
+                        UPDATE_STATE(frame, state.s_chunk_size_start);
                         if (!RaiseChunkComplete(frame))
                         {
                             return RETURN(p, data);
@@ -2301,9 +2320,9 @@ namespace ZTImage.HttpParser
 
                     default:
                         //assert(0 && "unhandled state");
-                        SET_ERRNO(frame,http_errno.HPE_INVALID_INTERNAL_STATE);
+                        SET_ERRNO(frame, http_errno.HPE_INVALID_INTERNAL_STATE);
                         goto error;
-                        
+
 
                 }//switch end
 
@@ -2317,23 +2336,23 @@ namespace ZTImage.HttpParser
 
 
             //CALLBACK_DATA_NOADVANCE(header_field);
-            RaiseHeaderField(frame,header_field_mark);
+            RaiseHeaderField(frame,array, ref header_field_mark, (Int32)(p - data) + offset);
             //CALLBACK_DATA_NOADVANCE(header_value);
-            RaiseHeaderValue(frame, header_value_mark);
+            RaiseHeaderValue(frame,array, ref header_value_mark, (Int32)(p - data) + offset);
             //CALLBACK_DATA_NOADVANCE(url);
-            RaiseUrl(frame, url_mark);
+            RaiseUrl(frame,array, ref url_mark, (Int32)(p - data) + offset);
             //CALLBACK_DATA_NOADVANCE(body);
-            RaiseBody(frame, body_mark);
+            RaiseBody(frame,array, ref body_mark, (Int32)(p - data) + offset);
             //CALLBACK_DATA_NOADVANCE(status);
-            RaiseStatus(frame, status_mark);
+            RaiseStatus(frame,array, ref status_mark, (Int32)(p - data) + offset);
 
-            return len;
+            return count;
 
 
             error:
             if (frame.http_errno == http_errno.HPE_OK)
             {
-                SET_ERRNO(frame,http_errno.HPE_UNKNOWN);
+                SET_ERRNO(frame, http_errno.HPE_UNKNOWN);
             }
             return RETURN(p, data);
         }
@@ -2342,95 +2361,111 @@ namespace ZTImage.HttpParser
 
 
         #region events
-        
+
         private bool RaiseMessageBegin(HttpFrame frame)
-        {            
+        {
             if (callback.on_message_begin(frame) != 0)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_message_begin);
+                SET_ERRNO(frame, http_errno.HPE_CB_message_begin);
                 return false;
             }
 
             return true;
         }
 
-        private unsafe bool RaiseUrl(HttpFrame frame,byte* data)
+        private unsafe bool RaiseStatus(HttpFrame frame, byte[] array, ref Int32 start, Int32 end)
         {
-            if (callback.on_url(frame, data) != 0)
+            if (start == -1)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_url);
                 return false;
             }
-
+            
+            if (callback.on_status(frame, frame.status_code,  new ArraySegment<byte>(array, start, end - start)) != 0)
+            {
+                SET_ERRNO(frame, http_errno.HPE_CB_status);
+                return false;
+            }
+            start = -1;
             return true;
         }
 
-        private unsafe bool RaiseStatus(HttpFrame frame,byte* data)
+        private unsafe bool RaiseUrl(HttpFrame frame, byte[] array, ref Int32 start, Int32 end)
         {
-            if (callback.on_status(frame, data) != 0)
+            if (start == -1)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_status);
                 return false;
             }
-
+            
+            if (callback.on_uri(frame, new ArraySegment<byte>(array, start, end - start)) != 0)
+            {
+                SET_ERRNO(frame, http_errno.HPE_CB_url);
+                return false;
+            }
+            start = -1;
             return true;
         }
 
-        private unsafe bool RaiseHeaderField(HttpFrame frame,byte* data)
+
+
+        private unsafe bool RaiseHeaderField(HttpFrame frame,byte[] array,ref Int32 start,Int32 end)
         {
-            if (callback.on_header_field(frame, data) != 0)
+            if (start == -1)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_header_field);
                 return false;
             }
-
+            
+            if (callback.on_header_field(frame,  new ArraySegment<byte>(array, start, end - start)) != 0)
+            {
+                SET_ERRNO(frame, http_errno.HPE_CB_header_field);
+                return false;
+            }
+            start = -1;
             return true;
         }
-        
-        private unsafe bool RaiseHeaderValue(HttpFrame frame, byte* data)
+
+        private unsafe bool RaiseHeaderValue(HttpFrame frame, byte[] array, ref Int32 start, Int32 end)
         {
-            if (callback.on_header_value(frame, data) != 0)
+            if (start == -1)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_header_value);
                 return false;
             }
+            
 
+            if (callback.on_header_value(frame, new ArraySegment<byte>(array, start, end - start)) != 0)
+            {
+                SET_ERRNO(frame, http_errno.HPE_CB_header_value);
+                return false;
+            }
+            start = -1;
             return true;
         }
 
-
-        private bool RaiseHeaderComplete(HttpFrame frame)
+        private unsafe bool RaiseBody(HttpFrame frame, byte[] array, ref Int32 start, Int32 end)
         {
-            if (callback.on_headers_complete(frame) != 0)
+            if (start == -1)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_headers_complete);
                 return false;
             }
-
+            if (callback.on_body(frame, new ArraySegment<byte>(array,start,end-start)) != 0)
+            {
+                SET_ERRNO(frame, http_errno.HPE_CB_body);
+                return false;
+            }
+            start = -1;
             return true;
         }
 
-        private unsafe bool RaiseBody(HttpFrame frame, byte* data)
-        {
-            if (callback.on_body(frame, data) != 0)
-            {
-                SET_ERRNO(frame,http_errno.HPE_CB_body);
-                return false;
-            }
-
-            return true;
-        }
-        
         private bool RaiseMessageComplete(HttpFrame frame)
         {
             if (callback.on_message_complete(frame) != 0)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_message_complete);
+                SET_ERRNO(frame, http_errno.HPE_CB_message_complete);
                 return false;
             }
 
             return true;
         }
+
         /* When on_chunk_header is called, the current chunk length is stored
          * in frame.content_length.
          */
@@ -2438,7 +2473,7 @@ namespace ZTImage.HttpParser
         {
             if (callback.on_chunk_header(frame) != 0)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_chunk_header);
+                SET_ERRNO(frame, http_errno.HPE_CB_chunk_header);
                 return false;
             }
 
@@ -2449,7 +2484,7 @@ namespace ZTImage.HttpParser
         {
             if (callback.on_chunk_complete(frame) != 0)
             {
-                SET_ERRNO(frame,http_errno.HPE_CB_chunk_complete);
+                SET_ERRNO(frame, http_errno.HPE_CB_chunk_complete);
                 return false;
             }
 
