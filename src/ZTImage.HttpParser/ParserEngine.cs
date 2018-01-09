@@ -1398,7 +1398,8 @@ namespace ZTImage.HttpParser
                                         {
                                             frame.header_state = HeaderStates.h_general;
                                         }
-                                        else if (frame.index == CONNECTION.Length - 2)
+                                        //else if (frame.index == CONNECTION.Length - 2)
+                                        else if (frame.index == CONNECTION.Length - 1)
                                         {
                                             frame.header_state = HeaderStates.h_connection;
                                         }
@@ -1413,7 +1414,8 @@ namespace ZTImage.HttpParser
                                         {
                                             frame.header_state = HeaderStates.h_general;
                                         }
-                                        else if (frame.index == PROXY_CONNECTION.Length - 2)
+                                        //else if (frame.index == PROXY_CONNECTION.Length - 2)
+                                        else if (frame.index == PROXY_CONNECTION.Length - 1)
                                         {
                                             frame.header_state = HeaderStates.h_connection;
                                         }
@@ -1423,12 +1425,13 @@ namespace ZTImage.HttpParser
 
                                     case HeaderStates.h_matching_content_length:
                                         frame.index++;
-                                        if (frame.index > CONTENT_LENGTH.Length - 1
+                                        if (frame.index > CONTENT_LENGTH.Length-1
                                             || c != CONTENT_LENGTH[frame.index])
                                         {
                                             frame.header_state = HeaderStates.h_general;
                                         }
-                                        else if (frame.index == CONTENT_LENGTH.Length - 2)
+                                        //else if (frame.index == CONTENT_LENGTH.Length - 2)
+                                        else if (frame.index == CONTENT_LENGTH.Length-1 )
                                         {
                                             frame.header_state = HeaderStates.h_content_length;
                                         }
@@ -1443,7 +1446,8 @@ namespace ZTImage.HttpParser
                                         {
                                             frame.header_state = HeaderStates.h_general;
                                         }
-                                        else if (frame.index == TRANSFER_ENCODING.Length - 2)
+                                        //else if (frame.index == TRANSFER_ENCODING.Length - 2)
+                                        else if (frame.index == TRANSFER_ENCODING.Length - 1)
                                         {
                                             frame.header_state = HeaderStates.h_transfer_encoding;
                                         }
@@ -1458,7 +1462,8 @@ namespace ZTImage.HttpParser
                                         {
                                             frame.header_state = HeaderStates.h_general;
                                         }
-                                        else if (frame.index == UPGRADE.Length - 2)
+                                        //else if (frame.index == UPGRADE.Length - 2)
+                                        else if (frame.index == UPGRADE.Length - 1)
                                         {
                                             frame.header_state = HeaderStates.h_upgrade;
                                         }
@@ -1689,13 +1694,7 @@ namespace ZTImage.HttpParser
                                                 goto error;
                                             }
 
-                                            t = frame.content_length;
-
-
-                                            t *= 10;
-
-
-                                            t += (byte)(ch - '0');
+                                            t = frame.content_length*10+ (byte)(ch - '0');
 
                                             /* Overflow? Test against a conservative limit for simplicity. */
                                             if ((UInt64.MaxValue - 10) / 10 < frame.content_length)
@@ -1717,7 +1716,7 @@ namespace ZTImage.HttpParser
                                         {
                                             h_state = HeaderStates.h_general;
                                         }
-                                        else if (frame.index == CHUNKED.Length - 2)
+                                        else if (frame.index == CHUNKED.Length - 1)
                                         {
                                             h_state = HeaderStates.h_transfer_encoding_chunked;
                                         }
@@ -1760,7 +1759,7 @@ namespace ZTImage.HttpParser
                                         {
                                             h_state = HeaderStates.h_matching_connection_token;
                                         }
-                                        else if (frame.index == KEEP_ALIVE.Length - 2)
+                                        else if (frame.index == KEEP_ALIVE.Length - 1)
                                         {
                                             h_state = HeaderStates.h_connection_keep_alive;
                                         }
@@ -1773,7 +1772,7 @@ namespace ZTImage.HttpParser
                                         {
                                             h_state = HeaderStates.h_matching_connection_token;
                                         }
-                                        else if (frame.index == CLOSE.Length - 2)
+                                        else if (frame.index == CLOSE.Length - 1)
                                         {
                                             h_state = HeaderStates.h_connection_close;
                                         }
@@ -1787,7 +1786,7 @@ namespace ZTImage.HttpParser
                                         {
                                             h_state = HeaderStates.h_matching_connection_token;
                                         }
-                                        else if (frame.index == UPGRADE.Length - 2)
+                                        else if (frame.index == UPGRADE.Length - 1)
                                         {
                                             h_state = HeaderStates.h_connection_upgrade;
                                         }

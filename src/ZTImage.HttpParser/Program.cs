@@ -15,10 +15,11 @@ namespace ZTImage.HttpParser
         {
             string request = @"POST http://admin.xzhealth.cn/Frame/Login HTTP/1.1
 Host: admin.xzhealth.cn
-Connection: keep-alive
+Connection: close
 Content-Length: 46
 Cache-Control: max-age=0
 Origin: http://admin.xzhealth.cn
+Upgrade: website
 Upgrade-Insecure-Requests: 1
 Content-Type: application/x-www-form-urlencoded
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36
@@ -36,13 +37,13 @@ ispostback=1&username=admin&password=283965069";
 
             HttpFrame frame = new HttpFrame();
             
-            Int32 len = RequestData.Length;
+            Int32 len = ResponseDatas.Length;
             Int32 count = 0;
             //Stopwatch watch = new Stopwatch();
             //watch.Start();
             //for (int i = 0; i < 1000000; i++)
             //{
-                count = engine.Execute(frame, RequestData);
+                count = engine.Execute(frame, ResponseDatas);
             //    frame.Reset();
             //}
             //watch.Stop();

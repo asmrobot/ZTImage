@@ -63,7 +63,12 @@ namespace ZTImage.HttpParser
         internal bool lenient_http_headers = false;//http header 宽容模式 1bits
 
         internal UInt32 nread;          /* # bytes read in various scenarios */
-        public UInt64 content_length; /* # bytes in body (0 if no Content-Length header) */
+        public UInt64 content_length
+        {
+            get;
+
+            set;
+        }/* # bytes in body (0 if no Content-Length header) */
 
         /** READ-ONLY **/
         public byte http_major
