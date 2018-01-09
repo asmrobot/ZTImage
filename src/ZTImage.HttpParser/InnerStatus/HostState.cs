@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZTImage.HttpParser
 {
-    public enum http_host_state:byte
+    public enum HostState:byte
     {
         s_http_host_dead = 1
       , s_http_userinfo_start

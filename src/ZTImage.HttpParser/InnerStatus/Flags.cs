@@ -9,7 +9,7 @@ namespace ZTImage.HttpParser
     /// <summary>
     /// for ParserEngine.flags field
     /// </summary>
-    public enum flags:byte
+    internal enum Flags:byte
     {
         F_CHUNKED = 1 << 0
       , F_CONNECTION_KEEP_ALIVE = 1 << 1

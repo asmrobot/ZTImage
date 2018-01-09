@@ -8,21 +8,31 @@ namespace ZTImage.HttpParser
 {
     public class HttpFrame
     {
-        public HttpFrame():this(http_parser_type.HTTP_BOTH)
-        {
+        public HttpFrame():this(HttpParserType.HTTP_BOTH)
+        {}
 
-        }
-
-        public HttpFrame(http_parser_type parserType)
+        public HttpFrame(HttpParserType parserType)
         {
-            this.type = parserType;
+            this.mSourceType=this.type = parserType;
             Init();
         }
 
         private void Init()
         {
-            this.state = (this.type == http_parser_type.HTTP_REQUEST ? state.s_start_req : (this.type == http_parser_type.HTTP_RESPONSE ? state.s_start_res : state.s_start_req_or_res));
-            this.http_errno = http_errno.HPE_OK;
+            this.type = this.mSourceType;
+            flags = 0;
+            state = (this.type == HttpParserType.HTTP_REQUEST ? State.s_start_req : (this.type == HttpParserType.HTTP_RESPONSE ? State.s_start_res : State.s_start_req_or_res));
+            header_state = 0;
+            lenient_http_headers = false;
+            nread = 0;
+            content_length = 0;
+            http_major = 0;
+            http_minor = 0;
+            status_code = 0;
+            method = 0;
+            http_errno = HttpErrNO.HPE_OK;
+            upgrade = false;
+            data = default(ArraySegment<byte>);
         }
 
         /// <summary>
@@ -30,40 +40,94 @@ namespace ZTImage.HttpParser
         /// </summary>
         public void Reset()
         {
-
+            Init();
         }
 
-        public http_parser_type type;//enum http_parser_type : 2bits
 
-        public flags flags; // F_* values from 'flags' enum; semi-public :8bits
+        private HttpParserType mSourceType;
+        /// <summary>
+        /// enum http_parser_type : 2bits
+        /// </summary>
+        internal HttpParserType type
+        {
+            get;
+            set;
+        }
+
+        internal Flags flags; // F_* values from 'flags' enum; semi-public :8bits
 
 
-        internal state state; //enum state from http_parser.c :7 bits
-        internal header_states header_state; // enum header_state from http_parser.c :7bits
+        internal State state; //enum state from http_parser.c :7 bits
+        internal HeaderStates header_state; // enum header_state from http_parser.c :7bits
         internal byte index;//index into current matcher :7bits
         internal bool lenient_http_headers = false;//http header 宽容模式 1bits
 
-        public UInt32 nread;          /* # bytes read in various scenarios */
+        internal UInt32 nread;          /* # bytes read in various scenarios */
         public UInt64 content_length; /* # bytes in body (0 if no Content-Length header) */
 
         /** READ-ONLY **/
-        public byte http_major;
-        public byte http_minor;
-        public UInt16 status_code; /* responses only :2bytes*/
-        public http_method method;       /* requests only  :8bits*/
-        public http_errno http_errno; //7 bits
+        public byte http_major
+        {
+            get;
+            internal set;
+        }
+        public byte http_minor
+        {
+            get;
+            internal set;
+        }
+
+        /// <summary>
+        /// responses only :2bytes
+        /// </summary>
+        public UInt16 status_code
+        {
+            get;
+            internal set;
+        }
+
+        /// <summary>
+        /// requests only  :8bits
+        /// </summary>
+        public HttpMethod method
+        {
+            get;
+            internal set;
+        }
+
+        /// <summary>
+        /// execute result :7 bits
+        /// </summary>
+        public HttpErrNO http_errno
+        {
+            get;
+            internal set;
+        }
 
 
 
 
-        /* 1 = Upgrade header was present and the parser has exited because of that.
-         * 0 = No upgrade header present.
+        /* true = Upgrade header was present and the parser has exited because of that.
+         * false = No upgrade header present.
          * Should be checked when http_parser_execute() returns in addition to
          * error checking.
          */
-        public bool upgrade; //1bits
+        /// <summary>
+        /// tras to websocket:1bits
+        /// </summary>
+        public bool upgrade
+        {
+            get;
+            internal set;
+        }
 
-        /** PUBLIC **/
-        public ArraySegment<byte> data; /* A pointer to get hook to the "connection" or "socket" object */
+        /// <summary>
+        /// A pointer to get hook to the "connection" or "socket" object
+        /// </summary>
+        public ArraySegment<byte> data
+        {
+            get;
+            set;
+        }
     }
 }

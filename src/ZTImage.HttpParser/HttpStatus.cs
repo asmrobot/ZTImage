@@ -9,7 +9,7 @@ namespace ZTImage.HttpParser
     /// <summary>
     /// http status
     /// </summary>
-    public enum http_status:UInt16
+    public enum HttpStatus:UInt16
     {
         HTTP_STATUS_CONTINUE                        =100,//Continue)                       
         HTTP_STATUS_SWITCHING_PROTOCOLS             =101,//Switching Protocols)            

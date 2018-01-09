@@ -9,10 +9,10 @@ namespace ZTImage.HttpParser
     /// <summary>
     /// 解析类型
     /// </summary>
-    public enum http_parser_type
+    public enum HttpParserType
     {
-        HTTP_REQUEST,
-        HTTP_RESPONSE,
+        HTTP_REQUEST,//请求
+        HTTP_RESPONSE,//应答
         HTTP_BOTH
     }
 }

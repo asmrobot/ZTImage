@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZTImage.HttpParser
 {
-    public enum http_errno:byte
+    public enum HttpErrNO:byte
     {
         /* No error */
         HPE_OK,

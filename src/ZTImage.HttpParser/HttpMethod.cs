@@ -9,7 +9,7 @@ namespace ZTImage.HttpParser
     /// <summary>
     /// 支持的请求方法
     /// </summary>
-    public enum http_method:byte
+    public enum HttpMethod:byte
     {
         DELETE      =0, 
         GET         =1, 

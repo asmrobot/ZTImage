@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZTImage.HttpParser
 {
-    public enum header_states:byte
+    internal enum HeaderStates:byte
     {
         h_general = 0
       , h_C

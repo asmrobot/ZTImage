@@ -43,23 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultParserCallback.cs" />
-    <Compile Include="flags.cs" />
-    <Compile Include="header_states.cs" />
+    <Compile Include="InnerStatus\DefaultParserCallback.cs" />
+    <Compile Include="InnerStatus\Flags.cs" />
+    <Compile Include="InnerStatus\HeaderStates.cs" />
     <Compile Include="HttpFrame.cs" />
     <Compile Include="IParserCallback.cs" />
-    <Compile Include="http_errno.cs" />
-    <Compile Include="http_errstr.cs" />
-    <Compile Include="http_host_state.cs" />
-    <Compile Include="http_method.cs" />
-    <Compile Include="http_parser_url.cs" />
-    <Compile Include="http_parser_url_fields.cs" />
+    <Compile Include="ErrNo.cs" />
+    <Compile Include="InnerStatus\HttpErrStr.cs" />
+    <Compile Include="InnerStatus\HostState.cs" />
+    <Compile Include="HttpMethod.cs" />
     <Compile Include="ParserEngine.cs" />
-    <Compile Include="http_parser_type.cs" />
+    <Compile Include="HttpParserType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="http_status.cs" />
-    <Compile Include="state.cs" />
+    <Compile Include="HttpStatus.cs" />
+    <Compile Include="InnerStatus\State.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

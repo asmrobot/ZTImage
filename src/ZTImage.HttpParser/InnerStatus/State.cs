@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZTImage.HttpParser
 {
-    public enum state:byte
+    internal enum State:byte
     {
         s_dead = 1 /* important that this is > 0 */
       , s_start_req_or_res
