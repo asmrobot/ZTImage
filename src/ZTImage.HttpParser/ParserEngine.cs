@@ -28,7 +28,7 @@ namespace ZTImage.HttpParser
 
         public ParserEngine()
         {
-            this.callback = DefaultParserCallback.Define;
+            this.callback = EmptyParserCallback.Define;
         }
         public ParserEngine(IParserCallback callback)
         {

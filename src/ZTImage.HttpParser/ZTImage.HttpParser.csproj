@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultHttpFrame.cs" />
+    <Compile Include="InnerStatus\EmptyParserCallback.cs" />
     <Compile Include="InnerStatus\DefaultParserCallback.cs" />
     <Compile Include="InnerStatus\Flags.cs" />
     <Compile Include="InnerStatus\HeaderStates.cs" />
