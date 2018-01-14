@@ -36,6 +36,12 @@ namespace ZTImage.HttpParser
         }
 
         /// <summary>
+        /// 清理
+        /// </summary>
+        protected virtual void Clear() { }
+        
+
+        /// <summary>
         /// 重置复用
         /// </summary>
         public void Reset()

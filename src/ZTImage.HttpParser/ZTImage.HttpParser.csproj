@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentEncoding.cs" />
     <Compile Include="DefaultHttpFrame.cs" />
     <Compile Include="InnerStatus\EmptyParserCallback.cs" />
     <Compile Include="InnerStatus\DefaultParserCallback.cs" />
@@ -60,6 +61,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HttpStatus.cs" />
     <Compile Include="InnerStatus\State.cs" />
+    <Compile Include="ZTHttpFrame.cs" />
+    <Compile Include="ZTParserCallback.cs" />
+    <Compile Include="ZTRequest.cs" />
+    <Compile Include="ZTResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
