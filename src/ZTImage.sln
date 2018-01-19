@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage", "ZTImage\ZTImage.csproj", "{957AC055-A1F5-421D-AE3C-08E250104634}"
 EndProject
@@ -14,6 +14,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.SchedulerDaemon", "ZTImage.SchedulerDaemon\ZTImage.SchedulerDaemon.csproj", "{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.HttpParser", "ZTImage.HttpParser\ZTImage.HttpParser.csproj", "{21AE8167-100F-445E-854E-6E2ABF3A388F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.ServiceController", "ZTImage.ServiceController\ZTImage.ServiceController.csproj", "{4A957175-ABAB-4404-9466-C4AA272E4537}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{CCD099F3-61DB-4221-A48C-0C7293F9057B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTest", "ServiceTest\ServiceTest.csproj", "{B93A664A-48E8-4D6E-B3F7-783BE433C666}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +51,22 @@ Global
 		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A957175-ABAB-4404-9466-C4AA272E4537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A957175-ABAB-4404-9466-C4AA272E4537}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A957175-ABAB-4404-9466-C4AA272E4537}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A957175-ABAB-4404-9466-C4AA272E4537}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B93A664A-48E8-4D6E-B3F7-783BE433C666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B93A664A-48E8-4D6E-B3F7-783BE433C666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B93A664A-48E8-4D6E-B3F7-783BE433C666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B93A664A-48E8-4D6E-B3F7-783BE433C666}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{943DF2CD-29D0-41D2-98CE-B8E0A254D2C0} = {CCD099F3-61DB-4221-A48C-0C7293F9057B}
+		{4682581E-1BA8-4869-8E18-33E6A667D8B4} = {CCD099F3-61DB-4221-A48C-0C7293F9057B}
+		{B93A664A-48E8-4D6E-B3F7-783BE433C666} = {CCD099F3-61DB-4221-A48C-0C7293F9057B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E4B10B62-9B23-4F94-9548-3B7FC03CE7B7}
