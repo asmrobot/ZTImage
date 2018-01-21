@@ -739,6 +739,9 @@ namespace ZTImage.Json
                     if (_Current != 'y') ThrowException();
                     MoveNext();
                     return double.NegativeInfinity;
+                case '"':
+                    return 0;
+
                 default:
                     if ((WordChars[_Current] & 4) > 0)
                     {

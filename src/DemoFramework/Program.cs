@@ -7,67 +7,44 @@ using ZTImage.Log;
 
 namespace DemoFramework
 {
-    public enum flag:byte
+    public class App_Upload_sec_user
     {
-        one=0x01<<0,
-        two=0x01<<1,
-        three=0x01<<2
-    }
+        public Guid userid { get; set; }
+
+        public Int64 birthday { get; set; }
+        public string nick { get; set; }
+        public string idnumber { get; set; }
+        public string sex { get; set; }
+        public decimal height { get; set; }
+        public decimal weight { get; set; }
+        public string email { get; set; }
+        public string phonenumber { get; set; }
+
+        public int departmantid { get; set; }
+        public string doctorintroduct { get; set; }
+
+        public string headportrait { get; set; }
 
 
-    public class InoneagentRequestModel
-    {
-        ///<summary>
-        ///创建时间开始日期，非必要可为空
-        /// </summary>
-        public Int64 createbegin { get; set; }
-        ///<summary>
-        ///创建时间结束日期，非必要可为空
-        /// </summary>
-        public Int64? createend { get; set; }
-        ///<summary>
-        ///页码，非必要可为空（为空时默认1）
-        /// </summary>
-        public int pageindex { get; set; }
-        ///<summary>
-        ///页大小，非必要可为空(为空时默认20)(20-500)
-        /// </summary>
-        public int pagesize { get; set; }
-        /// <summary>
-        /// 提交请求的时间，为linux时间戳，UTC时间，必要
-        /// </summary>
-        public long ts { get; set; }
-        /// <summary>
-        /// 接口提供方提供的AP值，必要
-        /// </summary>
-        public string ap { get; set; }
-        /// <summary>
-        /// 加密值（加密算法见最后），必要
-        /// </summary>
-        public string sig { get; set; }
+
+        //public string oldpsw { get; set; }
+        //public string newpsw { get; set; }
+
+
+        //public string picname { get; set; }
+        //public string image { get; set; }
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-            //string json = "{\"ap\":\"09de6c06-d81e-4027-a176-e379c0e5b66b\",\"createbegin\":\"1515046734\"}";
-            //var model = ZTImage.Json.JsonParser.ToObject<InoneagentRequestModel>(json);
 
-            //Console.WriteLine(model.ap);
+            string json = "{\"phonenumber\":\"\"}";
 
-            flag f = flag.one|flag.two;
+            var model = ZTImage.Json.JsonParser.ToObject<App_Upload_sec_user>(json);
 
-            Console.WriteLine(((byte)f).ToString());
-
-            if ((f & flag.two)==flag.two)
-            {
-                Console.WriteLine("one");
-            }
-            else
-            {
-                Console.WriteLine("two");
-            }
+            Console.WriteLine(model.phonenumber);
 
 
             Console.ReadKey();
