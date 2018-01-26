@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>ZTImage.Log</id>
+    <version>0.0.0.1</version>
+    <authors>ZTImage.Log</authors>
+    <owners>ZTImage.Log</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NLog的封装，配置文件为nlog的配置文件，放在目录configs/nlog.config里</description>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="NLog" version="4.5.0-rc03" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="NLog" version="4.5.0-rc03" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\Quartz\Xml\job_scheduling_data_2_0.xsd" target="content" />
+  </files>
+</package>

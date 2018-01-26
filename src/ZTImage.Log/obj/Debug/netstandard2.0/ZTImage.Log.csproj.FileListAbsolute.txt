@@ -1,0 +1,9 @@
+D:\Code\git\ZTImage\src\ZTImage.Log\bin\Debug\netstandard2.0\nlog.config
+D:\Code\git\ZTImage\src\ZTImage.Log\bin\Debug\netstandard2.0\ZTImage.Log.deps.json
+D:\Code\git\ZTImage\src\ZTImage.Log\bin\Debug\netstandard2.0\ZTImage.Log.dll
+D:\Code\git\ZTImage\src\ZTImage.Log\bin\Debug\netstandard2.0\ZTImage.Log.pdb
+D:\Code\git\ZTImage\src\ZTImage.Log\obj\Debug\netstandard2.0\ZTImage.Log.csproj.CoreCompileInputs.cache
+D:\Code\git\ZTImage\src\ZTImage.Log\obj\Debug\netstandard2.0\ZTImage.Log.AssemblyInfoInputs.cache
+D:\Code\git\ZTImage\src\ZTImage.Log\obj\Debug\netstandard2.0\ZTImage.Log.AssemblyInfo.cs
+D:\Code\git\ZTImage\src\ZTImage.Log\obj\Debug\netstandard2.0\ZTImage.Log.dll
+D:\Code\git\ZTImage\src\ZTImage.Log\obj\Debug\netstandard2.0\ZTImage.Log.pdb
