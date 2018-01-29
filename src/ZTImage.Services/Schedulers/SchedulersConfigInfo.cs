@@ -19,7 +19,6 @@ namespace ZTImage.Services.Schedulers
         {
             get;
             set;
-
         }
 
         public JobInfo this[string Name]

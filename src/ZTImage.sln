@@ -11,11 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoNetCore", "DemoNetCore\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Database", "ZTImage.Database\ZTImage.Database.csproj", "{830DDEB3-AB25-457C-B249-27BF4BC38427}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.SchedulerDaemon", "ZTImage.SchedulerDaemon\ZTImage.SchedulerDaemon.csproj", "{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.HttpParser", "ZTImage.HttpParser\ZTImage.HttpParser.csproj", "{21AE8167-100F-445E-854E-6E2ABF3A388F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.ServiceController", "ZTImage.ServiceController\ZTImage.ServiceController.csproj", "{4A957175-ABAB-4404-9466-C4AA272E4537}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{CCD099F3-61DB-4221-A48C-0C7293F9057B}"
 EndProject
@@ -23,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTest", "ServiceTest\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Log", "ZTImage.Log\ZTImage.Log.csproj", "{E26AB214-0791-4478-A47B-3E070D41D6B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.Services", "ZTImage.Services\ZTImage.Services.csproj", "{84F32538-21DA-42EA-91C7-56A5D99A35A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Services", "ZTImage.Services\ZTImage.Services.csproj", "{84F32538-21DA-42EA-91C7-56A5D99A35A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,18 +43,10 @@ Global
 		{830DDEB3-AB25-457C-B249-27BF4BC38427}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{830DDEB3-AB25-457C-B249-27BF4BC38427}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{830DDEB3-AB25-457C-B249-27BF4BC38427}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35296FCD-3847-49B5-A4EA-1CC9295FBB6E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A957175-ABAB-4404-9466-C4AA272E4537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A957175-ABAB-4404-9466-C4AA272E4537}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A957175-ABAB-4404-9466-C4AA272E4537}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A957175-ABAB-4404-9466-C4AA272E4537}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B93A664A-48E8-4D6E-B3F7-783BE433C666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B93A664A-48E8-4D6E-B3F7-783BE433C666}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B93A664A-48E8-4D6E-B3F7-783BE433C666}.Release|Any CPU.ActiveCfg = Release|Any CPU

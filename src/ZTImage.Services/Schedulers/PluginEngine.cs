@@ -31,7 +31,7 @@ namespace ZTImage.Services.Schedulers
             IgnoreDlls.Add("Common.Logging.dll".ToUpper(), true);
             IgnoreDlls.Add("Common.Logging.Core.dll".ToUpper(), true);
 
-            IgnoreDlls.Add("ZTImage.SchedulerDaemon.dll".ToUpper(), true);
+            IgnoreDlls.Add("ZTImage.Services.dll".ToUpper(), true);
             IgnoreDlls.Add("System.Configuration.ConfigurationManager.dll".ToUpper(), true);
             
             IgnoreDlls.Add("System.Data.SqlClient.dll".ToUpper(), true);
@@ -40,11 +40,12 @@ namespace ZTImage.Services.Schedulers
 
             
         }
-        public PluginEngine()
-        {
-            
-            Initialize();
+        public PluginEngine():this(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"))
+        {}
 
+        public PluginEngine(string pluginsDir)
+        {
+            Initialize(pluginsDir);
         }
 
         private readonly static Dictionary<string, bool> IgnoreDlls = new Dictionary<string, bool>();
@@ -58,12 +59,11 @@ namespace ZTImage.Services.Schedulers
         /// 初始化任务
         /// </summary>
         /// <returns></returns>
-        private void Initialize()
+        private void Initialize(string pluginsDir)
         {
             if (Interlocked.CompareExchange(ref InitializeState, 1, 0) == 0)
             {
-                LoadAssembly();
-
+                FindAssembly(pluginsDir);
                 LoadJobs();
             }
         }
@@ -144,10 +144,8 @@ namespace ZTImage.Services.Schedulers
         /// <summary>
         /// 加载程序集
         /// </summary>
-        private void LoadAssembly()
+        private void FindAssembly(string pluginsDir)
         {
-            var plugins =Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Plugins");
-            
             //搜索插件目录下bin目录下的所有*.dll 将这些.dll 文件拷贝到一个缓存目录
             var target = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app_data", "plugins-cache");
             if (Directory.Exists(target))
@@ -158,7 +156,7 @@ namespace ZTImage.Services.Schedulers
 
             IEnumerable<string> dlls;
             string filename = string.Empty;
-            var dirs = Directory.EnumerateDirectories(plugins);
+            var dirs = Directory.EnumerateDirectories(pluginsDir);
             foreach (var dir in dirs)
             {
                 if (Directory.Exists(dir))
