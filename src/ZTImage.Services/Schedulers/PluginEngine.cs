@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using ZTImage.Configuration;
 
 
-namespace ZTImage.SchedulerDaemon
+namespace ZTImage.Services.Schedulers
 {
     public class PluginEngine
     {
@@ -51,7 +51,7 @@ namespace ZTImage.SchedulerDaemon
         private Int32 InitializeState = 0;
         private ISchedulerFactory factory;
         private IScheduler scheduler;
-        private SortOutConfigInfo mConfig;
+        private SchedulersConfigInfo mConfig;
 
         #region 周期操作
         /// <summary>
@@ -117,15 +117,10 @@ namespace ZTImage.SchedulerDaemon
         /// <summary>
         /// 得到任务列表
         /// </summary>
-#if NET45
-        
+#if NET45   
         public List<IJobDetail> GetJobList()
 #else
-        /// <summary>
-        /// 得到任务列表
-        /// </summary>
         public async Task<List<IJobDetail>> GetJobList()
-
 #endif
         {
             List<IJobDetail> details = new List<IJobDetail>();
@@ -233,7 +228,7 @@ namespace ZTImage.SchedulerDaemon
 #endif
 
 
-            mConfig = ConfigHelper.GetInstance<SortOutConfigInfo>();
+            mConfig = ConfigHelper.GetInstance<SchedulersConfigInfo>();
             for (int j = 0; j < mConfig.Jobs.Length; j++)
             {
                 JobInfo job = mConfig.Jobs[j];
@@ -299,7 +294,5 @@ namespace ZTImage.SchedulerDaemon
 
             return null;
         }
-
-        
     }
 }

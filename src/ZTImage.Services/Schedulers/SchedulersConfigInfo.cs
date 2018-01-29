@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using ZTImage.Configuration;
 
-namespace ZTImage.SchedulerDaemon
+namespace ZTImage.Services.Schedulers
 {
-    [ConfigPath("configs","sortout.config")]
-    public class SortOutConfigInfo
+    [ConfigPath("configs", "schedulers.config")]
+    public class SchedulersConfigInfo
     {
         /// <summary>
         /// 任务列表

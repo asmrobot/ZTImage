@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net45</TargetFramework>
+    <!--<TargetFrameworks>net45;netstandard2.0</TargetFrameworks>-->
+  </PropertyGroup>
+
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+		<DefineConstants>NET45</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+		<DefineConstants>NETSTANDARD20</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+		<PackageReference Include="Quartz" Version="2.6.1" />
+		<Reference Include="System.ServiceProcess" />
+		<Reference Include="System.Configuration.Install" />
+	</ItemGroup>
+
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+		<PackageReference Include="Quartz" Version="3.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Plugins\ClassLibrary2\**" />
+		<EmbeddedResource Remove="Plugins\ClassLibrary2\**" />
+		<None Remove="Plugins\ClassLibrary2\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="NLog" Version="4.5.0-rc04" />
+		<PackageReference Include="ZTImage" Version="1.1.3" />
+		<PackageReference Include="ZTImage.Log" Version="0.0.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Schedulers\schedulers.config">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Daemons\ZTServiceBase.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
+	</ItemGroup>
+	
+</Project>
