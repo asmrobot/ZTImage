@@ -36,7 +36,13 @@ namespace ZTImage.Services.Schedulers
         {
             try
             {
-                return Execute(string.Empty);
+                string ds = string.Empty;
+                Object data=context.JobDetail.JobDataMap.Get("data");
+                if (data != null)
+                {
+                    ds = data.ToString();
+                }
+                return Execute(ds);
             }
             catch (Exception error)
             {
