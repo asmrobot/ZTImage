@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-#if NETCOREAPP
+#if NETSTANDARD20
 using System.Runtime.Loader;
 #endif
 using System.Text;
@@ -146,6 +146,10 @@ namespace ZTImage.Services.Schedulers
         /// </summary>
         private void FindAssembly(string pluginsDir)
         {
+            if (!Directory.Exists(pluginsDir))
+            {
+                return;
+            }
             //搜索插件目录下bin目录下的所有*.dll 将这些.dll 文件拷贝到一个缓存目录
             var target = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app_data", "plugins-cache");
             if (Directory.Exists(target))
@@ -247,7 +251,7 @@ namespace ZTImage.Services.Schedulers
                 }
                 catch (Exception ex)
                 {
-                    ZTImage.Log.Trace.Error("查找类型失败:"+job.JobType);
+                    ZTImage.Log.Trace.Error("查找类型失败:"+job.JobType,ex);
                     continue;
                 }
                 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using ZTImage.ServiceController;
+using ZTImage.Services.Schedulers;
 
 namespace ServiceTest
 {
@@ -12,10 +12,16 @@ namespace ServiceTest
     {
         static void Main(string[] args)
         {
+            ZTImage.Log.Trace.EnableListener(ZTImage.Log.NLog.Instance);
             //xx.exe [-i myservicename|--install myservicename]
             //xx.exe [-u myservicename|--uninstall myservicename]
-            ServiceHelper.Run(new RunDemo(), args);
 
+            PluginEngine engine = new PluginEngine();
+            engine.Start();
+
+            ZTImage.Log.Trace.Info("engine complete");
+            new System.Threading.ManualResetEvent(false).WaitOne();
+            engine.Stop(true);
         }
     }
 }

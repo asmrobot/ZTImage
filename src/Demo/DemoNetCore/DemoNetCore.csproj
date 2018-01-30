@@ -10,11 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZTImage" Version="1.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ZTImage.Database\ZTImage.Database.csproj" />
+    <ProjectReference Include="..\..\ZTImage.Database\ZTImage.Database.csproj" />
+    <ProjectReference Include="..\..\ZTImage\ZTImage.csproj" />
   </ItemGroup>
 
 </Project>

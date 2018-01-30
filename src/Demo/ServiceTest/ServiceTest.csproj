@@ -42,9 +42,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZTImage, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ZTImage.1.1.2\lib\net45\ZTImage.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RunDemo.cs" />
@@ -53,7 +50,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="configs\nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="configs\schedulers.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ZTImage.Log\ZTImage.Log.csproj">
+      <Project>{e26ab214-0791-4478-a47b-3e070d41d6b2}</Project>
+      <Name>ZTImage.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZTImage.Services\ZTImage.Services.csproj">
+      <Project>{84f32538-21da-42ea-91c7-56a5d99a35a7}</Project>
+      <Name>ZTImage.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZTImage\ZTImage.csproj">
+      <Project>{957ac055-a1f5-421d-ae3c-08e250104634}</Project>
+      <Name>ZTImage</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

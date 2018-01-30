@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Quartz;
@@ -17,7 +16,13 @@ namespace ZTImage.Services.Schedulers
         {
             try
             {
-                //Execute(string.Empty);
+                string ds = string.Empty;
+                Object data=context.JobDetail.JobDataMap.Get("data");
+                if (data != null)
+                {
+                    ds = data.ToString();
+                }
+                Execute(ds);
             }
             catch (Exception error)
             {
