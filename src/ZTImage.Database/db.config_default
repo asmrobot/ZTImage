@@ -4,5 +4,7 @@
     <Connection ID="mysqldb" DBType="MySql" ConnectionString="Server=192.168.2.124;charset=gbk;Database=webdb;Uid=root;Pwd=283965069;default command timeout=120;"></Connection>
 	  <Connection ID="sqlserverdb" DBType="SqlServer" ConnectionString="server=219.232.245.66;user id=union;password=LKJFodfjm9d7f78a96Rifo_+_f9df97655fd;database=dbUnion;min pool size=10;max pool size=500;"></Connection>
     <Connection ID="log"    DBType="MongoDB" ConnectionString="mongodb://asminfo:283965069@127.0.0.1:3721/logs"></Connection>
+    <Connection ID="sqlitedb" DBType="Sqlite" ConnectionString="Data Source=filename;Version=3;"></Connection>
+    
   </Connections>
 </DBConfigInfo>
