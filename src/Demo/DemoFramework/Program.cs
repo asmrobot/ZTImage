@@ -3,48 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZTImage.Log;
+using ZTImage.WeChat;
+using ZTImage.WeChat.Messages;
 
 namespace DemoFramework
 {
-    public class App_Upload_sec_user
-    {
-        public Guid userid { get; set; }
-
-        public Int64 birthday { get; set; }
-        public string nick { get; set; }
-        public string idnumber { get; set; }
-        public string sex { get; set; }
-        public decimal height { get; set; }
-        public decimal weight { get; set; }
-        public string email { get; set; }
-        public string phonenumber { get; set; }
-
-        public int departmantid { get; set; }
-        public string doctorintroduct { get; set; }
-
-        public string headportrait { get; set; }
-
-
-
-        //public string oldpsw { get; set; }
-        //public string newpsw { get; set; }
-
-
-        //public string picname { get; set; }
-        //public string image { get; set; }
-    }
 
     class Program
     {
         static void Main(string[] args)
         {
-
-            string json = "{\"phonenumber\":\"\"}";
-
-            var model = ZTImage.Json.JsonParser.ToObject<App_Upload_sec_user>(json);
-
-            Console.WriteLine(model.phonenumber);
+            string xml = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><FromUserName><![CDATA[fromUser]]></FromUserName><CreateTime>1351776360</CreateTime><MsgType><![CDATA[link]]></MsgType><Title><![CDATA[公众平台官网链接]]></Title><Description><![CDATA[公众平台官网链接]]></Description><Url><![CDATA[url]]></Url><MsgId>1234567890123456</MsgId></xml>";
+            MessageManager manager = new MessageManager("abc");
+            MessageBase messageb=manager.ParseToMessage(xml);
+            if (messageb.GetMsgType() == MsgType.link)
+            {
+                LinkMessage message = messageb as LinkMessage;
+                Console.WriteLine(message.ToUserName+"\r\n");
+                Console.WriteLine(message.FromUserName + "\r\n");
+                Console.WriteLine(message.CreateTime + "\r\n");
+                Console.WriteLine(message.MsgType + "\r\n");
+                Console.WriteLine(message.Title+ "\r\n");
+                Console.WriteLine(message.Description + "\r\n");
+                Console.WriteLine(message.Url + "\r\n");
+            }
+            else
+            {
+                Console.WriteLine("error");
+            }
+            
+            //AccessTokenProvider atProvider = new AccessTokenProvider("wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    Console.WriteLine("AccessToken:" + atProvider.GetAccessToken());
+            //    System.Threading.Thread.Sleep(1000);
+            //}
 
 
             Console.ReadKey();

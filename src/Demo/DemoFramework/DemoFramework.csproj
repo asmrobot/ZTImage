@@ -51,17 +51,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZTImage.Database\ZTImage.Database.csproj">
-      <Project>{830ddeb3-ab25-457c-b249-27bf4bc38427}</Project>
-      <Name>ZTImage.Database</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ZTImage.HttpParser\ZTImage.HttpParser.csproj">
-      <Project>{21ae8167-100f-445e-854e-6e2abf3a388f}</Project>
-      <Name>ZTImage.HttpParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ZTImage\ZTImage.csproj">
-      <Project>{957ac055-a1f5-421d-ae3c-08e250104634}</Project>
-      <Name>ZTImage</Name>
+    <ProjectReference Include="..\..\ZTImage.WeChat\ZTImage.WeChat.csproj">
+      <Project>{ab89ef9b-bf6d-489e-909f-0968775fb027}</Project>
+      <Name>ZTImage.WeChat</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
