@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZTImage.WeChat.Messages
+namespace ZTImage.WeChat.Menus
 {
-    public abstract class MessageBase:PushBase
+    public abstract class MenuBase
     {
         /// <summary>
-        /// 消息id，64位整型
+        /// 菜单名称 
         /// </summary>
-        public Int64 MsgID { get; set; }
+        public string name { get; set; }
+        
     }
 }

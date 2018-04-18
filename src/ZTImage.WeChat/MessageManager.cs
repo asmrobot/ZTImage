@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZTImage.WeChat.Events;
 using ZTImage.WeChat.Messages;
 using ZTImage.WeChat.Utility;
 
@@ -40,14 +41,19 @@ namespace ZTImage.WeChat
             return hash.Equals(signature, StringComparison.OrdinalIgnoreCase);
         }
 
-
-        public MessageBase ParseToMessage(string xml)
+        /// <summary>
+        /// xml字符串解析为消息
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        public PushBase XmlToMessage(string xml)
         {
-            XmlDeserialize deserialize = new XmlDeserialize(xml);
+            XmlUtils deserialize = new XmlUtils(xml);
             string msgtype = deserialize.GetValue("/xml/MsgType").ToLower();
-            MessageBase message = null;
+            PushBase message = null;
             switch (msgtype)
             {
+                //普通消息
                 case "text":
                     message = new TextMessage();
                     break;
@@ -69,6 +75,10 @@ namespace ZTImage.WeChat
                 case "link":
                     message = new LinkMessage();
                     break;
+                //事件推送
+                case "event":
+                    message = GetEventModel(deserialize);
+                    break;
                 default:
                     return null;
             }
@@ -76,6 +86,52 @@ namespace ZTImage.WeChat
             deserialize.FillModel(message);
             return message;
         }
+        
+        /// <summary>
+        /// 事件模型
+        /// </summary>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        private EventBase GetEventModel(XmlUtils xml)
+        {
+            string eventType = xml.GetValue("/xml/Event").ToLower();
+            EventBase message = null;
+            switch (eventType)
+            {
+                case "unsubscribe":
+                    message = new UnsubscribeEvent();
+                    break;
+                case "subscribe":
+                    message = new SubscribeEvent();
+                    break;
+                case "scan":
+                    message = new ScanEvent();
+                    break;
+                case "location":
+                    message = new LocationEvent();
+                    break;
+                case "click":
+                    message = new ClickEvent();
+                    break;
+                case "view":
+                    message = new ViewEvent();
+                    break;
+                default:
+                    return null;
+            }
 
+            return message;
+        }
+
+        /// <summary>
+        /// 回复消息转化为xml字符串
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public string ReplyMessageToXml(ReplyMessages.ReplyMessageBase message)
+        {
+            return XmlUtils.ToXmlString(message);
+        }
+        
     }
 }

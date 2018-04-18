@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,12 @@ using ZTImage.Reflection.Reflector;
 
 namespace ZTImage.WeChat.Utility
 {
-    internal class XmlDeserialize
+    internal class XmlUtils
     {
         private string mXml;
         private XmlDocument mDocument = new XmlDocument();
 
-        public XmlDeserialize(string xml)
+        public XmlUtils(string xml)
         {
             this.mXml = xml;
             InitXml();
@@ -29,6 +30,67 @@ namespace ZTImage.WeChat.Utility
             T model = reflector.NewObject() as T;
             FillModel(model);
             return model;
+        }
+
+        /// <summary>
+        /// 转化为xml字符串
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static string ToXmlString(object model)
+        {
+            if (model == null)
+            {
+                return "<xml></xml>";
+            }
+            
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<xml>");
+            ToXmlString(builder, model);
+            builder.Append("</xml>");
+            return builder.ToString();
+        }
+        
+        /// <summary>
+        /// 转化对象为xml字符串 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="model"></param>
+        private static void ToXmlString(StringBuilder builder,object model)
+        {
+            KubiuReflector reflector = KubiuReflector.Cache(model.GetType(), false);
+            foreach (var item in reflector.Properties)
+            {
+                
+                builder.Append("<"+item.Name+">");
+                object v = item.GetValue(model);
+                if (v == null || v is DBNull)
+                {
+                    builder.Append("</" + item.Name + ">");
+                    continue;
+                }
+                else if (v is String || v is ValueType)
+                {
+                    builder.Append("<![CDATA["+v.ToString()+ "]]>");
+                    builder.Append("</" + item.Name + ">");
+                    continue;
+                }
+                if(v is IEnumerable)
+                {
+                    builder.Append("<item>");
+                    IEnumerable array = (IEnumerable)v;
+                    var ee = array.GetEnumerator();
+                    if (ee.MoveNext())
+                    {
+                        ToXmlString(builder, ee.Current);
+                    }
+                    builder.Append("<item>");
+                }
+                
+                builder.Append("</" + item.Name + ">");
+            }
+
+            
         }
 
         /// <summary>

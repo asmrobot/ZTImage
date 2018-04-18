@@ -8,10 +8,16 @@ namespace ZTImage.WeChat.ReplyMessages
 {
     public class ReplyTextMessage:ReplyMessageBase
     {
-        public ReplyTextMessage()
-        {
-            this.MsgType = "text";
-        }
+        public ReplyTextMessage(string fromUserName, string toUserName, Int64 createTime) : base(fromUserName, toUserName, createTime, "text")
+        {}
+
+
+
+        public ReplyTextMessage(string fromUserName, string toUserName) : base(fromUserName, toUserName, "text")
+        {}
+
+
+
         /// <summary>
         /// 回复的消息内容（换行：在content中能够换行，微信客户端就支持换行显示）
         /// </summary>

@@ -8,8 +8,4 @@
     <PackageReference Include="ZTImage" Version="1.1.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
-
 </Project>

@@ -14,6 +14,7 @@ namespace WebDemo
     {
         public static void Main(string[] args)
         {
+            ZTImage.Log.Trace.EnableListener(ZTImage.Log.NLog.Instance);
             BuildWebHost(args).Run();
         }
 

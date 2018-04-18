@@ -94,34 +94,54 @@ namespace ZTImage.Reflection.Reflector
         }
 
         #region 只读属性
-        /// <summary> 是否为可空值类型
+        /// <summary> 
+        /// 是否为可空值类型
         /// </summary>
         public bool Nullable { get; private set; }
-        /// <summary> 属性/字段的名称
+
+        /// <summary> 
+        /// 属性/字段的名称
         /// </summary>
         public string Name { get; private set; }
-        /// <summary> 属性/字段的类型
+
+        /// <summary> 
+        /// 属性/字段的类型
+        /// 如果是可空泛型，则表示脱可空之后的真实类型
         /// </summary>
         public Type MemberType { get; private set; }
-        /// <summary> 原始类型
+
+        /// <summary> 
+        /// 属性/字段原始类型
         /// </summary>
         public Type OriginalType { get; private set; }
-        /// <summary> 属性/字段所属对象的类型
+
+        /// <summary> 
+        /// 属性/字段所属对象的类型
         /// </summary>
         public Type ClassType { get; private set; }
-        /// <summary> 属性/字段是否是静态
+
+        /// <summary> 
+        /// 属性/字段是否是静态
         /// </summary>
         public bool Static { get; private set; }
-        /// <summary> 属性/字段是否可读
+
+        /// <summary>
+        /// 属性/字段是否可读
         /// </summary>
         public bool CanRead { get; private set; }
-        /// <summary> 属性/字段是否可写
+
+        /// <summary> 
+        /// 属性/字段是否可写
         /// </summary>
         public bool CanWrite { get; private set; }
-        /// <summary> 当前对象是否是字段
+
+        /// <summary> 
+        /// 当前对象是否是字段
         /// </summary>
         public bool Field { get; private set; }
-        /// <summary> 当前对象是否是公开的属性/字段
+
+        /// <summary> 
+        /// 当前对象是否是公开的属性/字段
         /// </summary>
         public bool IsPublic { get; private set; }
 
