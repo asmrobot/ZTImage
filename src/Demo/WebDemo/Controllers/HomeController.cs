@@ -8,26 +8,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using ZTImage.WeChat;
 using ZTImage.WeChat.Events;
+using ZTImage.WeChat.Menus;
 using ZTImage.WeChat.Messages;
 
 namespace WebDemo.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private static WeChatManager Manager;
+
+        static HomeController()
         {
-            AccessTokenProvider atProvider = new AccessTokenProvider("wxf72a46e6e8cc09bc", "1837debfde1a3b7680390c7a84292432");
-            
-            return Content("AccessToken:"+ atProvider.GetAccessToken(), "text/html");
+            //Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wxf72a46e6e8cc09bc", "1837debfde1a3b7680390c7a84292432");
+            Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
         }
 
-        private MessageManager Manager;
+        public IActionResult Index()
+        {
+            
+
+            return Content("AccessToken:"+ Manager.GetAccessToken(), "text/html");
+        }
+
+        
         public IActionResult Message()
         {
-            if (Manager == null)
-            {
-                Manager = new MessageManager("NkRWYqr3KUR1UfO7");
-            }
             if (Request.Method.Equals("GET"))
             {
                 //验证
@@ -85,8 +90,37 @@ namespace WebDemo.Controllers
         /// <returns></returns>
         public IActionResult CreateMenus()
         {
+            
+            List<MenuBase> menus = new List<MenuBase>();
+            menus.Add( new ClickMenu("咨询o医生","v100_001"));
+            MenuGroup group = new MenuGroup("我");
+            group.AddMenu(new ClickMenu("设置o密码", "v200_001"));
+            group.AddMenu(new ViewMenu("查看o信息", "http://wechat.ztimage.com/Home/View"));
+            menus.Add(group);
 
-            return Content("ok", "text/html");
+
+            menus.Add(new ViewMenu("查看o须知", "http://wechat.ztimage.com/Home/View2"));
+
+            bool ret = Manager.CreateMenus(menus);
+            if (ret)
+            {
+                return Content("ok", "text/html");
+            }
+            else
+            {
+                return Content("failed", "text/html");
+            }
+        }
+
+        public IActionResult View()
+        {
+            return Content("this is view", "text/html");
+        }
+
+
+        public IActionResult View2()
+        {
+            return Content("这里是须知", "text/html");
         }
 
 

@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace ZTImage.WeChat.Menus
 {
-    public abstract class MenuBase
+    public class SimpleMenuBase:MenuBase
     {
-        public MenuBase(string name)
+        public SimpleMenuBase(string name,string type):base(name)
         {
-            this.name = name;
+            this.type = type;
         }
         /// <summary>
-        /// 菜单名称 
+        /// 菜单类型
         /// </summary>
-        public string name { get; set; }
-        
+        public string type { get; set; }
     }
 }

@@ -11,34 +11,22 @@ using ZTImage.WeChat.ReplyMessages;
 
 namespace DemoFramework
 {
-    public enum person
-    {
-        x=0,
-        @event=1
-    }
     class Program
     {
         static void Main(string[] args)
         {
-            ReplyNewsMessage message = new ReplyNewsMessage("xylee", "wangyan");
-            for (int i = 0; i < 5; i++)
+            ZTImage.Log.Trace.EnableListener(ZTImage.Log.NLog.Instance);
+            WeChatManager Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
+
+            SugarTemplateNotificationMessage msg = new SugarTemplateNotificationMessage("12", "98", 178);
+            if (Manager.SendTemplateMessage("oVn8nv2moexMjC7K7CkakRtYRsIA", string.Empty, msg))
             {
-                ReplyNewsMessageItem item = new ReplyNewsMessageItem();
-                item.Description = "description" + i.ToString();
-                item.PicUrl = "picurl" + i.ToString();
-                item.Title = "title" + i.ToString();
-                item.Url = "url" + i.ToString();
-                message.Articles.Add(item);
+                Console.WriteLine("ok");
             }
-            message.ArticleCount = message.Articles.Count;
-
-            //ReplyTextMessage message = new ZTImage.WeChat.ReplyMessages.ReplyTextMessage("xylee","wangyan");
-            //message.Content = "this is test";
-
-
-            MessageManager manager = new MessageManager("fdjskl");
-            Console.WriteLine(manager.ReplyMessageToXml(message));
-
+            else
+            {
+                Console.WriteLine("failed");
+            }
 
 
             //string xml = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><FromUserName><![CDATA[fromUser]]></FromUserName><CreateTime>1351776360</CreateTime><MsgType><![CDATA[link]]></MsgType><Title><![CDATA[公众平台官网链接]]></Title><Description><![CDATA[公众平台官网链接]]></Description><Url><![CDATA[url]]></Url><MsgId>1234567890123456</MsgId></xml>";
@@ -59,7 +47,7 @@ namespace DemoFramework
             //{
             //    Console.WriteLine("error");
             //}
-            
+
             //AccessTokenProvider atProvider = new AccessTokenProvider("wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
             //for (int i = 0; i < 10; i++)
             //{
