@@ -248,6 +248,192 @@ namespace ZTImage.WeChat
         {
             return SendTemplateMessage(touser, template.template_id, url, template.GetDataJson());
         }
+
+
+        /// <summary>
+        /// 得到授权URL
+        /// 将用户导向此url,如果用户同意授权，页面将跳转至 redirect_uri/?code=CODE&state=STATE。
+        /// </summary>
+        /// <param name="redirectURL">授权后回调url</param>
+        /// <param name="scope">要求的授权类型</param>
+        /// <param name="tag">附带信息，长度不可大于128，可空</param>
+        /// <returns></returns>
+        public string GetAuthUrl(string redirectURL, AuthenticationScope scope,string tag)
+        {
+            string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+this.mAppID+"&redirect_uri="+ZTImage.Text.Coding.EncodeURI(redirectURL)+"&response_type=code&scope="+(scope==AuthenticationScope.snsapi_base? "snsapi_base" : "snsapi_userinfo") +"&state="+tag+"#wechat_redirect";
+            return url;
+        }
+
+
+        /// <summary>
+        /// 得到授权AccessToken,OpenID
+        /// </summary>
+        /// <param name="code">授权URL得到的code</param>
+        /// <param name="authAccessToken">授权Access Token</param>
+        /// <param name="openID"></param>
+        /// <param name="expiresIn">AccessToken过期时间，单位(秒)</param>
+        /// <param name="refreshToken">用户刷新access_token,有效期30天</param>
+        /// <returns></returns>
+        public bool GetAuthenticationAccessToken(string code,out string authAccessToken,out string openID,out Int32 expiresIn,out string refreshToken)
+        {
+            authAccessToken = string.Empty;
+            openID = string.Empty;
+            expiresIn = 7200;
+            refreshToken = string.Empty;
+
+            string url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+this.mAppID+"&secret="+this.mAppSecurity+"&code="+code+"&grant_type=authorization_code";
+            string json = string.Empty;
+
+            try
+            {
+                json = ZTImage.HttpEx.SyncGet(url);
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("请求授权AccessToken时出现错误",ex);
+                return false;
+            }
+
+            Dictionary<string, object> dic = null;
+            try
+            {
+                dic = ZTImage.Json.JsonParser.ToDictionary(json);
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("解析json时出现错误,json:"+json, ex);
+            }
+
+            if (dic.ContainsKey("access_token") && dic.ContainsKey("openid")
+                &&dic.ContainsKey("expires_in")&&dic.ContainsKey("refresh_token"))
+            {
+                authAccessToken = dic["access_token"].ToString();
+                openID = dic["openid"].ToString();
+                expiresIn = ZTImage.TypeConverter.ObjectToInt(dic["expires_in"], 7200);
+                refreshToken = dic["refresh_token"].ToString();
+                return true;
+            }
+            
+            ZTImage.Log.Trace.Warn("请求授权AccessToken时出现错误,json:"+json);
+            return false;
+        }
+
+        /// <summary>
+        /// 刷新授权AccessToken
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        /// <param name="authAccessToken"></param>
+        /// <param name="openID"></param>
+        /// <param name="expiresIn"></param>
+        /// <param name="newRefreshToken"></param>
+        /// <returns></returns>
+        public bool RefreshAuthenticationAccessToken(string refreshToken,out string authAccessToken, out string openID, out Int32 expiresIn, out string newRefreshToken)
+        {
+            authAccessToken = string.Empty;
+            openID = string.Empty;
+            expiresIn = 7200;
+            newRefreshToken = string.Empty;
+
+            string url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid="+this.mAppID+"&grant_type=refresh_token&refresh_token="+refreshToken;
+            string json = string.Empty;
+
+            try
+            {
+                json = ZTImage.HttpEx.SyncGet(url);
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("请求授权AccessToken时出现错误", ex);
+                return false;
+            }
+
+            Dictionary<string, object> dic = null;
+            try
+            {
+                dic = ZTImage.Json.JsonParser.ToDictionary(json);
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("解析json时出现错误,json:" + json, ex);
+            }
+
+            if (dic.ContainsKey("access_token") && dic.ContainsKey("openid")
+                && dic.ContainsKey("expires_in") && dic.ContainsKey("refresh_token"))
+            {
+                authAccessToken = dic["access_token"].ToString();
+                openID = dic["openid"].ToString();
+                expiresIn = ZTImage.TypeConverter.ObjectToInt(dic["expires_in"], 7200);
+                newRefreshToken = dic["refresh_token"].ToString();
+                return true;
+            }
+
+            ZTImage.Log.Trace.Warn("刷新授权AccessToken时出现错误,json:" + json);
+            return false;
+        }
+        
+        /// <summary>
+        /// 拉取用户信息,通过AccessToken
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="authAccessToken"></param>
+        public WeChatUserInfo GetUserInfoByAuthAccessToken(string openid,string authAccessToken)
+        {
+            string url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + authAccessToken + "&openid=" + openid + "&lang=zh_CN";
+            string json = string.Empty;
+
+            try
+            {
+                json = ZTImage.HttpEx.SyncGet(url);
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("请求授权AccessToken时出现错误", ex);
+            }
+
+            WeChatUserInfo userInfo = null;
+            try
+            {
+                userInfo = ZTImage.Json.JsonParser.ToObject<WeChatUserInfo>(json);
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("解析json时出现错误,json:"+json, ex);
+                return null;
+            }
+
+            if (userInfo == null)
+            {
+                ZTImage.Log.Trace.Warn("解析json时出现错误,json:" + json);
+            }
+            return userInfo;
+        }
+
+
+        /// <summary>
+        /// 拉取用户信息，通过授权URL中的code
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public WeChatUserInfo GetUserInfoByCode(string code,AuthenticationScope scope)
+        {
+            string authAccessToken;
+            string openID;
+            Int32 expiresIn;
+            string refreshToken;
+
+            if (!GetAuthenticationAccessToken(code, out authAccessToken, out openID, out expiresIn, out refreshToken))
+            {
+                return null;
+            }
+
+            if (scope == AuthenticationScope.snsapi_base)
+            {
+                return new WeChatUserInfo() { openid = openID };
+            }
+
+            return GetUserInfoByAuthAccessToken(openID, authAccessToken);
+        }
         
     }
 }

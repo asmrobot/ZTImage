@@ -19,7 +19,7 @@ namespace DemoFramework
             WeChatManager Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
 
             SugarTemplateNotificationMessage msg = new SugarTemplateNotificationMessage("12", "98", 178);
-            if (Manager.SendTemplateMessage("oVn8nv2moexMjC7K7CkakRtYRsIA", string.Empty, msg))
+            if (Manager.SendTemplateMessage("oVn8nvzApTSC_K-SNnm3dbxU0-ls", string.Empty, msg))
             {
                 Console.WriteLine("ok");
             }
