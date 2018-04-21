@@ -20,8 +20,7 @@ namespace WebDemo.Controllers
 
         static HomeController()
         {
-            Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wxf72a46e6e8cc09bc", "1837debfde1a3b7680390c7a84292432");
-            //Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
+            Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
         }
 
         public IActionResult Index()
