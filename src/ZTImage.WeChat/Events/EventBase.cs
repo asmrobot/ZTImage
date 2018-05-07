@@ -21,7 +21,7 @@ namespace ZTImage.WeChat.Events
         public EventType GetEventType()
         {
             EventType t = ZTImage.WeChat.EventType.unknow;
-            if (Enum.TryParse<EventType>(this.@Event, out t))
+            if (Enum.TryParse<EventType>(this.@Event,true, out t))
             {
                 return t;
             }

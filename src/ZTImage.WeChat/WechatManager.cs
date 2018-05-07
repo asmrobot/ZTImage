@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ZTImage.WeChat.Events;
 using ZTImage.WeChat.Menus;
 using ZTImage.WeChat.Messages;
+using ZTImage.WeChat.Models;
 using ZTImage.WeChat.Utility;
 
 namespace ZTImage.WeChat
@@ -433,6 +434,76 @@ namespace ZTImage.WeChat
             }
 
             return GetUserInfoByAuthAccessToken(openID, authAccessToken);
+        }
+
+
+        /// <summary>
+        /// 得到微信临时二维码字符串
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="expireTime"></param>
+        /// <returns></returns>
+        public QRReturnModel GetTempQRString(string content,Int64 expireTime= 2592000)
+        {
+            return GetQRString(true, content, expireTime);
+        }
+
+        /// <summary>
+        /// 得到微信二维码字符串
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public QRReturnModel GetQRString(string content)
+        {
+            return GetQRString(false, content, 0);
+        }
+
+        /// <summary>
+        /// 生成二维码字符串
+        /// https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=TOKEN
+        /// </summary>
+        /// <param name="isTemp"></param>
+        /// <param name="content"></param>
+        /// <param name="expireTime"></param>
+        /// <returns></returns>
+        private QRReturnModel GetQRString(bool isTemp,string content,long expireTime= 2592000)
+        {
+            string messageJson = "{";
+            if (isTemp)
+            {
+                messageJson += "\"expire_seconds\":" + expireTime.ToString()+",";
+            }
+            messageJson+="\"action_name\":\"";
+            if (isTemp)
+            {
+                messageJson += "QR_STR_SCENE\"";
+            }
+            else
+            {
+                messageJson += "QR_LIMIT_STR_SCENE\"";
+            }
+
+            messageJson +=",\"action_info\":{\"scene\":{\"scene_str\": \""+content+"\"}}}";
+
+            string posturl = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + this.mTokenProvider.GetAccessToken();
+            string returnData = string.Empty;
+            try
+            {
+                returnData = ZTImage.HttpEx.SyncPost(posturl, messageJson, Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("调用二维码生成失败", ex);
+                return null;
+            }
+
+            QRReturnModel retModel = ZTImage.Json.JsonParser.ToObject< QRReturnModel>(returnData);
+            if (retModel == null)
+            {
+                ZTImage.Log.Trace.Error("调用二维码生成失败返回消息没有成功转化为json,data:" + returnData);
+                return null;
+            }
+            return retModel;
         }
         
     }

@@ -20,7 +20,7 @@ namespace WebDemo.Controllers
 
         static HomeController()
         {
-            Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
+            //Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
         }
 
         public IActionResult Index()
@@ -144,6 +144,14 @@ namespace WebDemo.Controllers
             }
             
             return View(model);
+        }
+
+
+        public IActionResult QR()
+        {
+            var model=Manager.GetQRString(Guid.NewGuid().ToString());
+
+            return Content("ticket:"+model.ticket+",url"+model.url, "text/html");
         }
 
 

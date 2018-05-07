@@ -13,47 +13,46 @@ namespace DemoFramework
 {
     class Program
     {
+
+        public enum EventType : int
+        {
+            unknow = 0,//未知
+            subscribe = 1,//订阅
+            unsubscribe = 2,//取消订阅
+            scan = 3,//扫描带参数二维码
+            location = 4,//上报地理位置
+            click = 5,//点击自定义菜单
+            view = 6,//点击菜单跳转链接
+        }
+
         static void Main(string[] args)
         {
             ZTImage.Log.Trace.EnableListener(ZTImage.Log.NLog.Instance);
-            WeChatManager Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
+            //WeChatManager Manager = new WeChatManager("NkRWYqr3KUR1UfO7", "wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
 
-            SugarTemplateNotificationMessage msg = new SugarTemplateNotificationMessage("12", "98", 178);
-            if (Manager.SendTemplateMessage("oVn8nvzApTSC_K-SNnm3dbxU0-ls", string.Empty, msg))
-            {
-                Console.WriteLine("ok");
-            }
-            else
-            {
-                Console.WriteLine("failed");
-            }
-
-
-            //string xml = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><FromUserName><![CDATA[fromUser]]></FromUserName><CreateTime>1351776360</CreateTime><MsgType><![CDATA[link]]></MsgType><Title><![CDATA[公众平台官网链接]]></Title><Description><![CDATA[公众平台官网链接]]></Description><Url><![CDATA[url]]></Url><MsgId>1234567890123456</MsgId></xml>";
-            //MessageManager manager = new MessageManager("abc");
-            //MessageBase messageb=manager.ParseToMessage(xml);
-            //if (messageb.GetMsgType() == MsgType.link)
+            //SugarTemplateNotificationMessage msg = new SugarTemplateNotificationMessage("12", "98", 178);
+            //if (Manager.SendTemplateMessage("oVn8nvzApTSC_K-SNnm3dbxU0-ls", string.Empty, msg))
             //{
-            //    LinkMessage message = messageb as LinkMessage;
-            //    Console.WriteLine(message.ToUserName+"\r\n");
-            //    Console.WriteLine(message.FromUserName + "\r\n");
-            //    Console.WriteLine(message.CreateTime + "\r\n");
-            //    Console.WriteLine(message.MsgType + "\r\n");
-            //    Console.WriteLine(message.Title+ "\r\n");
-            //    Console.WriteLine(message.Description + "\r\n");
-            //    Console.WriteLine(message.Url + "\r\n");
+            //    Console.WriteLine("ok");
             //}
             //else
             //{
-            //    Console.WriteLine("error");
+            //    Console.WriteLine("failed");
             //}
 
-            //AccessTokenProvider atProvider = new AccessTokenProvider("wx56bb5bd00d687d3d", "02ac6f9db3166a7fd2e0098d1fe4f2ee");
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    Console.WriteLine("AccessToken:" + atProvider.GetAccessToken());
-            //    System.Threading.Thread.Sleep(1000);
-            //}
+
+            EventType t = EventType.unknow;
+            if (Enum.TryParse<EventType>("scan",true, out t))
+            {
+                Console.WriteLine(t);
+            }
+            else
+            {
+                Console.WriteLine("no");
+            }
+            
+
+
 
 
             Console.ReadKey();

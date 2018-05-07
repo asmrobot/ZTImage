@@ -39,7 +39,7 @@ namespace ZTImage.WeChat
         public MsgType GetMsgType()
         {
             MsgType t = ZTImage.WeChat.MsgType.text;
-            if (Enum.TryParse<MsgType>(this.MsgType, out t))
+            if (Enum.TryParse<MsgType>(this.MsgType,true, out t))
             {
                 return t;
             }
