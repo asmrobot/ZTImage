@@ -18,6 +18,12 @@ namespace ZTImage.WeChat
         private string mAppSecurity;
         private AccessTokenProvider mTokenProvider;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token">消息接收的token</param>
+        /// <param name="appID"></param>
+        /// <param name="appSecurity"></param>
         public WeChatManager(string token,string appID,string appSecurity)
         {
             this.mToken = token;
