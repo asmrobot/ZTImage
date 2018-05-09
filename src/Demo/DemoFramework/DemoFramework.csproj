@@ -56,7 +56,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZTImage.Easemob\ZTImage.Easemob.csproj">
+    <ProjectReference Include="..\..\SDKs\ZTImage.Easemob\ZTImage.Easemob.csproj">
       <Project>{de2616f0-27a8-47f5-91cb-cae134dc8c31}</Project>
       <Name>ZTImage.Easemob</Name>
     </ProjectReference>
