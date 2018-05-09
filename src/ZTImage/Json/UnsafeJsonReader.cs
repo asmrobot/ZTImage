@@ -241,6 +241,33 @@ namespace ZTImage.Json
             }
         }
 
+        /// <summary>
+        /// 跳过空白字符
+        /// </summary>
+        /// <returns></returns>
+        public void SkipWhiteChar()
+        {
+            while (true)
+            {
+                if (_Current == ' ' || _Current=='\t'||_Current=='\r' ||_Current=='\n')
+                {
+                    if (_Position > _End)
+                    {
+                        _Position++;
+                        _Current = '\0';
+                        return;
+                    }
+                    else
+                    {
+                        _Position++;
+                        _Current = _P[_Position];
+                        continue;
+                    }
+                }
+                return;
+            }
+        }
+
         /// <summary> 跳过一个字符串
         /// </summary>
         public void SkipString()

@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -57,12 +54,11 @@
     <None Include="configs\nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ZTImage.WeChat\ZTImage.WeChat.csproj">
-      <Project>{ab89ef9b-bf6d-489e-909f-0968775fb027}</Project>
-      <Name>ZTImage.WeChat</Name>
+    <ProjectReference Include="..\..\ZTImage.Easemob\ZTImage.Easemob.csproj">
+      <Project>{de2616f0-27a8-47f5-91cb-cae134dc8c31}</Project>
+      <Name>ZTImage.Easemob</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ZTImage\ZTImage.csproj">
       <Project>{957ac055-a1f5-421d-ae3c-08e250104634}</Project>

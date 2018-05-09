@@ -192,12 +192,12 @@ namespace ZTImage.Json
             {
                 while (true)
                 {
-                    string key = ReadKey(reader);      //获取Key
+                    string key = ReadKey(reader);               //获取Key
                     object val = ReadValue(reader, elementType);//得到值
                     dict[key] = val;
-                    if (reader.SkipChar(',') == false)//跳过,号
+                    if (reader.SkipChar(',') == false)          //跳过,号
                     {
-                        return;                     //失败,终止方法
+                        return;                                 //失败,终止方法
                     }
                 }
             }
@@ -219,9 +219,10 @@ namespace ZTImage.Json
 
         private void FillList(IList list, Type elementType, UnsafeJsonReader reader)
         {
-            if (reader.Current == ']') return;
             while (true)
             {
+                reader.SkipWhiteChar();
+                if (reader.Current == ']') return;
                 object val = ReadValue(reader, elementType);//得到值
                 list.Add(val);                  //赋值
                 if (reader.SkipChar(',') == false)//跳过,号
