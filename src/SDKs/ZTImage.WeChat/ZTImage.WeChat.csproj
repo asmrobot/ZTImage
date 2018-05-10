@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZTImage" Version="1.1.4" />
+    <PackageReference Include="ZTImage" Version="1.1.7" />
   </ItemGroup>
 
 </Project>

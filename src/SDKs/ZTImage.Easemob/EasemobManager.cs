@@ -587,8 +587,8 @@ namespace ZTImage.Easemob
         }
         #endregion
 
-
         #region 聊天记录相关
+
         #endregion
 
         #region 文件相关
