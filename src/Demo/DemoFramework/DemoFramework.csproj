@@ -60,6 +60,10 @@
       <Project>{de2616f0-27a8-47f5-91cb-cae134dc8c31}</Project>
       <Name>ZTImage.Easemob</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SDKs\ZTImage.WeChat\ZTImage.WeChat.csproj">
+      <Project>{ab89ef9b-bf6d-489e-909f-0968775fb027}</Project>
+      <Name>ZTImage.WeChat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ZTImage\ZTImage.csproj">
       <Project>{957ac055-a1f5-421d-ae3c-08e250104634}</Project>
       <Name>ZTImage</Name>

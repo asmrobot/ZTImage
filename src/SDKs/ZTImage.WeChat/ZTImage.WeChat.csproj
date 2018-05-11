@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-	  <Version>1.0.3</Version>
+	  <Version>1.0.4</Version>
 	  <Description>微信简易SDK</Description>
 	  <PackageTags>ztimage;wechat .net core</PackageTags>
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
