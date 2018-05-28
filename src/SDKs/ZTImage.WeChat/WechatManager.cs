@@ -7,6 +7,7 @@ using ZTImage.WeChat.Events;
 using ZTImage.WeChat.Menus;
 using ZTImage.WeChat.Messages;
 using ZTImage.WeChat.Models;
+using ZTImage.WeChat.Payments;
 using ZTImage.WeChat.Utility;
 
 namespace ZTImage.WeChat
@@ -16,7 +17,10 @@ namespace ZTImage.WeChat
         private string mToken;
         private string mAppID;
         private string mAppSecurity;
+        private static object mTokenProviderLocker = new object();
         private AccessTokenProvider mTokenProvider;
+        private PaymentProvider mPaymentProvider;
+
 
         /// <summary>
         /// 
@@ -29,15 +33,45 @@ namespace ZTImage.WeChat
             this.mToken = token;
             this.mAppID = appID;
             this.mAppSecurity = appSecurity;
-            mTokenProvider = new AccessTokenProvider(this.mAppID, this.mAppSecurity);
+           
         }
 
+        /// <summary>
+        /// 初始化支付
+        /// </summary>
+        /// <param name="mchID"></param>
+        /// <param name="notifyURL"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool InitializePayment(string mchID, string notifyURL, string key)
+        {
+            if (this.mPaymentProvider != null)
+            {
+                return false;
+            }
+
+            this.mPaymentProvider = new PaymentProvider(this.mAppID, mchID, notifyURL, key);
+            return true;
+        }
+
+        #region 公众号基础
         /// <summary>
         /// 得到access token
         /// </summary>
         /// <returns></returns>
         public string GetAccessToken()
         {
+            if (mTokenProvider == null)
+            {
+                lock (mTokenProviderLocker)
+                {
+                    if (mTokenProvider == null)
+                    {
+                        mTokenProvider = new AccessTokenProvider(this.mAppID, this.mAppSecurity);
+                    }
+                }
+            }
+
             return mTokenProvider.GetAccessToken();
         }
 
@@ -58,8 +92,7 @@ namespace ZTImage.WeChat
             {
                 raw += list[i];
             }
-
-
+            
             string hash = ZTImage.Security.Cryptography.SHA1.Encrypt(raw);
             return hash.Equals(signature, StringComparison.OrdinalIgnoreCase);
         }
@@ -174,7 +207,7 @@ namespace ZTImage.WeChat
             container.button = menus;
 
             string postData = ZTImage.Json.JsonBuilder.ToJsonString(container);
-            string url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + this.mTokenProvider.GetAccessToken();
+            string url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + this.GetAccessToken();
             string returnData = string.Empty;
             try
             {
@@ -216,7 +249,7 @@ namespace ZTImage.WeChat
             }
             messageJson += "\"data\":"+dataJson+"}";
 
-            string posturl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + this.mTokenProvider.GetAccessToken();
+            string posturl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + this.GetAccessToken();
             string returnData = string.Empty;
             try
             {
@@ -491,7 +524,7 @@ namespace ZTImage.WeChat
 
             messageJson +=",\"action_info\":{\"scene\":{\"scene_str\": \""+content+"\"}}}";
 
-            string posturl = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + this.mTokenProvider.GetAccessToken();
+            string posturl = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + this.GetAccessToken();
             string returnData = string.Empty;
             try
             {
@@ -511,6 +544,89 @@ namespace ZTImage.WeChat
             }
             return retModel;
         }
-        
+
+        #endregion
+
+        #region 支付
+        /// <summary>
+        /// 统一下单
+        /// </summary>
+        /// <param name="tradeType">交易类型</param>
+        /// <param name="body">商品描述，128</param>
+        /// <param name="attach">附加数据</param>
+        /// <param name="tradeNo">商户订单号</param>
+        /// <param name="totalFee">标价金额，以‘分’为单位</param>
+        /// <param name="clientIP">客户端IP，如果没有客户端，传服务器IP</param>
+        /// <param name="productID">商品ID，商户自定义，native时必传</param>
+        /// <param name="openid">用户标识，jsapi时必传</param>
+        /// <returns></returns>
+        public PrepayResult UnifiedOrder(TradeType tradeType, string body, string attach, string tradeNo, int totalFee, string clientIP, string productID, string openid)
+        {
+            if (this.mPaymentProvider == null)
+            {
+                throw new ArgumentNullException("PaymentProvider未初始化");
+            }
+            return this.mPaymentProvider.UnifiedOrder(tradeType, body, attach, tradeNo, totalFee, clientIP, productID, openid);
+        }
+
+        /// <summary>
+        /// 查询订单通过微信订单号
+        /// </summary>
+        /// <param name="transactionID"></param>
+        /// <returns></returns>
+        public PayQueryResult OrderQueryByTransactionID(string transactionID)
+        {
+            if (this.mPaymentProvider == null)
+            {
+                throw new ArgumentNullException("PaymentProvider未初始化");
+            }
+            return this.mPaymentProvider.OrderQueryByTransactionID(transactionID);
+        }
+
+        /// <summary>
+        /// 查询订单通过商户订单号
+        /// </summary>
+        /// <param name="outTradeNo"></param>
+        /// <returns></returns>
+        public PayQueryResult OrderQueryByTradeNo(string outTradeNo)
+        {
+            if (this.mPaymentProvider == null)
+            {
+                throw new ArgumentNullException("PaymentProvider未初始化");
+            }
+            return this.mPaymentProvider.OrderQueryByTradeNo(outTradeNo);
+        }
+
+        /// <summary>
+        /// 解析支付通知
+        /// </summary>
+        /// <param name="xml"></param>
+        public PayResult ParsePayNotify(string xml)
+        {
+            if (this.mPaymentProvider == null)
+            {
+                throw new ArgumentNullException("PaymentProvider未初始化");
+            }
+            return this.mPaymentProvider.ParsePayNotify(xml);
+        }
+
+
+        /// <summary>
+        /// 支付通知返回数据
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public string GenericPayNotifyReturnString(bool success, string msg)
+        {
+            if (this.mPaymentProvider == null)
+            {
+                throw new ArgumentNullException("PaymentProvider未初始化");
+            }
+
+            return this.mPaymentProvider.GenericPayNotifyReturnString(success, msg);
+        }
+        #endregion
+
     }
 }

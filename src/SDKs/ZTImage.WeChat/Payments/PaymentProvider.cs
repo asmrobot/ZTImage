@@ -25,11 +25,15 @@ namespace ZTImage.WeChat.Payments
         /// </summary>
         public string NotifyURL { get; set; }
 
+        /// <summary>
+        /// 支付秘钥
+        /// </summary>
         private string KEY { get; set; }
 
-        private const string url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+        private const string Unified_Order_Url = "https://api.mch.weixin.qq.com/pay/unifiedorder";//统一下单
+        private const string Order_QUERY_Url = "https://api.mch.weixin.qq.com/pay/orderquery";//订单查询
 
-        
+
         public PaymentProvider(string appID, string mchID,string notifyURL,string key)
         {
             ParamCheckHelper.WhiteSpaceThrow(appID, "appID");
@@ -113,7 +117,7 @@ namespace ZTImage.WeChat.Payments
 
             if (!string.IsNullOrWhiteSpace(openid))
             {
-                builder.Append("<openid>{6}</openid>");
+                builder.Append("<openid>"+openid+"</openid>");
                 parameters.Add("openid", openid);
             }
             
@@ -142,7 +146,7 @@ namespace ZTImage.WeChat.Payments
             builder.Append("<trade_type>"+ tradeTypeString + "</trade_type>");
             parameters.Add("trade_type", tradeTypeString);
 
-            string sign = GenericSignString(parameters);
+            string sign = CalcSign(parameters);
 
             builder.Append("<sign>"+sign+"</sign>");
             builder.Append("</xml>");
@@ -150,7 +154,7 @@ namespace ZTImage.WeChat.Payments
             string xml = string.Empty;
             try
             {
-                xml = ZTImage.HttpEx.SyncPost(url,builder.ToString(),Encoding.UTF8);
+                xml = ZTImage.HttpEx.SyncPost(Unified_Order_Url,builder.ToString(),Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -159,29 +163,9 @@ namespace ZTImage.WeChat.Payments
 
             return ParseUnifiedOrderResult(xml);
         }
-       
 
         /// <summary>
-        /// 通过成签名字符串
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        private string GenericSignString(SortedDictionary<string,string> parameters)
-        {
-            string signTemp = string.Empty;
-            foreach (var item in parameters)
-            {
-               
-                signTemp += item.Key + "=" + item.Value+"&";
-            }
-
-            signTemp += "key="+this.KEY;
-
-            return ZTImage.Security.Cryptography.MD5.Encrypt(signTemp).ToUpper();
-        }
-
-        /// <summary>
-        /// 解析统一下单接口返回
+        /// 解析微信统一下单接口返回的数据
         /// </summary>
         /// <param name="xml"></param>
         /// <returns></returns>
@@ -201,6 +185,15 @@ namespace ZTImage.WeChat.Payments
                     return result;
                 }
 
+                if (!CheckSign(document))
+                {
+                    result.Message = "微信端签名不正确";
+                    return result;
+                }
+
+                //result.AppID = GetNodeInnerText(document, "appid");
+                //result.MchID = GetNodeInnerText(document, "mch_id");
+                //result.DeviceInfo = GetNodeInnerText(document, "device_info");
 
                 val = GetNodeInnerText(document, "result_code");
                 if (val != "SUCCESS")
@@ -208,13 +201,9 @@ namespace ZTImage.WeChat.Payments
                     result.Message = GetNodeInnerText(document, "err_code_des");
                     return result;
                 }
-                
 
-                if (!CheckResultSign(document))
-                {
-                    result.Message = "签名不正确";
-                    return result;
-                }
+
+                
 
                 TradeType tt = TradeType.JSAPI;
                 string trade_type = GetNodeInnerText(document, "trade_type");
@@ -228,12 +217,147 @@ namespace ZTImage.WeChat.Payments
                 result.Ok = true;
                 result.Message = "success";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ZTImage.Log.Trace.Error("解析统一下单接口时出错,xml:"+xml, ex);
+                ZTImage.Log.Trace.Error("解析统一下单接口时出错,xml:" + xml, ex);
                 result.Ok = false;
             }
             return result;
+        }
+        
+        /// <summary>
+        /// 查询订单通过微信订单号
+        /// </summary>
+        public PayQueryResult OrderQueryByTransactionID(string transactionID)
+        {
+            return OrderQuery(true, transactionID);
+        }
+
+        /// <summary>
+        /// 查询订单通过商户订单号
+        /// </summary>
+        public PayQueryResult OrderQueryByTradeNo(string outTradeNo)
+        {
+            return OrderQuery(false, outTradeNo);
+        }
+        
+        /// <summary>
+        /// 解析支付通知
+        /// </summary>
+        /// <param name="xml"></param>
+        public PayResult ParsePayNotify(string xml)
+        {
+            PayResult result = new PayResult();
+            result.Ok = true;
+            result.Message = "微信服务错误";
+            XmlDocument document = new XmlDocument();
+            try
+            {
+                document.LoadXml(xml);
+                string val = GetNodeInnerText(document, "return_code");
+                if (val != "SUCCESS")
+                {
+                    result.Ok = false;
+                    result.Message = GetNodeInnerText(document, "return_msg");
+                    return result;
+                }
+
+                result.AppID = GetNodeInnerText(document, "appid");
+                result.MchID = GetNodeInnerText(document, "mch_id");
+                result.DeviceInfo = GetNodeInnerText(document, "device_info");
+
+                if (!CheckSign(document))
+                {
+                    result.Message = "微信端签名不正确";
+                    result.Ok = false;
+                    return result;
+                }
+
+                val = GetNodeInnerText(document, "result_code");
+                if (val != "SUCCESS")
+                {
+                    result.Ok = false;
+                    result.Message = GetNodeInnerText(document, "err_code_des");
+                }
+                
+                result.OpenID = GetNodeInnerText(document, "openid");
+                result.IsSubscribe = GetNodeInnerText(document, "is_subscribe");
+
+
+                TradeType tt = TradeType.JSAPI;
+                string trade_type = GetNodeInnerText(document, "trade_type");
+                if (!Enum.TryParse<TradeType>(trade_type, out tt))
+                {
+                    tt = TradeType.JSAPI;
+                }
+                result.TradeType = tt;
+
+                result.BankType = GetNodeInnerText(document, "bank_type");
+                string totalFee = GetNodeInnerText(document, "total_fee");
+                result.TotalFee = TypeConverter.StringToInt(totalFee, 0);
+
+                string settlementTotalFee = GetNodeInnerText(document, "settlement_total_fee");
+                result.SettlementTotalFee = TypeConverter.StringToInt(settlementTotalFee, 0);
+
+                result.FeeType = GetNodeInnerText(document, "fee_type");
+                string cashFee = GetNodeInnerText(document, "cash_fee");
+                result.CashFee = TypeConverter.StringToInt(cashFee, 0);
+
+                result.CashFeeType = GetNodeInnerText(document, "cash_fee_type");
+                string couponFee = GetNodeInnerText(document, "coupon_fee");
+                result.CouponFee = TypeConverter.StringToInt(couponFee, 0);
+
+                string couponCount = GetNodeInnerText(document, "coupon_count");
+                result.CouponCount = TypeConverter.StringToInt(couponCount, 0);
+
+
+                result.TransactionID = GetNodeInnerText(document, "transaction_id");
+                result.OutTradeNo = GetNodeInnerText(document, "out_trade_no");
+                result.Attach = GetNodeInnerText(document, "attach");
+                result.TimeEnd = GetNodeInnerText(document, "time_end");
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("解析支付结果通知时出错,xml:" + xml, ex);
+                result.Ok = false;
+            }
+            return result;
+        }
+        
+        /// <summary>
+        /// 支付通知返回数据
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public string GenericPayNotifyReturnString(bool success, string msg)
+        {
+            string xml = @"
+            <xml>
+              <return_code><![CDATA["+(success? "SUCCESS" : "FAIL") +@"]]></return_code>
+              <return_msg><![CDATA["+msg+@"]]></return_msg>
+            </xml>";
+
+            return xml;
+        }
+        
+        /// <summary>
+        /// 生成成签名字符串
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        private string CalcSign(SortedDictionary<string, string> parameters)
+        {
+            string signTemp = string.Empty;
+            foreach (var item in parameters)
+            {
+
+                signTemp += item.Key + "=" + item.Value + "&";
+            }
+
+            signTemp += "key=" + this.KEY;
+
+            return ZTImage.Security.Cryptography.MD5.Encrypt(signTemp).ToUpper();
         }
 
         /// <summary>
@@ -241,7 +365,7 @@ namespace ZTImage.WeChat.Payments
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        private bool CheckResultSign(XmlDocument document)
+        private bool CheckSign(XmlDocument document)
         {
             string sign = GetNodeInnerText(document, "sign");
             if (string.IsNullOrWhiteSpace(sign))
@@ -249,20 +373,20 @@ namespace ZTImage.WeChat.Payments
                 return false;
             }
             SortedDictionary<string, string> parameters = new SortedDictionary<string, string>();
-            parameters.Add("return_code", GetNodeInnerText(document, "return_code"));
-            parameters.Add("return_msg", GetNodeInnerText(document, "return_msg"));
-            parameters.Add("appid", GetNodeInnerText(document, "appid"));
-            parameters.Add("mch_id", GetNodeInnerText(document, "mch_id"));
-            parameters.Add("device_info", GetNodeInnerText(document, "device_info"));
-            parameters.Add("nonce_str", GetNodeInnerText(document, "nonce_str"));
-            parameters.Add("result_code", GetNodeInnerText(document, "result_code"));
-            parameters.Add("err_code", GetNodeInnerText(document, "err_code"));
-            parameters.Add("err_code_des", GetNodeInnerText(document, "err_code_des"));
-            parameters.Add("trade_type", GetNodeInnerText(document, "trade_type"));
-            parameters.Add("prepay_id", GetNodeInnerText(document, "prepay_id"));
-            parameters.Add("code_url", GetNodeInnerText(document, "code_url"));
+            XmlElement element = document.DocumentElement;
+            for (int i = 0; i < element.ChildNodes.Count; i++)
+            {
+                XmlNode node = element.ChildNodes[i];
+                string name = node.Name;
+                string val = node.InnerText;
+                if (name == "sign")
+                {
+                    continue;
+                }
+                parameters.Add(name, val);
+            }
 
-            string msign = GenericSignString(parameters);
+            string msign = CalcSign(parameters);
             if (msign == sign)
             {
                 return true;
@@ -271,9 +395,15 @@ namespace ZTImage.WeChat.Payments
             return false;
         }
 
+        /// <summary>
+        /// 得到微信xml节点内容
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         private string GetNodeInnerText(XmlDocument document, string key)
         {
-            XmlNode node = document.SelectSingleNode("/xml/key");
+            XmlNode node = document.SelectSingleNode("/xml/"+key);
             if (node == null)
             {
                 return string.Empty;
@@ -281,23 +411,162 @@ namespace ZTImage.WeChat.Payments
             return node.InnerText;
         }
 
-
         /// <summary>
-        /// 查询订单
+        /// 订单查询
         /// </summary>
-        public void OrderQuery()
+        /// <param name="byTransactionID"></param>
+        /// <param name="identify"></param>
+        /// <returns></returns>
+        private PayQueryResult OrderQuery(bool byTransactionID, string identify)
         {
+            ParamCheckHelper.WhiteSpaceThrow(identify, "identify");
+            ParamCheckHelper.LimitLengthThrow(identify, 32, "identify");
 
+            string nonce_str = Guid.NewGuid().ToString().Replace("-", "");
+
+            SortedDictionary<string, string> parameters = new SortedDictionary<string, string>();
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<xml>");
+            builder.Append("<appid>" + this.AppID + "</appid>");
+            parameters.Add("appid", this.AppID);
+
+            builder.Append("<mch_id>" + this.MchID + "</mch_id>");
+            parameters.Add("mch_id", this.MchID);
+
+            if (byTransactionID)
+            {
+                builder.Append("<transaction_id>" + identify + "</transaction_id>");
+                parameters.Add("transaction_id", identify);
+            }
+            else
+            {
+                builder.Append("<out_trade_no>" + identify + "</out_trade_no>");
+                parameters.Add("out_trade_no", identify);
+            }
+
+            builder.Append("<nonce_str>" + nonce_str + "</nonce_str>");
+            parameters.Add("nonce_str", nonce_str);
+
+            string sign = CalcSign(parameters);
+
+            builder.Append("<sign>" + sign + "</sign>");
+            builder.Append("</xml>");
+
+            string xml = string.Empty;
+            try
+            {
+                xml = ZTImage.HttpEx.SyncPost(Order_QUERY_Url, builder.ToString(), Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("订单查询时出现错误", ex);
+            }
+
+            return ParseOrderQuery(xml);
         }
 
         /// <summary>
-        /// 解析支付通知
+        /// 解析订单查询结果
         /// </summary>
         /// <param name="xml"></param>
-        public void ParsePayNotify(string xml)
+        /// <returns></returns>
+        private PayQueryResult ParseOrderQuery(string xml)
         {
+            PayQueryResult result = new PayQueryResult();
+            result.Ok = false;
+            result.Message = "微信服务错误";
+            XmlDocument document = new XmlDocument();
+            try
+            {
+                document.LoadXml(xml);
+                string val = GetNodeInnerText(document, "return_code");
+                if (val != "SUCCESS")
+                {
+                    result.Ok = false;
+                    result.Message = GetNodeInnerText(document, "return_msg");
+                    return result;
+                }
 
+                if (!CheckSign(document))
+                {
+                    result.Message = "微信端签名不正确";
+                    result.Ok = false;
+                    return result;
+                }
+
+                result.AppID = GetNodeInnerText(document, "appid");
+                result.MchID = GetNodeInnerText(document, "mch_id");
+
+
+                val = GetNodeInnerText(document, "result_code");
+                if (val != "SUCCESS")
+                {
+                    result.Ok = false;
+                    result.Message = GetNodeInnerText(document, "err_code_des");
+                    return result;
+                }
+
+
+                TradeState ts = TradeState.NOTPAY;
+                string tradeState = GetNodeInnerText(document, "trade_state");
+                if (!Enum.TryParse<TradeState>(tradeState, out ts))
+                {
+                    ts = TradeState.NOTPAY;
+                }
+                result.TradeState = ts;
+
+                if (result.TradeState != TradeState.SUCCESS)
+                {
+                    result.TradeStateDesc = GetNodeInnerText(document, "trade_state_desc");
+                    result.Ok = false;
+                    result.Message = "订单未完成";
+                    return result;
+                }
+
+                result.DeviceInfo = GetNodeInnerText(document, "device_info");
+                result.OpenID = GetNodeInnerText(document, "openid");
+                result.IsSubscribe = GetNodeInnerText(document, "is_subscribe");
+
+
+                TradeType tt = TradeType.JSAPI;
+                string trade_type = GetNodeInnerText(document, "trade_type");
+                if (!Enum.TryParse<TradeType>(trade_type, out tt))
+                {
+                    tt = TradeType.JSAPI;
+                }
+                result.TradeType = tt;
+
+                result.BankType = GetNodeInnerText(document, "bank_type");
+                string totalFee = GetNodeInnerText(document, "total_fee");
+                result.TotalFee = TypeConverter.StringToInt(totalFee, 0);
+
+                string settlementTotalFee = GetNodeInnerText(document, "settlement_total_fee");
+                result.SettlementTotalFee = TypeConverter.StringToInt(settlementTotalFee, 0);
+
+                result.FeeType = GetNodeInnerText(document, "fee_type");
+                string cashFee = GetNodeInnerText(document, "cash_fee");
+                result.CashFee = TypeConverter.StringToInt(cashFee, 0);
+
+                result.CashFeeType = GetNodeInnerText(document, "cash_fee_type");
+                string couponFee = GetNodeInnerText(document, "coupon_fee");
+                result.CouponFee = TypeConverter.StringToInt(couponFee, 0);
+
+                string couponCount = GetNodeInnerText(document, "coupon_count");
+                result.CouponCount = TypeConverter.StringToInt(couponCount, 0);
+
+
+                result.TransactionID = GetNodeInnerText(document, "transaction_id");
+                result.OutTradeNo = GetNodeInnerText(document, "out_trade_no");
+                result.Attach = GetNodeInnerText(document, "attach");
+                result.TimeEnd = GetNodeInnerText(document, "time_end");
+                result.Ok = true;
+            }
+            catch (Exception ex)
+            {
+                ZTImage.Log.Trace.Error("解析支付结果通知时出错,xml:" + xml, ex);
+                result.Ok = false;
+            }
+            return result;
         }
-
     }
 }
