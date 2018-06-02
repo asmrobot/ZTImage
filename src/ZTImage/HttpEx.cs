@@ -506,9 +506,7 @@ namespace ZTImage
                     writer.Flush();
                 }
 
-
                 WebResponse wrep = request.GetResponse();
-
                 HttpWebResponse hwerep = wrep as HttpWebResponse;
                 if (hwerep.StatusCode == HttpStatusCode.OK)
                 {
@@ -521,7 +519,7 @@ namespace ZTImage
             }
             catch(Exception ex)
             {
-                ZTImage.Log.Trace.Error("网格请求发送失败", ex);
+                ZTImage.Log.Trace.Error("网络请求失败", ex);
                 return Stream.Null;
             }
         }
@@ -597,5 +595,6 @@ namespace ZTImage
             AddHeaders(request, headers);
             return request;
         }
+        
     }
 }

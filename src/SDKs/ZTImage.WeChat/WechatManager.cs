@@ -626,6 +626,17 @@ namespace ZTImage.WeChat
 
             return this.mPaymentProvider.GenericPayNotifyReturnString(success, msg);
         }
+
+
+        /// <summary>
+        /// 计算签名
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public string CalcSign(SortedDictionary<string, string> parameters)
+        {
+            return this.mPaymentProvider.CalcSign(parameters);
+        }
         #endregion
 
     }

@@ -346,7 +346,7 @@ namespace ZTImage.WeChat.Payments
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        private string CalcSign(SortedDictionary<string, string> parameters)
+        public string CalcSign(SortedDictionary<string, string> parameters)
         {
             string signTemp = string.Empty;
             foreach (var item in parameters)
