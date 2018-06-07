@@ -19,7 +19,6 @@ namespace ZTImage.Diagnostics
         /// <param name="parameterTag"></param>
         public static void DaemonRun(string[] args, string parameterTag)
         {
-
             // 如果还没有进入daemon状态，就作daemon处理 
             int pid = fork();
             if (pid != 0)
@@ -39,9 +38,7 @@ namespace ZTImage.Diagnostics
             //这儿已经进入“守护进程”工作状态了,关闭所有打开的文件描述符
             int max = open("/dev/null", 0);
             for (var i = 0; i <= max; i++) { close(i); }
-
-
-
+            
 
             //为execp参数重组参数
             var args1 = args == null ? new string[4] : new string[args.Length + 4];
