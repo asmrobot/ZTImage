@@ -519,7 +519,20 @@ namespace ZTImage
             }
             catch(Exception ex)
             {
-                ZTImage.Log.Trace.Error("网络请求失败", ex);
+                if (Settings.Global.ExceptionLevel == Settings.ExceptionLevel.Simple)
+                {
+                    ZTImage.Log.Trace.Error("异步网络请求失败", ex);
+                }
+                else if (Settings.Global.ExceptionLevel == Settings.ExceptionLevel.Detail)
+                {
+                    string d = string.Empty;
+                    if (data != null && data.Length > 0)
+                    {
+                        d = TypeConverter.ByteArrayToString(data);
+                    }
+                    ZTImage.Log.Trace.Error("异步网络请求失败,请求URL:" + url + ",请求数据:" + d, ex);
+                }
+                
                 return Stream.Null;
             }
         }
@@ -536,7 +549,6 @@ namespace ZTImage
         {
             try
             {
-
                 HttpWebRequest request = CreateRequest(method, url, headers);
                 if (data != null && data.Length > 0)
                 {
@@ -561,7 +573,20 @@ namespace ZTImage
             }
             catch(Exception ex)
             {
-                ZTImage.Log.Trace.Error("异步网络请求失败", ex);
+                if (Settings.Global.ExceptionLevel == Settings.ExceptionLevel.Simple)
+                {
+                    ZTImage.Log.Trace.Error("异步网络请求失败", ex);
+                }
+                else if (Settings.Global.ExceptionLevel == Settings.ExceptionLevel.Detail)
+                {
+                    string d = string.Empty;
+                    if (data != null && data.Length > 0)
+                    {
+                        d=TypeConverter.ByteArrayToString(data);
+                    }
+                    ZTImage.Log.Trace.Error("异步网络请求失败,请求URL:"+url+",请求数据:"+d, ex);
+                }
+                
                 return Stream.Null;
             }
         }
