@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Quartz;
 
-namespace ZTImage.Services.Schedulers
+namespace ZTImage.Schedulers
 {
     /// <summary>
     /// 任务基类

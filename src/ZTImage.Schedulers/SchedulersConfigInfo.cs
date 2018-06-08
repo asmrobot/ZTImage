@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using ZTImage.Configuration;
 
-namespace ZTImage.Services.Schedulers
+namespace ZTImage.Schedulers
 {
     [ConfigPath("configs", "schedulers.config")]
     public class SchedulersConfigInfo

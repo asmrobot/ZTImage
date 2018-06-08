@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using ZTImage.Configuration;
 
 
-namespace ZTImage.Services.Schedulers
+namespace ZTImage.Schedulers
 {
     public class PluginEngine
     {
@@ -40,10 +40,10 @@ namespace ZTImage.Services.Schedulers
 
             
         }
-        public PluginEngine():this(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"))
+        private PluginEngine():this(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"))
         {}
 
-        public PluginEngine(string pluginsDir)
+        private PluginEngine(string pluginsDir)
         {
             Initialize(pluginsDir);
         }
