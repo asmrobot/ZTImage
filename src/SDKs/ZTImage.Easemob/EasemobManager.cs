@@ -651,7 +651,7 @@ namespace ZTImage.Easemob
             requestBody += "\"target_type\" : \"" + GetTargetType(targetType) + "\",";
             requestBody += "\"target\" : " + ConcatStringToJsonArray(targets) + ",";
             requestBody += "\"msg\":"+messageJson;
-            if (string.IsNullOrEmpty(from))
+            if (!string.IsNullOrEmpty(from))
             {
                 requestBody += ",\"from\":\""+from+"\"";
             }
@@ -796,7 +796,9 @@ namespace ZTImage.Easemob
             headers.Add("Authorization", "Bearer " + this.mTokenProvider.GetToken());
 
             string messageJson = "{\"type\":\"cmd\",\"action\":\"" + action + "\"}";
-            string json = HttpEx.SyncPost(UrlBase + "messages", WarpMessageWarp(targetType, targets, from, messageJson, ex), Encoding.UTF8, headers);
+            string requestData = WarpMessageWarp(targetType, targets, from, messageJson, ex);
+            ZTImage.Log.Trace.Debug("easemob message:"+requestData);
+            string json = HttpEx.SyncPost(UrlBase + "messages", requestData, Encoding.UTF8, headers);
             if (string.IsNullOrEmpty(json))
             {
                 return false;
