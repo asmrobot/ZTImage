@@ -17,10 +17,10 @@ using ZTImage.Configuration;
 
 namespace ZTImage.Schedulers
 {
-    public class PluginEngine
+    public class Scheduler
     {
 
-        static PluginEngine()
+        static Scheduler()
         {
             //IgnoreDlls.Add("sni.dll".ToUpper(), true);
             //IgnoreDlls.Add("NLog.dll".ToUpper(), true);
@@ -40,19 +40,21 @@ namespace ZTImage.Schedulers
 
             
         }
-        private PluginEngine():this(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"))
-        {}
 
-        private PluginEngine(string pluginsDir)
+        private Scheduler()
         {
-            Initialize(pluginsDir);
+            Initialize(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"));
         }
+
 
         private readonly static Dictionary<string, bool> IgnoreDlls = new Dictionary<string, bool>();
         private Int32 InitializeState = 0;
         private ISchedulerFactory factory;
         private IScheduler scheduler;
         private SchedulersConfigInfo mConfig;
+
+        
+
 
         #region 周期操作
         /// <summary>
@@ -299,6 +301,30 @@ namespace ZTImage.Schedulers
             return null;
         }
 
+        #endregion
+
+
+        #region 单例
+        private static object mLocker = new object();
+        private static Scheduler mInstance = null;
+        public static Scheduler Instance
+        {
+            get
+            {
+                if (mInstance == null)
+                {
+                    lock (mLocker)
+                    {
+                        if (mInstance == null)
+                        {
+                            mInstance = new Scheduler();
+                        }
+                    }
+                }
+
+                return mInstance;
+            }
+        }
         #endregion
     }
 }
