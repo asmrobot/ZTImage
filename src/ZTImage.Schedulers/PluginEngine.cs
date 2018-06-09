@@ -22,21 +22,21 @@ namespace ZTImage.Schedulers
 
         static PluginEngine()
         {
-            IgnoreDlls.Add("sni.dll".ToUpper(), true);
-            IgnoreDlls.Add("NLog.dll".ToUpper(), true);
-            IgnoreDlls.Add("Quartz.dll".ToUpper(), true);
-            IgnoreDlls.Add("ZTImage.dll".ToUpper(), true);
+            //IgnoreDlls.Add("sni.dll".ToUpper(), true);
+            //IgnoreDlls.Add("NLog.dll".ToUpper(), true);
+            //IgnoreDlls.Add("Quartz.dll".ToUpper(), true);
+            //IgnoreDlls.Add("ZTImage.dll".ToUpper(), true);
 
-            IgnoreDlls.Add("ZTImage.Log.dll".ToUpper(), true);
-            IgnoreDlls.Add("Common.Logging.dll".ToUpper(), true);
-            IgnoreDlls.Add("Common.Logging.Core.dll".ToUpper(), true);
+            //IgnoreDlls.Add("ZTImage.Log.dll".ToUpper(), true);
+            //IgnoreDlls.Add("Common.Logging.dll".ToUpper(), true);
+            //IgnoreDlls.Add("Common.Logging.Core.dll".ToUpper(), true);
 
-            IgnoreDlls.Add("ZTImage.Services.dll".ToUpper(), true);
-            IgnoreDlls.Add("System.Configuration.ConfigurationManager.dll".ToUpper(), true);
+            //IgnoreDlls.Add("ZTImage.Services.dll".ToUpper(), true);
+            //IgnoreDlls.Add("System.Configuration.ConfigurationManager.dll".ToUpper(), true);
             
-            IgnoreDlls.Add("System.Data.SqlClient.dll".ToUpper(), true);
-            IgnoreDlls.Add("System.Security.Cryptography.ProtectedData.dll".ToUpper(), true);
-            IgnoreDlls.Add("System.Text.Encoding.CodePages.dll".ToUpper(), true);
+            //IgnoreDlls.Add("System.Data.SqlClient.dll".ToUpper(), true);
+            //IgnoreDlls.Add("System.Security.Cryptography.ProtectedData.dll".ToUpper(), true);
+            //IgnoreDlls.Add("System.Text.Encoding.CodePages.dll".ToUpper(), true);
 
             
         }
@@ -114,10 +114,12 @@ namespace ZTImage.Schedulers
         }
         #endregion
 
+
+        #region 任务初始化
         /// <summary>
         /// 得到任务列表
         /// </summary>
-#if NET45   
+#if NET45
         public List<IJobDetail> GetJobList()
 #else
         public async Task<List<IJobDetail>> GetJobList()
@@ -296,5 +298,7 @@ namespace ZTImage.Schedulers
 
             return null;
         }
+
+        #endregion
     }
 }

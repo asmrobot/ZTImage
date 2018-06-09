@@ -30,7 +30,7 @@ namespace ZTImage.Schedulers
             }
         }
 
-        public abstract void Execute(string datas);
+        protected abstract void Execute(string datas);
 #else
         public Task Execute(IJobExecutionContext context)
         {
@@ -51,7 +51,7 @@ namespace ZTImage.Schedulers
             }
         }
 
-        public abstract Task Execute(string datas);
+        protected abstract Task Execute(string datas);
 #endif
 
 
