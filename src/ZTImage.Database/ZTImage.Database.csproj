@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
     <Description>Database Access Helper</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -11,8 +11,8 @@
     <PackageProjectUrl>https://github.com/asmrobot/ZTImage-Core</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/asmrobot/ZTImage-Core/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Apache License 2.0</Copyright>
-    <AssemblyVersion>2.1.1.0</AssemblyVersion>
-    <FileVersion>2.1.1.0</FileVersion>
+    <AssemblyVersion>2.1.2.0</AssemblyVersion>
+    <FileVersion>2.1.2.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ztimage.database.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-    <PackageReference Include="MySql.Data" Version="6.9.10" />
+    <PackageReference Include="MySql.Data" Version="6.9.12" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.106" />
   </ItemGroup>
   
