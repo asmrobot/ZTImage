@@ -17,6 +17,10 @@
     <AssemblyOriginatorKeyFile>ztimage.log.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+    <DocumentationFile>bin\Release\net45\ZTImage.Log.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     
     <PackageReference Include="NLog" Version="4.5.3" />

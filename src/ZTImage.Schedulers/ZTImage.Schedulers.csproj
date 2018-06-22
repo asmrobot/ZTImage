@@ -19,6 +19,10 @@
 		<DefineConstants>NETSTANDARD20</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+	  <DocumentationFile>bin\Release\net45\ZTImage.Schedulers.xml</DocumentationFile>
+	</PropertyGroup>
+
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
 		<PackageReference Include="Quartz" Version="2.6.1" />
 		<Reference Include="System.ServiceProcess" />
