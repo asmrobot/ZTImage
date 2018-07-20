@@ -13,7 +13,12 @@ namespace ZTImage.Database.Helper
 
         public override string ConnectionString
         {
-            get { return ConfigHelper.GetInstance<DBConfigInfo>()["sqlserverdb"].ConnectionString; }
+            get
+            {
+                //return ConfigHelper.GetInstance<DBConfigInfo>()["sqlserverdb"].ConnectionString;
+                throw new NotImplementedException("return connection string");
+
+            }
         }
 
         public override string DbType

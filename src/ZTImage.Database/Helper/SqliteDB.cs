@@ -4,16 +4,16 @@ using ZTImage.Configuration;
 
 namespace ZTImage.Database.Helper
 {
-    public abstract class MySQLDB :SQLDBHelper
+    public class SqliteDB : SQLDBHelper
     {
-        private MySQLDB()
+        private SqliteDB()
         {}
 
         public override string ConnectionString
         {
             get 
             {
-                //return ConfigHelper.GetInstance<DBConfigInfo>()["mysqldb"].ConnectionString;
+                //return ConfigHelper.GetInstance<DBConfigInfo>()["sqlitedb"].ConnectionString;
                 throw new NotImplementedException("return connection string");
             }
         }
@@ -24,14 +24,14 @@ namespace ZTImage.Database.Helper
         {
             get
             {
-                return "MySql";
+                return "Sqlite";
             }
         }
 
 
         private static object _lockHelper = new object();
-        private static MySQLDB _instance;
-        public static MySQLDB Instance
+        private static SqliteDB _instance;
+        public static SqliteDB Instance
         {
             get
             {
@@ -41,7 +41,7 @@ namespace ZTImage.Database.Helper
                     {
                         if (_instance == null)
                         {
-                            _instance = new MySQLDB();
+                            _instance = new SqliteDB();
                         }
                     }
                 }

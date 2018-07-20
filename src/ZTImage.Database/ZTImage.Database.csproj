@@ -32,13 +32,9 @@
   <ItemGroup>
     <Compile Remove="DBProvider\AccessProvider.cs" />
     <Compile Remove="Helper\MySQLDB.cs" />
+    <Compile Remove="Helper\SqliteDB.cs" />
     <Compile Remove="Helper\SqlServerDB.cs" />
     
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Helper\MySQLDB.cs" />
-    <None Include="Helper\SqlServerDB.cs" />
   </ItemGroup>
 
 
@@ -58,6 +54,18 @@
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
     <PackageReference Include="MySql.Data" Version="6.9.12" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.106" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Helper\MySQLDB.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Helper\SqliteDB.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Helper\SqlServerDB.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   
   <ItemGroup>    
