@@ -76,6 +76,19 @@ namespace ZTImage.WeChat
         }
 
         /// <summary>
+        /// 设置access token过期
+        /// </summary>
+        public void SetAssessTokenExpire()
+        {
+            if (mTokenProvider == null)
+            {
+                return;
+            }
+
+            mTokenProvider.SetAssessTokenExpire();
+        }
+
+        /// <summary>
         /// 设置url时，验证
         /// </summary>
         /// <returns></returns>

@@ -54,5 +54,15 @@ namespace ZTImage.WeChat
             }
             return mAccessToken;
         }
+
+
+        /// <summary>
+        /// 设置accessToken过期
+        /// </summary>
+        /// <returns></returns>
+        public void SetAssessTokenExpire()
+        {
+            mExpiresTime = DateTime.Now;
+        }
     }
 }
