@@ -17,10 +17,14 @@ namespace ZTImage.WeChat
         private string mToken;
         private string mAppID;
         private string mAppSecurity;
+
         private static object mTokenProviderLocker = new object();
-        private AccessTokenProvider mTokenProvider;
+        private AccessTokenProvider mAccessTokenProvider;
+
         private PaymentProvider mPaymentProvider;
 
+        private static object mJSAPITicketProviderLocker = new object();
+        private JSAPITicketProvider mJSAPITicketProvider;
 
         /// <summary>
         /// 
@@ -55,24 +59,57 @@ namespace ZTImage.WeChat
         }
 
         #region 公众号基础
+
+        /// <summary>
+        /// 确保access token provider已初始化
+        /// </summary>
+        /// <returns></returns>
+        private AccessTokenProvider EnsureAccessTokenProvider()
+        {
+            if (mAccessTokenProvider == null)
+            {
+                lock (mTokenProviderLocker)
+                {
+                    if (mAccessTokenProvider == null)
+                    {
+                        mAccessTokenProvider = new AccessTokenProvider(this.mAppID, this.mAppSecurity);
+                    }
+                }
+            }
+            return mAccessTokenProvider;
+        }
+
+        /// <summary>
+        /// 确保 jsapi ticket provider已初始化
+        /// </summary>
+        /// <returns></returns>
+        private JSAPITicketProvider EnsureJSAPITicketProvider()
+        {
+            if (mJSAPITicketProvider == null)
+            {
+                EnsureAccessTokenProvider();
+                lock (mJSAPITicketProviderLocker)
+                {
+                    if (mJSAPITicketProvider == null)
+                    {
+                        mJSAPITicketProvider = new JSAPITicketProvider(this.mAccessTokenProvider);
+                    }
+                }
+            }
+            return mJSAPITicketProvider;
+        }
+
+
+
+
         /// <summary>
         /// 得到access token
         /// </summary>
         /// <returns></returns>
         public string GetAccessToken()
         {
-            if (mTokenProvider == null)
-            {
-                lock (mTokenProviderLocker)
-                {
-                    if (mTokenProvider == null)
-                    {
-                        mTokenProvider = new AccessTokenProvider(this.mAppID, this.mAppSecurity);
-                    }
-                }
-            }
-
-            return mTokenProvider.GetAccessToken();
+            EnsureAccessTokenProvider();
+            return this.mAccessTokenProvider.GetAccessToken();
         }
 
         /// <summary>
@@ -80,13 +117,33 @@ namespace ZTImage.WeChat
         /// </summary>
         public void SetAssessTokenExpire()
         {
-            if (mTokenProvider == null)
+            if (mAccessTokenProvider == null)
             {
                 return;
             }
 
-            mTokenProvider.SetAssessTokenExpire();
+            mAccessTokenProvider.SetExpire();
         }
+
+        /// <summary>
+        /// 得到jsapi ticket
+        /// </summary>
+        /// <returns></returns>
+        public string GetJSAPITicket()
+        {
+            EnsureJSAPITicketProvider();
+            return this.mJSAPITicketProvider.GetTicket();
+        }
+
+        public void SetJSAPITicketExpire()
+        {
+            if (this.mJSAPITicketProvider == null)
+            {
+                return;
+            }
+            this.mJSAPITicketProvider.SetExpire();
+        }
+        
 
         /// <summary>
         /// 设置url时，验证
@@ -649,6 +706,27 @@ namespace ZTImage.WeChat
         public string CalcSign(SortedDictionary<string, string> parameters)
         {
             return this.mPaymentProvider.CalcSign(parameters);
+        }
+        #endregion
+
+        #region JSAPI
+        /// <summary>
+        /// js api调用时，向config里传递的签名
+        /// </summary>
+        /// <param name="noncestr">随机字符串，与wx.config里的相同</param>
+        /// <param name="timestamp">时间戳，与wx.config里的相同</param>
+        /// <param name="url">完整url,不包含#及其后的部分</param>
+        /// <returns></returns>
+        public string JSSignature(string noncestr,Int64 timestamp,string url)
+        {
+
+            string query = string.Format("noncestr={0}&jsapi_ticket={1}&timestamp={2}&url={3}",
+                noncestr,
+                GetJSAPITicket(),
+                timestamp,
+                url);
+
+            return ZTImage.Security.Cryptography.SHA1.Encrypt(query);
         }
         #endregion
 
