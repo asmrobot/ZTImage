@@ -22,6 +22,7 @@ namespace ZTImage.WeChat
         private string url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={0}&type=jsapi";
         private object mGetLocker = new object();
         private string mTicket = string.Empty;
+
         /// <summary>
         /// 获取AccessToken
         /// </summary>

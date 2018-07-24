@@ -14,9 +14,9 @@ namespace ZTImage.WeChat
 {
     public class WeChatManager
     {
-        private string mToken;
-        private string mAppID;
-        private string mAppSecurity;
+        protected string Token;
+        protected string AppID;
+        protected string AppSecurity;
 
         private static object mTokenProviderLocker = new object();
         private AccessTokenProvider mAccessTokenProvider;
@@ -34,10 +34,9 @@ namespace ZTImage.WeChat
         /// <param name="appSecurity"></param>
         public WeChatManager(string token,string appID,string appSecurity)
         {
-            this.mToken = token;
-            this.mAppID = appID;
-            this.mAppSecurity = appSecurity;
-           
+            this.Token = token;
+            this.AppID = appID;
+            this.AppSecurity = appSecurity;
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace ZTImage.WeChat
                 return false;
             }
 
-            this.mPaymentProvider = new PaymentProvider(this.mAppID, mchID, notifyURL, key);
+            this.mPaymentProvider = new PaymentProvider(this.AppID, mchID, notifyURL, key);
             return true;
         }
 
@@ -72,7 +71,7 @@ namespace ZTImage.WeChat
                 {
                     if (mAccessTokenProvider == null)
                     {
-                        mAccessTokenProvider = new AccessTokenProvider(this.mAppID, this.mAppSecurity);
+                        mAccessTokenProvider = new AccessTokenProvider(this.AppID, this.AppSecurity);
                     }
                 }
             }
@@ -152,7 +151,7 @@ namespace ZTImage.WeChat
         public bool VaildIsOK(string timestamp, string nonce, string signature)
         {
             List<string> list = new List<string>();
-            list.Add(this.mToken);
+            list.Add(this.Token);
             list.Add(timestamp);
             list.Add(nonce);
             list.Sort(new StringComparer());
@@ -370,7 +369,7 @@ namespace ZTImage.WeChat
         /// <returns></returns>
         public string GetAuthUrl(string redirectURL, AuthenticationScope scope,string tag)
         {
-            string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+this.mAppID+"&redirect_uri="+ZTImage.Text.Coding.EncodeURI(redirectURL)+"&response_type=code&scope="+(scope==AuthenticationScope.snsapi_base? "snsapi_base" : "snsapi_userinfo") +"&state="+tag+"#wechat_redirect";
+            string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+this.AppID+"&redirect_uri="+ZTImage.Text.Coding.EncodeURI(redirectURL)+"&response_type=code&scope="+(scope==AuthenticationScope.snsapi_base? "snsapi_base" : "snsapi_userinfo") +"&state="+tag+"#wechat_redirect";
             return url;
         }
 
@@ -391,7 +390,7 @@ namespace ZTImage.WeChat
             expiresIn = 7200;
             refreshToken = string.Empty;
 
-            string url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+this.mAppID+"&secret="+this.mAppSecurity+"&code="+code+"&grant_type=authorization_code";
+            string url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+this.AppID+"&secret="+this.AppSecurity+"&code="+code+"&grant_type=authorization_code";
             string json = string.Empty;
 
             try
@@ -444,7 +443,7 @@ namespace ZTImage.WeChat
             expiresIn = 7200;
             newRefreshToken = string.Empty;
 
-            string url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid="+this.mAppID+"&grant_type=refresh_token&refresh_token="+refreshToken;
+            string url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid="+this.AppID+"&grant_type=refresh_token&refresh_token="+refreshToken;
             string json = string.Empty;
 
             try
@@ -720,9 +719,9 @@ namespace ZTImage.WeChat
         public string JSSignature(string noncestr,Int64 timestamp,string url)
         {
 
-            string query = string.Format("noncestr={0}&jsapi_ticket={1}&timestamp={2}&url={3}",
-                noncestr,
+            string query = string.Format("jsapi_ticket={0}&noncestr={1}&timestamp={2}&url={3}",
                 GetJSAPITicket(),
+                noncestr,
                 timestamp,
                 url);
 

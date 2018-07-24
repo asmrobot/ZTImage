@@ -31,6 +31,9 @@ namespace ZTImage.WeChat
             this.items.Add(new Tuple<string, string, string>(key, value, color));
         }
 
+
+        
+
         /// <summary>
         /// 得到数据Json
         /// </summary>

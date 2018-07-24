@@ -59,7 +59,7 @@ namespace ZTImage.WeChat.Payments
         /// <param name="productID">商品ID，商户自定义，native时必传</param>
         /// <param name="openid">用户标识，jsapi时必传</param>
         /// <returns></returns>
-        public PrepayResult UnifiedOrder(TradeType tradeType,string body,string attach, string tradeNo, int totalFee, string clientIP,string productID,string openid)
+        public PrepayResult UnifiedOrder(TradeType tradeType,string body,string attach, string tradeNo, int totalFee, string clientIP,string productID,string openid,string notifyUrl=null)
         {
             ParamCheckHelper.LimitLengthThrow(body, 128, "body");
             ParamCheckHelper.LimitLengthThrow(attach, 127, "attach");
@@ -105,8 +105,8 @@ namespace ZTImage.WeChat.Payments
             builder.Append("<nonce_str>"+nonce_str+"</nonce_str>");
             parameters.Add("nonce_str", nonce_str);
 
-            builder.Append("<notify_url>"+this.NotifyURL+"</notify_url>");
-            parameters.Add("notify_url", this.NotifyURL);
+            builder.Append("<notify_url>"+(string.IsNullOrEmpty(notifyUrl)?this.NotifyURL:notifyUrl)+"</notify_url>");
+            parameters.Add("notify_url", (string.IsNullOrEmpty(notifyUrl) ? this.NotifyURL : notifyUrl));
 
             if (!string.IsNullOrEmpty(productID))
             {
