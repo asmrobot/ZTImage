@@ -13,18 +13,18 @@ namespace ZTImage.Security.Cryptography
     /// </summary>
     public class SHA256
     {
-        public string Encrypt(string str)
+        public static string Encrypt(string str)
         {
             return Encrypt(str, Encoding.ASCII);
 
         }
         
-        public string Encrypt(string str, Encoding encoding)
+        public static string Encrypt(string str, Encoding encoding)
         {
             return Encrypt(encoding.GetBytes(str));
         }
 
-        public string Encrypt(byte[] bytes)
+        public static string Encrypt(byte[] bytes)
         {
             byte[] tmpByte;
             SHA256Managed sha256 = new SHA256Managed();
