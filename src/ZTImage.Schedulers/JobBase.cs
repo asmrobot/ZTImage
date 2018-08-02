@@ -17,10 +17,13 @@ namespace ZTImage.Schedulers
             try
             {
                 string ds = string.Empty;
-                Object data=context.JobDetail.JobDataMap.Get("data");
-                if (data != null)
+                if (context != null)
                 {
-                    ds = data.ToString();
+                    Object data = context.JobDetail.JobDataMap.Get("data");
+                    if (data != null)
+                    {
+                        ds = data.ToString();
+                    }
                 }
                 Execute(ds);
             }
