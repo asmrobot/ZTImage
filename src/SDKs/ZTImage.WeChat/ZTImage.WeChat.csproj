@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-	  <Version>1.0.12</Version>
+	  <Version>2.1.11</Version>
 	  <Description>微信简易SDK</Description>
 	  <PackageTags>ztimage;wechat .net core</PackageTags>
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZTImage" Version="1.1.8" />
+    <PackageReference Include="ZTImage" Version="2.1.11" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@
   <PropertyGroup>
 	  <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
 	  <Description>环信服务端SDK简易实现</Description>
-	  <Version>1.0.4</Version>
+	  <Version>2.1.11</Version>
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	  <SignAssembly>false</SignAssembly>
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
@@ -14,7 +14,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ZTImage" Version="1.1.8" />
-		<PackageReference Include="ZTImage.Log" Version="0.0.0.2" />
+		<PackageReference Include="ZTImage" Version="2.1.11" />
+		<PackageReference Include="ZTImage.Log" Version="2.1.11" />
 	</ItemGroup>
 </Project>

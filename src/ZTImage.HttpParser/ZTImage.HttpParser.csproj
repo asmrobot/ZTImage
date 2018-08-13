@@ -34,7 +34,7 @@
     <DocumentationFile>bin\Release\ZTImage.HttpParser.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>ztimage.httpparser.pfx</AssemblyOriginatorKeyFile>
