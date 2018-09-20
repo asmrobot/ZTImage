@@ -237,6 +237,7 @@ namespace ZTImage.Json
         /// <param name="reader"></param>
         private void SkipValue(UnsafeJsonReader reader)
         {
+            reader.SkipWhiteChar();
             switch (reader.Current)
             {
                 case '[':
