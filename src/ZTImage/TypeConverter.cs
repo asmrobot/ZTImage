@@ -15,6 +15,11 @@ namespace ZTImage
         public const Int64 DaySecond = 86400;
 
         /// <summary>
+        /// Unix时间戳能表示的最大秒数
+        /// </summary>
+        public const Int64 MAX_SECOND = 253402300799;
+
+        /// <summary>
         /// 字符串转枚举
         /// </summary>
         /// <typeparam name="Tenum"></typeparam>
@@ -538,9 +543,31 @@ namespace ZTImage
         /// <returns></returns>
         public static DateTime LongToDate(long date)
         {
-            DateTime orgin = new DateTime(1970, 1, 1, 0, 0, 0, 0,DateTimeKind.Utc);
-            return orgin.AddSeconds(date);
+            if (date > MAX_SECOND)
+            {
+                throw new Exception("超出Unix时间戳能表示的最大秒数");
+            }
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0,DateTimeKind.Utc);
+            return origin;
         }
+
+
+        /// <summary>
+        /// 把时间戳转化为DateTime类型(UTC时间)
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <returns></returns>
+        public static DateTime LongToDate(long date,DateTime defVal)
+        {
+            if (date > MAX_SECOND)
+            {
+                return defVal;
+            }
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            return origin.AddSeconds(date);
+        }
+
+
 
 
 
