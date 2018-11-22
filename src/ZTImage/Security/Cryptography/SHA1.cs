@@ -20,15 +20,27 @@ namespace ZTImage.Security.Cryptography
         /// <returns></returns>
         public static string Encrypt(string value)
         {
-            byte[] StrRes = Encoding.Default.GetBytes(value);
+            return Encrypt(value, Encoding.Default);
+        }
+
+
+        /// <summary>
+        /// 加密
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static string Encrypt(string value,Encoding encoding)
+        {
+            byte[] sourceDatas = encoding.GetBytes(value);
             HashAlgorithm iSHA = new SHA1CryptoServiceProvider();
-            StrRes = iSHA.ComputeHash(StrRes);
-            StringBuilder EnText = new StringBuilder();
-            foreach (byte iByte in StrRes)
+            sourceDatas = iSHA.ComputeHash(sourceDatas);
+            StringBuilder result = new StringBuilder();
+            foreach (byte iByte in sourceDatas)
             {
-                EnText.AppendFormat("{0:x2}", iByte);
+                result.AppendFormat("{0:x2}", iByte);
             }
-            return EnText.ToString();
+            return result.ToString();
         }
 
 
@@ -40,10 +52,10 @@ namespace ZTImage.Security.Cryptography
         /// <returns></returns>
         public static byte[] EncryptToBytes(string value)
         {
-            byte[] StrRes = Encoding.Default.GetBytes(value);
+            byte[] sourceDatas = Encoding.Default.GetBytes(value);
             HashAlgorithm iSHA = new SHA1CryptoServiceProvider();
-            StrRes = iSHA.ComputeHash(StrRes);
-            return StrRes;
+            byte[] result = iSHA.ComputeHash(sourceDatas);
+            return result;
         }
 
     }

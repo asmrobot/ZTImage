@@ -202,6 +202,49 @@ namespace ZTImage.Text
             byte[] outputb = Convert.FromBase64String(value);
             return code.GetString(outputb);
         }
+
+
+
+        /// <summary>
+        /// 编码为URL安全的base64
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public static string EncodeUrlSafeBase64(byte[] content)
+        {
+            string base64 = Convert.ToBase64String(content);
+            return CommonBase64ToUrlSafeBase64(base64);
+        }
+
+        /// <summary>
+        /// url安全的base64转化为普通base64字符串
+        /// </summary>
+        /// <param name="safeBase64"></param>
+        /// <returns></returns>
+        public static string UrlSafeBase64ToCommonBase64(string safeBase64)
+        {
+            string safeb = safeBase64.Replace("-", "+").Replace("_", "/");
+            int i = safeb.Length % 3;
+            if (i == 1)
+            {
+                safeb += "=";
+            }
+            else if (i == 2)
+            {
+                safeb += "==";
+            }
+            return safeb;
+        }
+
+        /// <summary>
+        /// 普通base64字符串 转化为 url安全的base64
+        /// </summary>
+        /// <param name="base64"></param>
+        /// <returns></returns>
+        public static string CommonBase64ToUrlSafeBase64(string base64)
+        {
+            return base64.Replace("+", "-").Replace("/", "_").Replace("=", "");
+        }
         #endregion
 
 

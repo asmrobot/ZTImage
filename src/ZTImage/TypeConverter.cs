@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Collections.Generic;
+using ZTImage.Reflection.Reflector;
 
 namespace ZTImage
 {
@@ -772,6 +773,34 @@ namespace ZTImage
                 return v;
             }
             return Guid.Empty;
+        }
+
+        /// <summary>
+        /// 对象转为字典类型
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Dictionary<string, string> ObjectToDictionary(object value)
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            KubiuReflector reflector = KubiuReflector.Cache(value.GetType(), false);
+            object val;
+            string valString;
+            foreach (var item in reflector.Properties)
+            {
+                val = item.GetValue(value);
+                if (val == null)
+                {
+                    valString = string.Empty;
+                }
+                else
+                {
+                    valString = val.ToString();
+                }
+                dic.Add(item.Name, valString);
+            }
+
+            return dic;
         }
 
 
