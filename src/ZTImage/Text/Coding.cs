@@ -224,7 +224,7 @@ namespace ZTImage.Text
         public static string UrlSafeBase64ToCommonBase64(string safeBase64)
         {
             string safeb = safeBase64.Replace("-", "+").Replace("_", "/");
-            int i = safeb.Length % 3;
+            int i = 4-safeb.Length % 4;
             if (i == 1)
             {
                 safeb += "=";
