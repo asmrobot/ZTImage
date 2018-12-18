@@ -21,12 +21,12 @@
 
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.1.14</Version>
+    <Version>2.1.16</Version>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>ztimage.sign.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <AssemblyVersion>2.1.14</AssemblyVersion>
-    <FileVersion>2.1.14</FileVersion>
+    <AssemblyVersion>2.1.16</AssemblyVersion>
+    <FileVersion>2.1.16</FileVersion>
   </PropertyGroup>
 
 

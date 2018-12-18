@@ -549,7 +549,7 @@ namespace ZTImage
                 throw new Exception("超出Unix时间戳能表示的最大秒数");
             }
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0,DateTimeKind.Utc);
-            return origin;
+            return origin.AddSeconds(date);
         }
 
 
