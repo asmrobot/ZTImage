@@ -431,6 +431,7 @@ namespace ZTImage
                 request.ContentLength=val;
             } },
             { "Content-Type",(request,value)=>{ request.ContentType=value; } },
+            { "ContentType",(request,value)=>{ request.ContentType=value; } },
             { "Expect",(request,value)=>{ request.Expect=value; } },
             { "Date",(request,value)=>{
                 DateTime dt=TypeConverter.StringToDate(value,DateTime.Now);
