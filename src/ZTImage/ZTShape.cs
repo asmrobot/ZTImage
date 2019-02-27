@@ -185,5 +185,55 @@ namespace ZTImage
                 return LocationArea.Outside;
             }
         }
+
+        ///// <summary>
+        ///// 计算中心点
+        ///// </summary>
+        ///// <param name="points"></param>
+        ///// <returns></returns>
+        //public DPoint CalcCenterPoint(List<DPoint> points)
+        //{
+        //    List<double> areas = new List<double>();//面积
+        //    double sall = 0;
+        //    DPoint p = new DPoint(0, 0);
+        //    for (int i = 1; i < points.Count - 1; i++)
+        //    {
+        //        //每个三角形由v[0],v[i],v[i+1]三个顶点组成
+        //        //面积
+        //        areas[i - 1] = (points[i].x - points[0].x) * (points[i + 1].y - points[0].y) - (points[i].y - points[0].y) * (points[i + 1].x - points[0].x);
+        //        sall += areas[i - 1];
+        //        //重心
+        //        p.x += areas[i - 1] * (points[i].x + points[i + 1].x + points[0].x) * 1.0 / 3;
+        //        p.y += areas[i - 1] * (points[i].y + points[i + 1].y + points[0].y) * 1.0 / 3;
+        //    }
+        //    p.x /= sall * 1.0;
+        //    p.y /= sall * 1.0;
+        //    return p;
+        //}
+
+        /// <summary>
+        /// 计算重心点
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public DPoint CalcCenterOfGravityPoint(List<DPoint> points)
+        {
+            double area = 0.0f;//多边形面积  
+            double Gx = 0.0f, Gy = 0.0f;// 重心的x、y  
+            for (int i = 1; i <= points.Count; i++)
+            {
+                double iLat = points[(i % points.Count())].x;
+                double iLng = points[(i % points.Count())].y;
+                double preLat = points[(i - 1)].x;
+                double preLng = points[(i - 1)].y;
+                double temp = (iLat * preLng - iLng * preLat) / 2.0f;
+                area += temp;
+                Gx += temp * (iLat + preLat) / 3.0f;
+                Gy += temp * (iLng + preLng) / 3.0f;
+            }
+            Gx = Gx / area;
+            Gy = Gy / area;
+            return new DPoint(Gx, Gy);
+        }
     }
 }

@@ -24,87 +24,109 @@ namespace ZTImage.Demo
                 new DPoint(2,4),
             };
 
-            DPoint point = new DPoint(3, 5);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
-
-            point = new DPoint(1, 5);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+            DPoint point=geo.CalcCenterOfGravityPoint(points);
+            Console.WriteLine("the center:" + point);
 
 
 
-            point = new DPoint(3, 4);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
+            points = new List<DPoint>() {
+                new DPoint (1,1),
+                new DPoint (3,1),
+                new DPoint (3,3),
+                new DPoint (1,3)
+            };
+
+            point = geo.CalcCenterOfGravityPoint(points);
+            Console.WriteLine("the center:" + point);
+
+
+            points = new List<DPoint>() {
+                new DPoint (1,3),
+                new DPoint (2,2),
+                new DPoint (3,3),
+                new DPoint (2,4)
+            };
+
+            point = geo.CalcCenterOfGravityPoint(points);
+            Console.WriteLine("the center:" + point);
+
+            //DPoint point = new DPoint(3, 5);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
+
+            //point = new DPoint(1, 5);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
 
-            point = new DPoint(1, 1);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+            //point = new DPoint(3, 4);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
 
-            point = new DPoint(4, 4);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
-
-
-            point = new DPoint(3, 0.5d);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
-
-
-            point = new DPoint(2, 3);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
-            
-
-            point = new DPoint(3.5d, 2.5d);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+            //point = new DPoint(1, 1);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
 
-            point = new DPoint(1, 3);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
-
-            point = new DPoint(2, 2);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+            //point = new DPoint(4, 4);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
-            point = new DPoint(3, 1);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
-            
-
-            point = new DPoint(4, 2);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+            //point = new DPoint(3, 0.5d);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
-            point = new DPoint(3, 3);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+            //point = new DPoint(2, 3);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
-            point = new DPoint(5, 3);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
-
-
-            point = new DPoint(5, 4);
-            Console.WriteLine("point:" + point.ToString() + "$in polygon:" + geo.InPolygon(point, points)+"$distance:"+geo.DistanceToPolygon(point,points));
-
-
-            point = new DPoint(3, 6);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+            //point = new DPoint(3.5d, 2.5d);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
 
-            point = new DPoint(2, 5);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+            //point = new DPoint(1, 3);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
+            //point = new DPoint(2, 2);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
-            point = new DPoint(2, 4);
-            Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
-
-            //DateTime dt = TypeConverter.LongToDate(1);
-            //Console.WriteLine(dt);
+            //point = new DPoint(3, 1);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
 
-            //string content = System.Text.Encoding.UTF8.GetString(b);
-            //Console.WriteLine(content);
+            //point = new DPoint(4, 2);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
+
+            //point = new DPoint(3, 3);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
+
+            //point = new DPoint(5, 3);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
+
+            //point = new DPoint(5, 4);
+            //Console.WriteLine("point:" + point.ToString() + "$in polygon:" + geo.InPolygon(point, points)+"$distance:"+geo.DistanceToPolygon(point,points));
+
+
+            //point = new DPoint(3, 6);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
+
+
+            //point = new DPoint(2, 5);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
+
+            //point = new DPoint(2, 4);
+            //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
+
 
             new System.Threading.ManualResetEvent(false).WaitOne();
         }

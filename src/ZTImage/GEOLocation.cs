@@ -126,9 +126,6 @@ namespace ZTImage
             return dist;
         }
 
-
-
-
-
+        
     }
 }

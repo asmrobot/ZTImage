@@ -34,7 +34,7 @@ namespace ZTImage
         {
             return "x:" + x.ToString() + ",y:" + this.y.ToString();
         }
-        
-        
+
+        public static DPoint Empty = new DPoint(0, 0);
     }
 }
