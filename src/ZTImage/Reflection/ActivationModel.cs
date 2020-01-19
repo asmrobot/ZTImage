@@ -18,7 +18,7 @@ namespace ZTImage.Reflection
         /// <returns></returns>
         public static T FillModel(NameValueCollection collection)
         {
-            KubiuReflector reflector = KubiuReflector.Cache(typeof(T), false);
+            ZTReflector reflector = ZTReflector.Cache(typeof(T), false);
             T model = reflector.NewObject() as T;
             return FillModel(model, collection);
         }
@@ -35,7 +35,7 @@ namespace ZTImage.Reflection
                 throw new ArgumentNullException("传递过来的填充对象为空");
             }
 
-            KubiuReflector reflector = KubiuReflector.Cache(typeof(T), false);
+            ZTReflector reflector = ZTReflector.Cache(typeof(T), false);
             foreach (var property in reflector.Properties)
             {
                 if (collection.AllKeys.Contains(property.Name))

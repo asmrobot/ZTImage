@@ -25,50 +25,50 @@ namespace ZTImage
         }
 
         #region Get
-        public static string SyncGet(string url, Dictionary<string, string> headers = null)
+        public static string Get(string url, Dictionary<string, string> headers = null)
         {
-            Stream content = SyncRequestStream(RequestMethod.GET, url, null, headers);
+            Stream content = RequestStream(RequestMethod.GET, url, null, headers);
 
             StreamReader reader = new StreamReader(content);
             return reader.ReadToEnd();
         }
 
-        public async static Task<string> Get(string url, Dictionary<string, string> headers = null)
+        public async static Task<string> GetAsync(string url, Dictionary<string, string> headers = null)
         {
-            Stream content = await RequestStream(RequestMethod.GET, url, null, headers);
+            Stream content = await RequestStreamAsync(RequestMethod.GET, url, null, headers);
 
             StreamReader reader = new StreamReader(content);
             return await reader.ReadToEndAsync();
         }
 
-        public static string SyncGet(string url, string data, Dictionary<string, string> headers = null)
+        public static string Get(string url, string data, Dictionary<string, string> headers = null)
         {
-            Stream content = SyncGetStream(url, data, headers);
+            Stream content = GetStream(url, data, headers);
 
             StreamReader reader = new StreamReader(content);
             return reader.ReadToEnd();
         }
 
 
-        public async static Task<string> Get(string url, string data, Dictionary<string, string> headers = null)
+        public async static Task<string> GetAsync(string url, string data, Dictionary<string, string> headers = null)
         {
-            Stream content = await GetStream(url, data, headers);
+            Stream content = await GetStreamAsync(url, data, headers);
 
             StreamReader reader = new StreamReader(content);
             return await reader.ReadToEndAsync();
         }
 
-        public static Stream SyncGetStream(string url, Dictionary<string, string> headers = null)
+        public static Stream GetStream(string url, Dictionary<string, string> headers = null)
         {
-            return SyncRequestStream(RequestMethod.GET, url, null, headers);
+            return RequestStream(RequestMethod.GET, url, null, headers);
         }
 
-        public async static Task<Stream> GetStream(string url, Dictionary<string, string> headers = null)
+        public async static Task<Stream> GetStreamAsync(string url, Dictionary<string, string> headers = null)
         {
-            return await RequestStream(RequestMethod.GET, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.GET, url, null, headers);
         }
 
-        public static Stream SyncGetStream(string url, string data, Dictionary<string, string> headers = null)
+        public static Stream GetStream(string url, string data, Dictionary<string, string> headers = null)
         {
             if (!string.IsNullOrEmpty(data))
             {
@@ -81,10 +81,10 @@ namespace ZTImage
                     url += "?" + data;
                 }
             }
-            return SyncRequestStream(RequestMethod.GET, url, null, headers);
+            return RequestStream(RequestMethod.GET, url, null, headers);
         }
 
-        public async static Task<Stream> GetStream(string url, string data, Dictionary<string, string> headers = null)
+        public async static Task<Stream> GetStreamAsync(string url, string data, Dictionary<string, string> headers = null)
         {
 
             if (!string.IsNullOrEmpty(data))
@@ -99,7 +99,7 @@ namespace ZTImage
                 }
             }
 
-            return await RequestStream(RequestMethod.GET, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.GET, url, null, headers);
         }
         #endregion
 
@@ -107,7 +107,7 @@ namespace ZTImage
 
         public static String SyncPost(string url, Dictionary<string, string> headers = null)
         {
-            Stream stream = SyncRequestStream(RequestMethod.POST, url, null, headers);
+            Stream stream = RequestStream(RequestMethod.POST, url, null, headers);
             StreamReader reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
@@ -115,7 +115,7 @@ namespace ZTImage
 
         public async static Task<string> Post(string url, Dictionary<string, string> headers = null)
         {
-            Stream stream = await RequestStream(RequestMethod.POST, url, null, headers);
+            Stream stream = await RequestStreamAsync(RequestMethod.POST, url, null, headers);
             StreamReader reader = new StreamReader(stream);
             return await reader.ReadToEndAsync();
         }
@@ -132,7 +132,7 @@ namespace ZTImage
                 bdata = encoding.GetBytes(data);
 
             }
-            Stream stream = SyncRequestStream(RequestMethod.POST, url, bdata, headers);
+            Stream stream = RequestStream(RequestMethod.POST, url, bdata, headers);
             StreamReader reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
@@ -149,21 +149,21 @@ namespace ZTImage
                 bdata = encoding.GetBytes(data);
 
             }
-            Stream stream = await RequestStream(RequestMethod.POST, url, bdata, headers);
+            Stream stream = await RequestStreamAsync(RequestMethod.POST, url, bdata, headers);
             StreamReader reader = new StreamReader(stream);
             return await reader.ReadToEndAsync();
         }
 
         public static string SyncPost(string url, byte[] data, Dictionary<string, string> headers = null)
         {
-            Stream stream = SyncRequestStream(RequestMethod.POST, url, data, headers);
+            Stream stream = RequestStream(RequestMethod.POST, url, data, headers);
             StreamReader reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
 
         public async static Task<string> Post(string url, byte[] data, Dictionary<string, string> headers = null)
         {
-            Stream stream = await RequestStream(RequestMethod.POST, url, data, headers);
+            Stream stream = await RequestStreamAsync(RequestMethod.POST, url, data, headers);
             StreamReader reader = new StreamReader(stream);
             return await reader.ReadToEndAsync();
         }
@@ -171,12 +171,12 @@ namespace ZTImage
 
         public static Stream SyncPostStream(string url, Dictionary<string, string> headers = null)
         {
-            return SyncRequestStream(RequestMethod.POST, url, null, headers);
+            return RequestStream(RequestMethod.POST, url, null, headers);
         }
 
         public async static Task<Stream> PostStream(string url, Dictionary<string, string> headers = null)
         {
-            return await RequestStream(RequestMethod.POST, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.POST, url, null, headers);
         }
 
         public static Stream SyncPostStream(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
@@ -193,7 +193,7 @@ namespace ZTImage
             }
 
 
-            return SyncRequestStream(RequestMethod.POST, url, bdata, headers);
+            return RequestStream(RequestMethod.POST, url, bdata, headers);
         }
 
         public async static Task<Stream> PostStream(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
@@ -209,40 +209,40 @@ namespace ZTImage
             }
 
 
-            return await RequestStream(RequestMethod.POST, url, bdata, headers);
+            return await RequestStreamAsync(RequestMethod.POST, url, bdata, headers);
         }
 
         public static Stream SyncPostStream(string url, byte[] data, Dictionary<string, string> headers = null)
         {
-            return SyncRequestStream(RequestMethod.POST, url, data, headers);
+            return RequestStream(RequestMethod.POST, url, data, headers);
         }
 
 
         public async static Task<Stream> PostStream(string url, byte[] data, Dictionary<string, string> headers = null)
         {
-            return await RequestStream(RequestMethod.POST, url, data, headers);
+            return await RequestStreamAsync(RequestMethod.POST, url, data, headers);
         }
 
         #endregion
 
         #region PUT
 
-        public static String SyncPut(string url, Dictionary<string, string> headers = null)
+        public static String Put(string url, Dictionary<string, string> headers = null)
         {
-            Stream stream = SyncRequestStream(RequestMethod.PUT, url, null, headers);
+            Stream stream = RequestStream(RequestMethod.PUT, url, null, headers);
             StreamReader reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
 
 
-        public async static Task<string> Put(string url, Dictionary<string, string> headers = null)
+        public async static Task<string> PutAsync(string url, Dictionary<string, string> headers = null)
         {
-            Stream stream = await RequestStream(RequestMethod.PUT, url, null, headers);
+            Stream stream = await RequestStreamAsync(RequestMethod.PUT, url, null, headers);
             StreamReader reader = new StreamReader(stream);
             return await reader.ReadToEndAsync();
         }
 
-        public static string SyncPut(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
+        public static string Put(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
         {
             byte[] bdata = null;
             if (!string.IsNullOrEmpty(data))
@@ -254,12 +254,12 @@ namespace ZTImage
                 bdata = encoding.GetBytes(data);
 
             }
-            Stream stream = SyncRequestStream(RequestMethod.PUT, url, bdata, headers);
+            Stream stream = RequestStream(RequestMethod.PUT, url, bdata, headers);
             StreamReader reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
 
-        public async static Task<string> Put(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
+        public async static Task<string> PutAsync(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
         {
             byte[] bdata = null;
             if (!string.IsNullOrEmpty(data))
@@ -271,37 +271,37 @@ namespace ZTImage
                 bdata = encoding.GetBytes(data);
 
             }
-            Stream stream = await RequestStream(RequestMethod.PUT, url, bdata, headers);
+            Stream stream = await RequestStreamAsync(RequestMethod.PUT, url, bdata, headers);
             StreamReader reader = new StreamReader(stream);
             return await reader.ReadToEndAsync();
         }
 
-        public static string SyncPut(string url, byte[] data, Dictionary<string, string> headers = null)
+        public static string Put(string url, byte[] data, Dictionary<string, string> headers = null)
         {
-            Stream stream = SyncRequestStream(RequestMethod.PUT, url, data, headers);
+            Stream stream = RequestStream(RequestMethod.PUT, url, data, headers);
             StreamReader reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
 
-        public async static Task<string> Put(string url, byte[] data, Dictionary<string, string> headers = null)
+        public async static Task<string> PutAsync(string url, byte[] data, Dictionary<string, string> headers = null)
         {
-            Stream stream = await RequestStream(RequestMethod.PUT, url, data, headers);
+            Stream stream = await RequestStreamAsync(RequestMethod.PUT, url, data, headers);
             StreamReader reader = new StreamReader(stream);
             return await reader.ReadToEndAsync();
         }
 
 
-        public static Stream SyncPutStream(string url, Dictionary<string, string> headers = null)
+        public static Stream PutStream(string url, Dictionary<string, string> headers = null)
         {
-            return SyncRequestStream(RequestMethod.PUT, url, null, headers);
+            return RequestStream(RequestMethod.PUT, url, null, headers);
         }
 
-        public async static Task<Stream> PutStream(string url, Dictionary<string, string> headers = null)
+        public async static Task<Stream> PutStreamAsync(string url, Dictionary<string, string> headers = null)
         {
-            return await RequestStream(RequestMethod.PUT, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.PUT, url, null, headers);
         }
 
-        public static Stream SyncPutStream(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
+        public static Stream PutStream(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
         {
             byte[] bdata = null;
             if (!string.IsNullOrEmpty(data))
@@ -314,10 +314,10 @@ namespace ZTImage
 
             }
 
-            return SyncRequestStream(RequestMethod.PUT, url, bdata, headers);
+            return RequestStream(RequestMethod.PUT, url, bdata, headers);
         }
 
-        public async static Task<Stream> PutStream(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
+        public async static Task<Stream> PutStreamAsync(string url, string data, System.Text.Encoding encoding, Dictionary<string, string> headers = null)
         {
             byte[] bdata = null;
             if (!string.IsNullOrEmpty(data))
@@ -329,51 +329,51 @@ namespace ZTImage
                 bdata = encoding.GetBytes(data);
             }
 
-            return await RequestStream(RequestMethod.PUT, url, bdata, headers);
+            return await RequestStreamAsync(RequestMethod.PUT, url, bdata, headers);
         }
 
-        public static Stream SyncPutStream(string url, byte[] data, Dictionary<string, string> headers = null)
+        public static Stream PutStream(string url, byte[] data, Dictionary<string, string> headers = null)
         {
-            return SyncRequestStream(RequestMethod.PUT, url, data, headers);
+            return RequestStream(RequestMethod.PUT, url, data, headers);
         }
 
 
-        public async static Task<Stream> PutStream(string url, byte[] data, Dictionary<string, string> headers = null)
+        public async static Task<Stream> PutStreamAsync(string url, byte[] data, Dictionary<string, string> headers = null)
         {
-            return await RequestStream(RequestMethod.PUT, url, data, headers);
+            return await RequestStreamAsync(RequestMethod.PUT, url, data, headers);
         }
 
         #endregion
 
 
         #region DELETE
-        public static string SyncDelete(string url, Dictionary<string, string> headers = null)
+        public static string Delete(string url, Dictionary<string, string> headers = null)
         {
-            Stream content = SyncRequestStream(RequestMethod.DELETE, url, null, headers);
+            Stream content = RequestStream(RequestMethod.DELETE, url, null, headers);
 
             StreamReader reader = new StreamReader(content);
             return reader.ReadToEnd();
         }
 
-        public async static Task<string> Delete(string url, Dictionary<string, string> headers = null)
+        public async static Task<string> DeleteAsync(string url, Dictionary<string, string> headers = null)
         {
-            Stream content = await RequestStream(RequestMethod.DELETE, url, null, headers);
+            Stream content = await RequestStreamAsync(RequestMethod.DELETE, url, null, headers);
 
             StreamReader reader = new StreamReader(content);
             return await reader.ReadToEndAsync();
         }
 
-        public static Stream SyncDeleteStream(string url, Dictionary<string, string> headers = null)
+        public static Stream DeleteStream(string url, Dictionary<string, string> headers = null)
         {
-            return SyncRequestStream(RequestMethod.DELETE, url, null, headers);
+            return RequestStream(RequestMethod.DELETE, url, null, headers);
         }
 
-        public async static Task<Stream> DeleteStream(string url, Dictionary<string, string> headers = null)
+        public async static Task<Stream> DeleteStreamAsync(string url, Dictionary<string, string> headers = null)
         {
-            return await RequestStream(RequestMethod.DELETE, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.DELETE, url, null, headers);
         }
 
-        public static Stream SyncDeleteStream(string url, string data, Dictionary<string, string> headers = null)
+        public static Stream DeleteStream(string url, string data, Dictionary<string, string> headers = null)
         {
             if (!string.IsNullOrEmpty(data))
             {
@@ -386,10 +386,10 @@ namespace ZTImage
                     url += "?" + data;
                 }
             }
-            return SyncRequestStream(RequestMethod.DELETE, url, null, headers);
+            return RequestStream(RequestMethod.DELETE, url, null, headers);
         }
 
-        public async static Task<Stream> DeleteStream(string url, string data, Dictionary<string, string> headers = null)
+        public async static Task<Stream> DeleteStreamAsync(string url, string data, Dictionary<string, string> headers = null)
         {
 
             if (!string.IsNullOrEmpty(data))
@@ -404,7 +404,7 @@ namespace ZTImage
                 }
             }
 
-            return await RequestStream(RequestMethod.DELETE, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.DELETE, url, null, headers);
         }
         #endregion
 
@@ -494,7 +494,7 @@ namespace ZTImage
         }
 
 
-        private static Stream SyncRequestStream(RequestMethod method,string url, byte[] data, Dictionary<string, string> headers = null)
+        private static Stream RequestStream(RequestMethod method,string url, byte[] data, Dictionary<string, string> headers = null)
         {
             try
             {
@@ -546,7 +546,7 @@ namespace ZTImage
         /// <param name="data"></param>
         /// <param name="headers"></param>
         /// <returns></returns>
-        private async static Task<Stream> RequestStream(RequestMethod method,string url, byte[] data, Dictionary<string, string> headers = null)
+        private async static Task<Stream> RequestStreamAsync(RequestMethod method,string url, byte[] data, Dictionary<string, string> headers = null)
         {
             try
             {
@@ -560,9 +560,9 @@ namespace ZTImage
                 }
 
 
-                WebResponse wrep = await request.GetResponseAsync();
+                WebResponse response = await request.GetResponseAsync();
 
-                HttpWebResponse hwerep = wrep as HttpWebResponse;
+                HttpWebResponse hwerep = response as HttpWebResponse;
                 if (hwerep.StatusCode == HttpStatusCode.OK)
                 {
                     return hwerep.GetResponseStream();

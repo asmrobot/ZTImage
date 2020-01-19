@@ -36,7 +36,7 @@ namespace ZTImage.Reflection.Reflector
                     return list;
                 }
                 list = new GenericCollection();
-                list.Init = KubiuReflector.CreateNewObject(type);
+                list.Init = ZTReflector.CreateNewObject(type);
                 if (type.IsGenericType)
                 {
                     list.ElementType = type.GetGenericArguments()[0];
@@ -69,7 +69,7 @@ namespace ZTImage.Reflection.Reflector
                     return dict;
                 }
                 dict = new GenericCollection();
-                dict.Init = KubiuReflector.CreateNewObject(type);
+                dict.Init = ZTReflector.CreateNewObject(type);
                 if (type.IsGenericType)
                 {
                     var ga = type.GetGenericArguments();

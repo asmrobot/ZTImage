@@ -9,19 +9,19 @@ namespace ZTImage.Collections.Tree
     /// 节点类
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class KubiuNode<T>:IEnumerable<KubiuNode<T>>,IEnumerator<KubiuNode<T>> where T : class
+    public class ZTNode<T>:IEnumerable<ZTNode<T>>,IEnumerator<ZTNode<T>> where T : class
     {
-        public KubiuNode()
+        public ZTNode()
         {
             this.Value = null;
             this.ID = null;
 
             this.Parent = null;
-            this.Childs = new List<KubiuNode<T>>();
+            this.Childs = new List<ZTNode<T>>();
         }
 
 
-        public KubiuNode(T node,string id)
+        public ZTNode(T node,string id)
         {
             this.Value = node;            
             this.ID = id;
@@ -29,7 +29,7 @@ namespace ZTImage.Collections.Tree
             this.Parent = null;
             this.m_NextSbiling = null;
             this.m_PreSbiling = null;
-            this.Childs = new List<KubiuNode<T>>();
+            this.Childs = new List<ZTNode<T>>();
         }
 
         #region Fields
@@ -51,7 +51,7 @@ namespace ZTImage.Collections.Tree
             get
             {
                 int deep = 0;
-                KubiuNode<T> self = this;
+                ZTNode<T> self = this;
                 while (self.Parent!=null )
                 {
                     self = self.Parent;
@@ -73,7 +73,7 @@ namespace ZTImage.Collections.Tree
         /// <summary>
         /// 父结点
         /// </summary>
-        public KubiuNode<T> Parent
+        public ZTNode<T> Parent
         {
             get;
             set;
@@ -82,18 +82,18 @@ namespace ZTImage.Collections.Tree
         /// <summary>
         /// 子节点
         /// </summary>
-        public List<KubiuNode<T>> Childs
+        public List<ZTNode<T>> Childs
         {
             get;
             set;
         }
 
-        private KubiuNode<T> m_NextSbiling;
+        private ZTNode<T> m_NextSbiling;
         /// <summary>
         /// 下个兄弟节点
         /// </summary>
         /// <returns></returns>
-        public KubiuNode<T> NextSbiling
+        public ZTNode<T> NextSbiling
         {
             get
             {
@@ -102,11 +102,11 @@ namespace ZTImage.Collections.Tree
         }
 
 
-        private KubiuNode<T> m_PreSbiling;
+        private ZTNode<T> m_PreSbiling;
         /// <summary>
         /// 上一个兄弟节点
         /// </summary>
-        public KubiuNode<T> PreSbiling
+        public ZTNode<T> PreSbiling
         {
             get
             {
@@ -117,7 +117,7 @@ namespace ZTImage.Collections.Tree
         /// <summary>
         /// 首节点
         /// </summary>
-        public KubiuNode<T> First
+        public ZTNode<T> First
         {
             get {
                 if (Childs.Count > 0)
@@ -131,7 +131,7 @@ namespace ZTImage.Collections.Tree
         /// <summary>
         /// 最后一个节点
         /// </summary>
-        public KubiuNode<T> Last
+        public ZTNode<T> Last
         {
             get
             {
@@ -152,7 +152,7 @@ namespace ZTImage.Collections.Tree
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public KubiuNode<T> GetNodeByID(string id)
+        public ZTNode<T> GetNodeByID(string id)
         {
             if (this.ID == id)
             {
@@ -160,7 +160,7 @@ namespace ZTImage.Collections.Tree
             }
             for (int i = 0; i < this.Childs.Count; i++)
             {
-                KubiuNode<T> temp=this.Childs[i].GetNodeByID(id);
+                ZTNode<T> temp=this.Childs[i].GetNodeByID(id);
                 if (temp != null)
                 {
                     return temp;
@@ -189,9 +189,9 @@ namespace ZTImage.Collections.Tree
         /// <param name="node"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public KubiuNode<T> AppendChild(T node, string id)
+        public ZTNode<T> AppendChild(T node, string id)
         {
-            KubiuNode<T> leaf = new KubiuNode<T>(node, id);
+            ZTNode<T> leaf = new ZTNode<T>(node, id);
             leaf.Parent = this;
             
             if (this.Childs.Count > 0)
@@ -212,17 +212,17 @@ namespace ZTImage.Collections.Tree
         /// <param name="node"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public KubiuNode<T> InsertBefore(int index,T node, string id)
+        public ZTNode<T> InsertBefore(int index,T node, string id)
         {
             if (index < 0 || index >= this.Childs.Count)
             {
                 return this.AppendChild(node, id);
             }
 
-            KubiuNode<T> leaf = new KubiuNode<T>(node, id);
+            ZTNode<T> leaf = new ZTNode<T>(node, id);
             leaf.Parent = this;
 
-            KubiuNode<T> temp= this.Childs[index];
+            ZTNode<T> temp= this.Childs[index];
             leaf.m_PreSbiling = temp.m_PreSbiling;
             if (leaf.m_PreSbiling != null)
             {
@@ -251,7 +251,7 @@ namespace ZTImage.Collections.Tree
             {
                 if (this.Childs[i].ID == id)
                 {
-                    KubiuNode<T> ztnode = this.Childs[i];
+                    ZTNode<T> ztnode = this.Childs[i];
 
                     if (ztnode.m_PreSbiling != null)
                     {
@@ -279,7 +279,7 @@ namespace ZTImage.Collections.Tree
             {
                 if (this.Childs[i].Value ==node )
                 {
-                    KubiuNode<T> ztnode = this.Childs[i];
+                    ZTNode<T> ztnode = this.Childs[i];
 
                     if (ztnode.m_PreSbiling != null)
                     {
@@ -304,7 +304,7 @@ namespace ZTImage.Collections.Tree
 
 
         #region IEnumerable
-        public IEnumerator<KubiuNode<T>> GetEnumerator()
+        public IEnumerator<ZTNode<T>> GetEnumerator()
         {
             return this;
         }
@@ -317,10 +317,10 @@ namespace ZTImage.Collections.Tree
 
 
         #region IEnumerator
-        private Stack<KubiuNode<T>> _queue = new Stack<KubiuNode<T>>();
+        private Stack<ZTNode<T>> _queue = new Stack<ZTNode<T>>();
 
-        private KubiuNode<T> _current;
-        public KubiuNode<T> Current
+        private ZTNode<T> _current;
+        public ZTNode<T> Current
         {
             get 
             {

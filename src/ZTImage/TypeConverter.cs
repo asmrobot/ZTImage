@@ -783,7 +783,7 @@ namespace ZTImage
         public static Dictionary<string, string> ObjectToDictionary(object value)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            KubiuReflector reflector = KubiuReflector.Cache(value.GetType(), false);
+            ZTReflector reflector = ZTReflector.Cache(value.GetType(), false);
             object val;
             string valString;
             foreach (var item in reflector.Properties)

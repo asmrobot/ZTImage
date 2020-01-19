@@ -24,7 +24,7 @@ namespace ZTImage.Json
             {
                 return default(T);
             }
-            var lit = KubiuReflector.Cache(typeof(T), true);
+            var lit = ZTReflector.Cache(typeof(T), true);
             var obj = lit.NewObject();
             var parser = new JsonParser();
             parser.FillObject(obj, lit, json);
@@ -44,7 +44,7 @@ namespace ZTImage.Json
             {
                 return null;
             }
-            var lit = KubiuReflector.Cache(type, true);
+            var lit = ZTReflector.Cache(type, true);
             var obj = lit.NewObject();
             (new JsonParser()).FillObject(obj, lit, json);
             return obj;
@@ -57,7 +57,7 @@ namespace ZTImage.Json
                 return null;
             }
             var obj = new Dictionary<string, object>();
-            (new JsonParser()).FillObject(obj, KubiuReflector.Cache(typeof(Dictionary<string, object>), true), json);
+            (new JsonParser()).FillObject(obj, ZTReflector.Cache(typeof(Dictionary<string, object>), true), json);
             return obj;
         }
 
@@ -68,7 +68,7 @@ namespace ZTImage.Json
                 return null;
             }
             var obj = new List<T>();
-            (new JsonParser()).FillObject(obj, KubiuReflector.Cache(typeof(T[]), true), json);
+            (new JsonParser()).FillObject(obj, ZTReflector.Cache(typeof(T[]), true), json);
             return obj.ToArray();
         }
 
@@ -79,7 +79,7 @@ namespace ZTImage.Json
                 return null;
             }
             var obj = new List<object>();
-            (new JsonParser()).FillObject(obj, KubiuReflector.Cache(typeof(List<object>), true), json);
+            (new JsonParser()).FillObject(obj, ZTReflector.Cache(typeof(List<object>), true), json);
             return obj;
         }
 
@@ -90,12 +90,12 @@ namespace ZTImage.Json
                 return null;
             }
             var obj = new List<T>();
-            (new JsonParser()).FillObject(obj, KubiuReflector.Cache(typeof(List<T>), true), json);
+            (new JsonParser()).FillObject(obj, ZTReflector.Cache(typeof(List<T>), true), json);
             return obj;
         }
 
 
-        private void FillObject(object obj, KubiuReflector lit, string json)
+        private void FillObject(object obj, ZTReflector lit, string json)
         {
             if (json == null || json.Length == 0)
             {
@@ -154,7 +154,7 @@ namespace ZTImage.Json
             }
         }
 
-        private void FillObject(object obj, KubiuReflector lit, UnsafeJsonReader reader)
+        private void FillObject(object obj, ZTReflector lit, UnsafeJsonReader reader)
         {
             if (reader.Current == '}') return;
             if (obj is IDictionary)
@@ -523,7 +523,7 @@ namespace ZTImage.Json
             }
             else
             {
-                var lit = KubiuReflector.Cache(type, true);
+                var lit = ZTReflector.Cache(type, true);
                 obj = lit.NewObject();
                 FillObject(obj, lit, reader);
                 return obj;

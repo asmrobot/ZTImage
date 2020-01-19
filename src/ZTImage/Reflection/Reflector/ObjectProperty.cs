@@ -195,11 +195,11 @@ namespace ZTImage.Reflection.Reflector
                     }
                     else if (Field)
                     {
-                        Getter = KubiuReflector.CreateGetter((FieldInfo)_Member);
+                        Getter = ZTReflector.CreateGetter((FieldInfo)_Member);
                     }
                     else
                     {
-                        Getter = KubiuReflector.CreateGetter((PropertyInfo)_Member);
+                        Getter = ZTReflector.CreateGetter((PropertyInfo)_Member);
                     }
                 }
             }
@@ -223,11 +223,11 @@ namespace ZTImage.Reflection.Reflector
                     }
                     else if (Field)
                     {
-                        Setter = KubiuReflector.CreateSetter((FieldInfo)_Member);
+                        Setter = ZTReflector.CreateSetter((FieldInfo)_Member);
                     }
                     else
                     {
-                        Setter = KubiuReflector.CreateSetter((PropertyInfo)_Member);
+                        Setter = ZTReflector.CreateSetter((PropertyInfo)_Member);
                     }
                 }
             }

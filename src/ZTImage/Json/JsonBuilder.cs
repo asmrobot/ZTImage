@@ -174,7 +174,7 @@ namespace ZTImage.Json
         private Dictionary<object, object> _LoopObject = new Dictionary<object, object>();//循环引用对象缓存区
         private UnsafeStringWriter Buffer = new UnsafeStringWriter();//字符缓冲区
         private static Module SystemModule = typeof(int).Module;
-        protected static Dictionary<Type, KubiuReflector> _LitCache = new Dictionary<Type, KubiuReflector>();
+        protected static Dictionary<Type, ZTReflector> _LitCache = new Dictionary<Type, ZTReflector>();
         #endregion
 
         /// <summary> 将对象转换为Json字符串
@@ -259,7 +259,7 @@ namespace ZTImage.Json
         protected virtual void AppendOther(object obj)
         {
             Type type = obj.GetType();
-            KubiuReflector lit = KubiuReflector.Cache(type, true);
+            ZTReflector lit = ZTReflector.Cache(type, true);
 
             UnsafeAppend('{');
             var ee = lit.Properties.GetEnumerator();

@@ -11,12 +11,12 @@ namespace ZTImage.Collections.Tree
     /// 遍历未完成
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class KubiuTree<T>:KubiuNode<T> where T:class
+    public class ZTTree<T>:ZTNode<T> where T:class
     {
-        public KubiuTree(T root,string id):base(root,id)
+        public ZTTree(T root,string id):base(root,id)
         { }
 
-        public KubiuTree():base(default(T),"0")
+        public ZTTree():base(default(T),"0")
         { }
     }
 }

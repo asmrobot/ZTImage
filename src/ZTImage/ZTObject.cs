@@ -10,11 +10,11 @@ namespace ZTImage
     /// <summary>
     /// 动态对象
     /// </summary>
-    public class KubiuObject : DynamicObject
+    public class ZTObject : DynamicObject
     {
         readonly Dictionary<string, object> dic = new Dictionary<string, object>();
 
-        public KubiuObject()
+        public ZTObject()
         {
 
         }
