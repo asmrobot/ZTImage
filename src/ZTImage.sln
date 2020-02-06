@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage", "ZTImage\ZTImage.csproj", "{957AC055-A1F5-421D-AE3C-08E250104634}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Database", "ZTImage.Database\ZTImage.Database.csproj", "{830DDEB3-AB25-457C-B249-27BF4BC38427}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.HttpParser", "ZTImage.HttpParser\ZTImage.HttpParser.csproj", "{21AE8167-100F-445E-854E-6E2ABF3A388F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Log", "ZTImage.Log\ZTImage.Log.csproj", "{E26AB214-0791-4478-A47B-3E070D41D6B2}"
 EndProject
@@ -18,8 +16,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Easemob", "SDKs\ZTImage.Easemob\ZTImage.Easemob.csproj", "{DE2616F0-27A8-47F5-91CB-CAE134DC8C31}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "ZTImage.Demo\Demo.csproj", "{73572DD4-2BCE-49D7-AA3F-55F9A729B413}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.Schedulers", "ZTImage.Schedulers\ZTImage.Schedulers.csproj", "{0D447680-A838-4CCC-92F4-A32AA7C54C53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +31,6 @@ Global
 		{830DDEB3-AB25-457C-B249-27BF4BC38427}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{830DDEB3-AB25-457C-B249-27BF4BC38427}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{830DDEB3-AB25-457C-B249-27BF4BC38427}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21AE8167-100F-445E-854E-6E2ABF3A388F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E26AB214-0791-4478-A47B-3E070D41D6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E26AB214-0791-4478-A47B-3E070D41D6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E26AB214-0791-4478-A47B-3E070D41D6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,10 +47,6 @@ Global
 		{73572DD4-2BCE-49D7-AA3F-55F9A729B413}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73572DD4-2BCE-49D7-AA3F-55F9A729B413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73572DD4-2BCE-49D7-AA3F-55F9A729B413}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D447680-A838-4CCC-92F4-A32AA7C54C53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D447680-A838-4CCC-92F4-A32AA7C54C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D447680-A838-4CCC-92F4-A32AA7C54C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D447680-A838-4CCC-92F4-A32AA7C54C53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

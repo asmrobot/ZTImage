@@ -8,10 +8,10 @@
     <OutputType>Library</OutputType>
     <StartupObject></StartupObject>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.1.11</Version>
+    <Version>2.3.0</Version>
     <Description>NLog的封装，配置文件为nlog的配置文件，放在目录configs/nlog.config里</Description>
-    <AssemblyVersion>2.1.11.0</AssemblyVersion>
-    <FileVersion>2.1.11.3</FileVersion>
+    <AssemblyVersion>2.3.0.0</AssemblyVersion>
+    <FileVersion>2.3.0.0</FileVersion>
     <NeutralLanguage>zh-CN</NeutralLanguage>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>ztimage.log.pfx</AssemblyOriginatorKeyFile>
@@ -25,7 +25,7 @@
     
     <PackageReference Include="NLog" Version="4.5.3" />
     
-    <PackageReference Include="ZTImage" Version="2.1.11" />
+    <PackageReference Include="ZTImage" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
