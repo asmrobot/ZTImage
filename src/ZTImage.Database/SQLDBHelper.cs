@@ -1174,7 +1174,7 @@ namespace ZTImage.Database.HelperBase
         /// <returns></returns>
         public T FillObject<T>(DbDataReader ddr, int start, int end)
         {
-            if (start > end)
+            if (start !=0 && start > end)
             {
                 throw new ArgumentOutOfRangeException("start");
             }
