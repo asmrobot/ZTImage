@@ -1174,9 +1174,9 @@ namespace ZTImage.Database.HelperBase
         /// <returns></returns>
         public T FillObject<T>(DbDataReader ddr, int start, int end)
         {
-            if (start !=0 && start > end)
+            if (end == 0)
             {
-                throw new ArgumentOutOfRangeException("start");
+                return default(T);
             }
 
             if (ddr.IsClosed)
@@ -1187,6 +1187,13 @@ namespace ZTImage.Database.HelperBase
             {
                 end = ddr.FieldCount;
             }
+
+            if (start > end)
+            {
+                throw new ArgumentOutOfRangeException("start");
+            }
+
+            
             if (typeof(T) == typeof(ZTObject))
             {
                 ZTObject entity = new ZTObject();
