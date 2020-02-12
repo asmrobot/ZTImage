@@ -12,7 +12,7 @@ using ZTImage;
 using ZTImage.Reflection.Reflector;
 using ZTImage.Collections;
 
-namespace ZTImage.Database.HelperBase
+namespace ZTImage.Database
 {
     /// <summary>
     /// 数据库操作基类
@@ -419,6 +419,10 @@ namespace ZTImage.Database.HelperBase
         #endregion
 
         #region 连接
+        /// <summary>
+        /// 创建连接
+        /// </summary>
+        /// <returns></returns>
         public DbConnection CreateConnection()
         {
             DbConnection connection = Factory.CreateConnection();
@@ -426,13 +430,28 @@ namespace ZTImage.Database.HelperBase
             return connection;
         }
 
+        /// <summary>
+        /// 创建事务
+        /// </summary>
+        /// <returns></returns>
         public DbTransaction CreateTransaction()
         {
             DbConnection connection = Factory.CreateConnection();
             connection.ConnectionString = ConnectionString;
             connection.Open();
             return connection.BeginTransaction();
+        }
 
+        /// <summary>
+        /// 创建事务
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DbTransaction> CreateTransactionAsync()
+        {
+            DbConnection connection = Factory.CreateConnection();
+            connection.ConnectionString = ConnectionString;
+            await connection.OpenAsync();
+            return connection.BeginTransaction();
         }
         #endregion
 
