@@ -28,18 +28,20 @@ namespace ZTImage.Demo
 
             double age = 12.3;
 
+            object toAge=Convert.ChangeType(age, typeof(Decimal));
 
+            Console.WriteLine($"value:{toAge},value type:{toAge.GetType().Name}");
 
-            ZTReflector refl = ZTReflector.Cache(typeof(person), false);
-            object p = refl.NewObject();
-            if (refl.Properties["age"].TrySetValue(p, age))
-            {
-                Console.WriteLine($"set success,{((person)p).age}");
-            }
-            else
-            {
-                Console.WriteLine("set failed");
-            }
+            //ZTReflector refl = ZTReflector.Cache(typeof(person), false);
+            //object p = refl.NewObject();
+            //if (refl.Properties["age"].TrySetValue(p, age))
+            //{
+            //    Console.WriteLine($"set success,{((person)p).age}");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("set failed");
+            //}
 
 
 

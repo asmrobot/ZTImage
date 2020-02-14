@@ -339,17 +339,16 @@ namespace ZTImage.Reflection.Reflector
             }
             else if (MemberType.IsInstanceOfType(value) == false)
             {
-                if (MemberType == typeof(Decimal))
-                { 
-                    Setter(instance, Convert.ToDecimal(value));
-                    return true;
-                }
-                if (MemberType==typeof(Int32)&&value.GetType() == typeof(Int64))
+                try
                 {
-                    Setter(instance, Convert.ToInt32(value));
+                    Setter(instance, Convert.ChangeType(value,MemberType));
                     return true;
                 }
-                return false;
+                catch(Exception)
+                {
+                    return false;
+                }
+                
             }
             try
             {
