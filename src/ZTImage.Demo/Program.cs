@@ -12,8 +12,25 @@ namespace ZTImage.Demo
             public decimal age { get; set; }
 
             public string name { get; set; }
+
+            public byte Sex { get; set; }
         }
 
+
+        public class ani
+        { 
+            public Int32 Age { get; set; }
+
+            public string Name { get; set; }
+
+            public bool sex { get; set; }
+
+
+            public override string ToString()
+            {
+                return $"age:{Age},name:{Name},sex:{sex}";
+            }
+        }
 
 
         public struct hii
@@ -24,13 +41,23 @@ namespace ZTImage.Demo
         static void Main(string[] args)
         {
 
+            person p = new person();
+            p.age = 12;
+            p.name = "xylee";
+            p.Sex = 1;
+
+            ani a = new ani();
+
+            ZTImage.Reflection.AutomiticVariable.CopyValue(p, a);
+
+            Console.WriteLine(a);
 
 
-            double age = 12.3;
+            //double age = 12.3;
 
-            object toAge=Convert.ChangeType(age, typeof(Decimal));
+            //object toAge=Convert.ChangeType(age, typeof(Decimal));
 
-            Console.WriteLine($"value:{toAge},value type:{toAge.GetType().Name}");
+            //Console.WriteLine($"value:{toAge},value type:{toAge.GetType().Name}");
 
             //ZTReflector refl = ZTReflector.Cache(typeof(person), false);
             //object p = refl.NewObject();

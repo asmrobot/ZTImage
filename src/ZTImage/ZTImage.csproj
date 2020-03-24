@@ -5,8 +5,8 @@
 	  <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
     
     <Title>ZTImage utils library</Title>
-    <Description>utils library</Description>
-    <Copyright>Copyright 2016–2018 asmrobot</Copyright>
+    <Description>基础功能类库</Description>
+    <Copyright>Copyright 2016–2020 by asmrobot</Copyright>
     <Authors>asmrobot</Authors>
     <AssemblyName>ZTImage</AssemblyName>
     <PackageId>ZTImage</PackageId>
@@ -21,12 +21,10 @@
 
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.3.2</Version>
+    <Version>2.3.3</Version>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>ztimage.sign.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <AssemblyVersion>2.3.2</AssemblyVersion>
-    <FileVersion>2.3.2</FileVersion>
   </PropertyGroup>
 
 
