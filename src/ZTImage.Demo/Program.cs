@@ -24,13 +24,14 @@ namespace ZTImage.Demo
         static void Main(string[] args)
         {
 
+            
 
 
-            double age = 12.3;
+            //double age = 12.3;
 
-            object toAge=Convert.ChangeType(age, typeof(Decimal));
+            //object toAge=Convert.ChangeType(age, typeof(Decimal));
 
-            Console.WriteLine($"value:{toAge},value type:{toAge.GetType().Name}");
+            //Console.WriteLine($"value:{toAge},value type:{toAge.GetType().Name}");
 
             //ZTReflector refl = ZTReflector.Cache(typeof(person), false);
             //object p = refl.NewObject();

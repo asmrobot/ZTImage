@@ -24,6 +24,11 @@ namespace ZTImage
             DELETE
         }
 
+        /// <summary>
+        /// 请求超时时间
+        /// </summary>
+        public static Int32 RequestTimeout = 15;
+
         #region Get
         public static string Get(string url, Dictionary<string, string> headers = null)
         {
@@ -499,6 +504,7 @@ namespace ZTImage
             try
             {
                 HttpWebRequest request = CreateRequest(method, url, headers);
+                request.Timeout = RequestTimeout;
                 if (data != null && data.Length > 0)
                 {
                     Stream requestStream = request.GetRequestStream();
