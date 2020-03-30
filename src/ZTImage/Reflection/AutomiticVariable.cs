@@ -1,14 +1,17 @@
-﻿using ZTImage.Reflection.Reflector;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZTImage.Reflection.Reflector;
 
 namespace ZTImage.Reflection
 {
-    public class ActivationModel<T> where T :class,new()
+    /// <summary>
+    /// 自动变量类
+    /// </summary>
+    public class AutomiticVariable
     {
 
         /// <summary>
@@ -16,11 +19,12 @@ namespace ZTImage.Reflection
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static T FillModel(NameValueCollection collection)
+        public static T FillModel<T>(IDictionary<string,string> collection) where T:class
         {
-            ZTReflector reflector = ZTReflector.Cache(typeof(T), false);
-            T model = reflector.NewObject() as T;
-            return FillModel(model, collection);
+            ZTReflector reflector = ZTReflector.Cache(typeof(T), true);
+            object model = reflector.NewObject();
+            FillModel(model, collection);
+            return model as T;
         }
 
         /// <summary>
@@ -28,26 +32,70 @@ namespace ZTImage.Reflection
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public static T FillModel(T model, NameValueCollection collection)
+        public static object FillModel(object model, IDictionary<string,string> collection)
         {
             if (model == null)
             {
                 throw new ArgumentNullException("传递过来的填充对象为空");
             }
 
-            ZTReflector reflector = ZTReflector.Cache(typeof(T), false);
-            foreach (var property in reflector.Properties)
+            ZTReflector reflector = ZTReflector.Cache(model.GetType(), true);
+            foreach (var item in collection)
             {
-                if (collection.AllKeys.Contains(property.Name))
+                if (reflector.Properties.ContainsKey(item.Key))
                 {
-                    SetValue(model, property, collection[property.Name]);
+                    SetValue(model, reflector.Properties[item.Key], item.Value);
                 }
             }
 
             return model;
         }
 
-        private static void SetValue(T model, ObjectProperty property, string value)
+        /// <summary>
+        /// 复制两个对象的值
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        public static void CopyValue(object from, object to)
+        {
+            ZTReflector fromReflector = ZTReflector.Cache(from.GetType(), true);
+            ZTReflector toReflector = ZTReflector.Cache(to.GetType(), true);
+            foreach (var fromProperty in fromReflector.Properties)
+            {
+                //目标不包含此属性
+                if (!toReflector.Properties.ContainsKey(fromProperty.Name))
+                {
+                    continue;
+                }
+
+                var toProperty = toReflector.Properties[fromProperty.Name];
+
+                object val = null;
+                if (!fromProperty.TryGetValue(from, out val))
+                {
+                    //无法从源中得到值 
+                    continue;
+                }
+
+                //源和目标的类型是否相同
+                if (fromProperty.OriginalType == toProperty.OriginalType)
+                {
+                    toProperty.TrySetValue(to, val);
+                }
+                else
+                {
+                    //类型不同
+                    if (val != null)
+                    {
+                        SetValue(to, toProperty, val.ToString());
+                    }
+                }
+            }
+        }
+
+        
+
+        private static void SetValue(object model, ObjectProperty property, string value)
         {
             switch (property.MemberType.Name)
             {
@@ -103,16 +151,14 @@ namespace ZTImage.Reflection
         }
 
 
-
-
         #region convert
 
-        private static void ToDefault(T model, ObjectProperty property, string val)
+        private static void ToDefault(object model, ObjectProperty property, string val)
         {
             property.TrySetValue(model, val);
         }
 
-        private static void ToBoolean(T model, ObjectProperty property, string val)
+        private static void ToBoolean(object model, ObjectProperty property, string val)
         {
             Boolean setter = false;
             if (!Boolean.TryParse(val, out setter))
@@ -129,7 +175,7 @@ namespace ZTImage.Reflection
             property.TrySetValue(model, setter);
         }
 
-        private static void ToGuid(T model, ObjectProperty property, string val)
+        private static void ToGuid(object model, ObjectProperty property, string val)
         {
             Guid setter;
             if (Guid.TryParse(val, out setter))
@@ -139,7 +185,7 @@ namespace ZTImage.Reflection
 
         }
 
-        private static void ToChar(T model, ObjectProperty property, string val)
+        private static void ToChar(object model, ObjectProperty property, string val)
         {
             Char setter;
             if (Char.TryParse(val, out setter))
@@ -148,7 +194,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToSByte(T model, ObjectProperty property, string val)
+        private static void ToSByte(object model, ObjectProperty property, string val)
         {
             SByte setter;
             if (SByte.TryParse(val, out setter))
@@ -157,7 +203,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToByte(T model, ObjectProperty property, string val)
+        private static void ToByte(object model, ObjectProperty property, string val)
         {
             Byte setter;
             if (Byte.TryParse(val, out setter))
@@ -166,7 +212,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToInt16(T model, ObjectProperty property, string val)
+        private static void ToInt16(object model, ObjectProperty property, string val)
         {
             Int16 setter;
             if (Int16.TryParse(val, out setter))
@@ -175,7 +221,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToUInt16(T model, ObjectProperty property, string val)
+        private static void ToUInt16(object model, ObjectProperty property, string val)
         {
             UInt32 setter;
             if (UInt32.TryParse(val, out setter))
@@ -184,7 +230,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToInt32(T model, ObjectProperty property, string val)
+        private static void ToInt32(object model, ObjectProperty property, string val)
         {
             Int32 setter;
             if (Int32.TryParse(val, out setter))
@@ -193,7 +239,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToUInt32(T model, ObjectProperty property, string val)
+        private static void ToUInt32(object model, ObjectProperty property, string val)
         {
             UInt32 setter;
             if (UInt32.TryParse(val, out setter))
@@ -202,7 +248,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToInt64(T model, ObjectProperty property, string val)
+        private static void ToInt64(object model, ObjectProperty property, string val)
         {
             Int64 setter;
             if (Int64.TryParse(val, out setter))
@@ -211,7 +257,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToUInt64(T model, ObjectProperty property, string val)
+        private static void ToUInt64(object model, ObjectProperty property, string val)
         {
             UInt64 setter;
             if (UInt64.TryParse(val, out setter))
@@ -220,7 +266,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToSingle(T model, ObjectProperty property, string val)
+        private static void ToSingle(object model, ObjectProperty property, string val)
         {
             Single setter;
             if (Single.TryParse(val, out setter))
@@ -229,7 +275,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToDouble(T model, ObjectProperty property, string val)
+        private static void ToDouble(object model, ObjectProperty property, string val)
         {
             Double setter;
             if (Double.TryParse(val, out setter))
@@ -238,7 +284,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToDecimal(T model, ObjectProperty property, string val)
+        private static void ToDecimal(object model, ObjectProperty property, string val)
         {
             Decimal setter;
             if (Decimal.TryParse(val, out setter))
@@ -247,7 +293,7 @@ namespace ZTImage.Reflection
             }
         }
 
-        private static void ToDateTime(T model, ObjectProperty property, string val)
+        private static void ToDateTime(object model, ObjectProperty property, string val)
         {
             DateTime setter;
             if (DateTime.TryParse(val, out setter))
