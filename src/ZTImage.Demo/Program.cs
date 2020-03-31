@@ -40,21 +40,29 @@ namespace ZTImage.Demo
 
         static void Main(string[] args)
         {
+            string name = "person_name_age";
 
-<<<<<<< HEAD
-            
-=======
-            person p = new person();
-            p.age = 12;
-            p.name = "xylee";
-            p.Sex = 1;
+            Console.WriteLine(name.Replace("_", ""));
 
-            ani a = new ani();
 
-            ZTImage.Reflection.AutomiticVariable.CopyValue(p, a);
 
-            Console.WriteLine(a);
->>>>>>> d7d779a8b2305f305096afff21176dc573517ffa
+            new System.Threading.ManualResetEvent(false).WaitOne();
+
+
+
+
+
+            //person p = new person();
+            //p.age = 12;
+            //p.name = "xylee";
+            //p.Sex = 1;
+
+            //ani a = new ani();
+
+            //ZTImage.Reflection.AutomiticVariable.CopyValue(p, a);
+
+            //Console.WriteLine(a);
+
 
 
             //double age = 12.3;

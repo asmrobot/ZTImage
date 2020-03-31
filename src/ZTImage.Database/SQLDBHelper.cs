@@ -1231,13 +1231,21 @@ namespace ZTImage.Database
                 ZTReflector reflector = ZTReflector.Cache(typeof(T), true);
                 T entity = (T)reflector.NewObject();
 
-                string fieldName = "";
+                string fieldName = string.Empty ;
                 for (int i = start; i < end; i++)
                 {
                     fieldName = ddr.GetName(i);
                     if (reflector.Properties.ContainsKey(fieldName))
                     {
                         reflector.Properties[fieldName].TrySetValue(entity, ddr.GetValue(i));
+                        continue;
+                    }
+
+                    fieldName = fieldName.Replace("_", "");
+                    if (reflector.Properties.ContainsKey(fieldName))
+                    {
+                        reflector.Properties[fieldName].TrySetValue(entity, ddr.GetValue(i));
+                        continue;
                     }
 
                 }
