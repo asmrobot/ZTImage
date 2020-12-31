@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZTImage.Easemob", "SDKs\ZTI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "ZTImage.Demo\Demo.csproj", "{73572DD4-2BCE-49D7-AA3F-55F9A729B413}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZTImage.DbLite", "ZTImage.DBLite\ZTImage.DbLite.csproj", "{9B209E5E-0DB1-4622-AF03-D2C074335276}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{73572DD4-2BCE-49D7-AA3F-55F9A729B413}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73572DD4-2BCE-49D7-AA3F-55F9A729B413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73572DD4-2BCE-49D7-AA3F-55F9A729B413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B209E5E-0DB1-4622-AF03-D2C074335276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B209E5E-0DB1-4622-AF03-D2C074335276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B209E5E-0DB1-4622-AF03-D2C074335276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B209E5E-0DB1-4622-AF03-D2C074335276}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

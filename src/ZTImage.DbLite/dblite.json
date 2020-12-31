@@ -1,0 +1,20 @@
+{
+  "dbs": [
+    {
+      "Default": false,
+      "DbID": "zmdb",
+      "DbType": "MySql",
+      "ConnectionString": "xxxxxxx"
+    },
+    {
+      "DbID": "logdb",
+      "DbType": "MySql",
+      "ConnectionString": "xxxxxxx"
+    },
+    {
+      "DbID": "userdb",
+      "DbType": "SqlLite",
+      "ConnectionString": "xxxxxxx"
+    }
+  ]
+}

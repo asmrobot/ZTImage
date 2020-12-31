@@ -27,6 +27,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
     <DocumentationFile>bin\Release\net45\ZTImage.Database.xml</DocumentationFile>
+    <NoWarn>1701;1702;CS1591;CS1572;CS1573;CS1712;CS1711;NU5125</NoWarn>
   </PropertyGroup>
   
   <ItemGroup>

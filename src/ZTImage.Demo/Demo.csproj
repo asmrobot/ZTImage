@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ZTImage.DBLite\ZTImage.DbLite.csproj" />
     <ProjectReference Include="..\ZTImage\ZTImage.csproj" />
   </ItemGroup>
 
