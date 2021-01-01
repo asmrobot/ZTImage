@@ -8,25 +8,24 @@ namespace ZTImage.DbLite
 {
     public class DbConnectionFactory
     {
-        private Dictionary<string, DbConnectionGenerate> generates = new Dictionary<string, DbConnectionGenerate>();
-        private DbConnectionGenerate defaultGenerate;
-
+        private Dictionary<string, DbConnectionGenerate> _generates = new Dictionary<string, DbConnectionGenerate>();
+        private DbConnectionGenerate _defaultGenerate;
 
 
         public IDbConnection CreateConnection(string db=null)
         {
             if (string.IsNullOrEmpty(db))
             {
-                if (defaultGenerate == null)
+                if (_defaultGenerate == null)
                 {
                     throw new DbLiteException("默认数据库连接不存在");
                 }
-                return this.defaultGenerate.CreateConnection();
+                return this._defaultGenerate.CreateConnection();
             }
 
-            if (generates.ContainsKey(db))
+            if (_generates.ContainsKey(db))
             {
-                return this.generates[db].CreateConnection();
+                return this._generates[db].CreateConnection();
             }
 
             throw new DbLiteException("不存在的数据库连接");
@@ -38,12 +37,12 @@ namespace ZTImage.DbLite
         /// <param name="generate"></param>
         internal void InsertGenerate(DbConnectionGenerate generate)
         {
-            if (!this.generates.ContainsKey(generate.Option.DbID))
+            if (!this._generates.ContainsKey(generate.Option.DbID))
             {
-                this.generates.Add(generate.Option.DbID, generate);
-                if (defaultGenerate == null || generate.Option.Default)
+                this._generates.Add(generate.Option.DbID, generate);
+                if (_defaultGenerate == null || generate.Option.Default)
                 {
-                    defaultGenerate = generate;
+                    _defaultGenerate = generate;
                 }
             }
         }

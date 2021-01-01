@@ -8,16 +8,16 @@ namespace ZTImage.DbLite
     {
         public DbConnectionFactoryBuilder()
         {
-            this.options = new List<DbLiteOptions>();
+            this.options = new List<DbConnectionOptions>();
         }
-        private List<DbLiteOptions> options;
+        private List<DbConnectionOptions> options;
 
         /// <summary>
         /// 添加连接配置
         /// </summary>
         /// <param name="option"></param>
         /// <returns></returns>
-        public DbConnectionFactoryBuilder AddDbConnectionOption(DbLiteOptions option)
+        public DbConnectionFactoryBuilder AddDbConnectionOption(DbConnectionOptions option)
         {
             if (option == null)
             {
@@ -37,7 +37,7 @@ namespace ZTImage.DbLite
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public DbConnectionFactoryBuilder AddDbConnectionOptions(IEnumerable<DbLiteOptions> options)
+        public DbConnectionFactoryBuilder AddDbConnectionOptions(IEnumerable<DbConnectionOptions> options)
         {
             foreach (var item in options)
             {

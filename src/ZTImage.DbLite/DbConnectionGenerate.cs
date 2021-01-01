@@ -12,8 +12,8 @@ namespace ZTImage.DbLite
     internal class DbConnectionGenerate
     {
 
-        internal DbLiteOptions Option;
-        public DbConnectionGenerate(DbLiteOptions option)
+        internal DbConnectionOptions Option;
+        public DbConnectionGenerate(DbConnectionOptions option)
         {
             this.Option = option;
         }

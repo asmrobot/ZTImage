@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ZTImage.DbLite
 {
-    public class DbLiteOptions:IEquatable<DbLiteOptions>
+    public class DbConnectionOptions:IEquatable<DbConnectionOptions>
     {
         /// <summary>
         /// 是否默认数据库
@@ -29,7 +29,7 @@ namespace ZTImage.DbLite
 
         #region interface implements
 
-        public bool Equals(DbLiteOptions other)
+        public bool Equals(DbConnectionOptions other)
         {
             if (other == null)
             {
@@ -45,7 +45,7 @@ namespace ZTImage.DbLite
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as DbLiteOptions);
+            return Equals(obj as DbConnectionOptions);
         }
 
         public override int GetHashCode()
