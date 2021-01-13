@@ -4,6 +4,11 @@ using System.Text;
 
 namespace ZTImage.DbLite
 {
+
+    /// <summary>
+    /// DbConnectionFactory Builder
+    /// for dapper map:Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+    /// </summary>
     public class DbConnectionFactoryBuilder
     {
         public DbConnectionFactoryBuilder()
