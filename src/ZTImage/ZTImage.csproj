@@ -6,7 +6,7 @@
     
     <Title>ZTImage utils library</Title>
     <Description>基础功能类库</Description>
-    <Copyright>Copyright 2016–2020 by asmrobot</Copyright>
+    <Copyright>Copyright 2016–2021 by asmrobot</Copyright>
     <Authors>asmrobot</Authors>
     <AssemblyName>ZTImage</AssemblyName>
     <PackageId>ZTImage</PackageId>
@@ -21,10 +21,11 @@
 
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.3.3</Version>
+    <Version>2.3.5</Version>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>ztimage.sign.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
 

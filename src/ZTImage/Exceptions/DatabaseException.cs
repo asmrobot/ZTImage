@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZTImage
+namespace ZTImage.Exceptions
 {
     /// <summary>
     /// 数据库错误
     /// </summary>
-    public class DatabaseException:Exception
+    public class DatabaseException:System.Exception
     {
         public DatabaseException():base()
         {

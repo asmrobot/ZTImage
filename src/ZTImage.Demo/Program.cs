@@ -83,7 +83,7 @@ namespace ZTImage.Demo
 
         static void Main(string[] args)
         {
-<<<<<<< HEAD
+
             DbConnectionFactoryBuilder builder = new DbConnectionFactoryBuilder();
             var factory=builder.AddDbConnectionOption(null)
                 .AddDbConnectionOption(null)
@@ -91,7 +91,7 @@ namespace ZTImage.Demo
                 .Build();
 
            
-=======
+
             string name = "person_name_age";
 
             Console.WriteLine(name.Replace("_", ""));
@@ -260,7 +260,7 @@ namespace ZTImage.Demo
             //point = new DPoint(2, 5);
             //Console.WriteLine("point:" + point.ToString() + "in polygon:" + geo.InPolygon(point, points) + "$distance:" + geo.DistanceToPolygon(point, points));
 
->>>>>>> 108343974d57828e0bde317b6408ff41e9a9f254
+
 
 
 
