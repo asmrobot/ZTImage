@@ -26,23 +26,25 @@ namespace ZTImage.Net
             DELETE
         }
 
+
+
         /// <summary>
         /// 请求超时时间
         /// </summary>
         public static Int32 RequestTimeout = 15;
 
         #region Get
-        public static HttpResult Get(string url, Dictionary<string, string> headers = null)
+        public static HttpResult Get(string url, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return RequestStreamAsync(RequestMethod.GET, url, null, headers).Result;
+            return RequestStreamAsync(RequestMethod.GET, url, null, setting, headers).Result;
         }
 
-        public async static Task<HttpResult> GetAsync(string url, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> GetAsync(string url, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return await RequestStreamAsync(RequestMethod.GET, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.GET, url, null, setting, headers);
         }
 
-        public static HttpResult Get(string url, string data, Dictionary<string, string> headers = null)
+        public static HttpResult Get(string url, string data, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
             if (!string.IsNullOrEmpty(data))
             {
@@ -55,10 +57,10 @@ namespace ZTImage.Net
                     url += "?" + data;
                 }
             }
-            return RequestStreamAsync(RequestMethod.GET, url, null, headers).Result;
+            return RequestStreamAsync(RequestMethod.GET, url, null, setting, headers).Result;
         }
 
-        public async static Task<HttpResult> GetAsync(string url, string data, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> GetAsync(string url, string data, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
 
             if (!string.IsNullOrEmpty(data))
@@ -73,24 +75,24 @@ namespace ZTImage.Net
                 }
             }
 
-            return await RequestStreamAsync(RequestMethod.GET, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.GET, url, null, setting, headers);
         }
         #endregion
 
         #region Post
 
-        public static HttpResult Post(string url, Dictionary<string, string> headers = null)
+        public static HttpResult Post(string url, Dictionary<string, string> headers = null,HttpSetting setting=null)
         {
-            return RequestStreamAsync(RequestMethod.POST, url, null, headers).Result;
+            return RequestStreamAsync(RequestMethod.POST, url, null, setting, headers).Result;
         }
 
 
-        public async static Task<HttpResult> PostAsync(string url, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> PostAsync(string url, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return await RequestStreamAsync(RequestMethod.POST, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.POST, url, null, setting, headers);
         }
 
-        public static HttpResult Post(string url, string data, Encoding encoding, Dictionary<string, string> headers = null)
+        public static HttpResult Post(string url, string data, Encoding encoding, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
             byte[] bdata = null;
             if (!string.IsNullOrEmpty(data))
@@ -102,10 +104,10 @@ namespace ZTImage.Net
                 bdata = encoding.GetBytes(data);
 
             }
-            return RequestStreamAsync(RequestMethod.POST, url, bdata, headers).Result;
+            return RequestStreamAsync(RequestMethod.POST, url, bdata, setting, headers).Result;
         }
 
-        public async static Task<HttpResult> PostAsync(string url, string data, Encoding encoding, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> PostAsync(string url, string data, Encoding encoding, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
             byte[] bdata = null;
             if (!string.IsNullOrEmpty(data))
@@ -117,32 +119,32 @@ namespace ZTImage.Net
                 bdata = encoding.GetBytes(data);
 
             }
-            return await RequestStreamAsync(RequestMethod.POST, url, bdata, headers);
+            return await RequestStreamAsync(RequestMethod.POST, url, bdata, setting, headers);
         }
 
-        public static HttpResult Post(string url, byte[] data, Dictionary<string, string> headers = null)
+        public static HttpResult Post(string url, byte[] data, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return RequestStreamAsync(RequestMethod.POST, url, data, headers).Result;
+            return RequestStreamAsync(RequestMethod.POST, url, data, setting, headers).Result;
         }
 
-        public async static Task<HttpResult> PostAsync(string url, byte[] data, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> PostAsync(string url, byte[] data, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return await RequestStreamAsync(RequestMethod.POST, url, data, headers);
+            return await RequestStreamAsync(RequestMethod.POST, url, data, setting, headers);
         }
         #endregion
 
         #region PUT
-        public static HttpResult Put(string url, Dictionary<string, string> headers = null)
+        public static HttpResult Put(string url, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return RequestStreamAsync(RequestMethod.PUT, url, null, headers).Result;
+            return RequestStreamAsync(RequestMethod.PUT, url, null, setting, headers).Result;
         }
 
-        public async static Task<HttpResult> PutAsync(string url, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> PutAsync(string url, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return await RequestStreamAsync(RequestMethod.PUT, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.PUT, url, null, setting, headers);
         }
 
-        public static HttpResult Put(string url, string data, Encoding encoding, Dictionary<string, string> headers = null)
+        public static HttpResult Put(string url, string data, Encoding encoding, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
             byte[] bdata = null;
             if (!string.IsNullOrEmpty(data))
@@ -155,10 +157,10 @@ namespace ZTImage.Net
 
             }
 
-            return RequestStreamAsync(RequestMethod.PUT, url, bdata, headers).Result;
+            return RequestStreamAsync(RequestMethod.PUT, url, bdata, setting, headers).Result;
         }
 
-        public async static Task<HttpResult> PutAsync(string url, string data, Encoding encoding, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> PutAsync(string url, string data, Encoding encoding, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
             byte[] bdata = null;
             if (!string.IsNullOrEmpty(data))
@@ -170,34 +172,34 @@ namespace ZTImage.Net
                 bdata = encoding.GetBytes(data);
             }
 
-            return await RequestStreamAsync(RequestMethod.PUT, url, bdata, headers);
+            return await RequestStreamAsync(RequestMethod.PUT, url, bdata, setting, headers);
         }
 
-        public static HttpResult Put(string url, byte[] data, Dictionary<string, string> headers = null)
+        public static HttpResult Put(string url, byte[] data, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return RequestStreamAsync(RequestMethod.PUT, url, data, headers).Result;
+            return RequestStreamAsync(RequestMethod.PUT, url, data, setting, headers).Result;
         }
 
 
-        public async static Task<HttpResult> PutAsync(string url, byte[] data, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> PutAsync(string url, byte[] data, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return await RequestStreamAsync(RequestMethod.PUT, url, data, headers);
+            return await RequestStreamAsync(RequestMethod.PUT, url, data, setting, headers);
         }
 
         #endregion
 
         #region DELETE
-        public static HttpResult Delete(string url, Dictionary<string, string> headers = null)
+        public static HttpResult Delete(string url, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return RequestStreamAsync(RequestMethod.DELETE, url, null, headers).Result;
+            return RequestStreamAsync(RequestMethod.DELETE, url, null, setting, headers).Result;
         }
 
-        public async static Task<HttpResult> DeleteAsync(string url, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> DeleteAsync(string url, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
-            return await RequestStreamAsync(RequestMethod.DELETE, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.DELETE, url, null, setting, headers);
         }
 
-        public static HttpResult Delete(string url, string data, Dictionary<string, string> headers = null)
+        public static HttpResult Delete(string url, string data, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
             if (!string.IsNullOrEmpty(data))
             {
@@ -210,10 +212,10 @@ namespace ZTImage.Net
                     url += "?" + data;
                 }
             }
-            return RequestStreamAsync(RequestMethod.DELETE, url, null, headers).Result;
+            return RequestStreamAsync(RequestMethod.DELETE, url, null, setting, headers).Result;
         }
 
-        public async static Task<HttpResult> DeleteAsync(string url, string data, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> DeleteAsync(string url, string data, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
 
             if (!string.IsNullOrEmpty(data))
@@ -228,7 +230,7 @@ namespace ZTImage.Net
                 }
             }
 
-            return await RequestStreamAsync(RequestMethod.DELETE, url, null, headers);
+            return await RequestStreamAsync(RequestMethod.DELETE, url, null, setting, headers);
         }
         #endregion
 
@@ -325,11 +327,15 @@ namespace ZTImage.Net
         /// <param name="data"></param>
         /// <param name="headers"></param>
         /// <returns></returns>
-        public async static Task<HttpResult> RequestStreamAsync(RequestMethod method,string url, byte[] data, Dictionary<string, string> headers = null)
+        public async static Task<HttpResult> RequestStreamAsync(RequestMethod method,string url, byte[] data, HttpSetting setting, Dictionary<string, string> headers = null)
         {
+            if (setting == null)
+            {
+                setting = HttpSetting.Default;
+            }
             try
             {
-                HttpWebRequest request = CreateRequest(method, url, headers);
+                HttpWebRequest request = CreateRequest(method, url, headers,setting);
                 if (data != null && data.Length > 0)
                 {
                     Stream requestStream = await request.GetRequestStreamAsync();
@@ -337,7 +343,7 @@ namespace ZTImage.Net
                     writer.Write(data);
                     writer.Flush();
                 }
-
+                
                 WebResponse response = await request.GetResponseAsync();
                 HttpWebResponse hwerep = response as HttpWebResponse;
 
@@ -383,7 +389,7 @@ namespace ZTImage.Net
         /// <param name="url"></param>
         /// <param name="headers"></param>
         /// <returns></returns>
-        private static HttpWebRequest CreateRequest(RequestMethod method,string url,Dictionary<string,string> headers)
+        private static HttpWebRequest CreateRequest(RequestMethod method,string url,Dictionary<string,string> headers,HttpSetting setting)
         {
             HttpWebRequest request = WebRequest.CreateHttp(url);
             switch (method)
@@ -403,6 +409,7 @@ namespace ZTImage.Net
             }
             
             AddHeaders(request, headers);
+            request.Timeout = setting.TimeoutMillSecond;
             return request;
         }
         
