@@ -12,7 +12,7 @@ namespace ZTImage
     /// </summary>
     public class ZTObject : DynamicObject
     {
-        readonly Dictionary<string, object> dic = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _dictionary = new Dictionary<string, object>();
 
         public ZTObject()
         {
@@ -23,12 +23,12 @@ namespace ZTImage
         #region DynamicObject成员
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            return dic.TryGetValue(binder.Name.ToUpper(), out result);
+            return _dictionary.TryGetValue(binder.Name.ToUpper(), out result);
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            dic[binder.Name.ToUpper()] = value;
+            _dictionary[binder.Name.ToUpper()] = value;
             return true;
         }
         #endregion
@@ -55,11 +55,11 @@ namespace ZTImage
 
         public T Get<T>(string key, T defaultVal)
         {
-            if (dic.ContainsKey(key.ToUpper()))
+            if (_dictionary.ContainsKey(key.ToUpper()))
             {
                 try
                 {
-                    return (T)dic[key.ToUpper()];
+                    return (T)_dictionary[key.ToUpper()];
                 }
                 catch
                 {
@@ -72,14 +72,14 @@ namespace ZTImage
 
         public void Add(string key, object value)
         {
-            dic[key.ToUpper()] = value;
+            _dictionary[key.ToUpper()] = value;
         }
 
         public void Remove(string key)
         {
-            if (dic.ContainsKey(key.ToUpper()))
+            if (_dictionary.ContainsKey(key.ToUpper()))
             {
-                dic.Remove(key.ToUpper());
+                _dictionary.Remove(key.ToUpper());
             }
         }
     }

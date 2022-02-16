@@ -28,7 +28,7 @@ namespace ZTImage
             return new DPoint(this.x, this.y);
         }
 
-
+        
         public static FPoint Empty = new FPoint(0, 0);
     }
 }

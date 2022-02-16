@@ -251,18 +251,18 @@ namespace ZTImage.Net
             { "Accept",(request,value)=>{ request.Accept=value; } },
             { "Connection",(request,value)=>{ request.Connection=value; } },
             { "Content-Length",(request,value)=>{
-                Int64 val=TypeConverter.StringToLong(value,0);
+                Int64 val=value.ToInt64(0);
                 request.ContentLength=val;
             } },
             { "Content-Type",(request,value)=>{ request.ContentType=value; } },
             { "ContentType",(request,value)=>{ request.ContentType=value; } },
             { "Expect",(request,value)=>{ request.Expect=value; } },
             { "Date",(request,value)=>{
-                DateTime dt=TypeConverter.StringToDate(value,DateTime.Now);
+                DateTime dt=value.ToDateTime(DateTime.Now);
                 request.Date=dt;
             } },
             { "If-Modified-Since",(request,value)=>{
-                DateTime dt=TypeConverter.StringToDate(value,DateTime.Now);
+                DateTime dt=value.ToDateTime(DateTime.Now);
                 request.IfModifiedSince=dt;
             } },
             { "Referer",(request,value)=>{ request.Referer=value; } },
@@ -284,8 +284,8 @@ namespace ZTImage.Net
                 {
                     return;
                 }
-                int from=TypeConverter.StringToInt(vals[0],0);
-                int to=TypeConverter.StringToInt(vals[1],0);
+                int from=vals[0].ToInt32(0);
+                int to=vals[1].ToInt32(0);
                 request.AddRange(from,to);
             } },
         };
@@ -364,12 +364,7 @@ namespace ZTImage.Net
                 }
                 else if (Settings.Global.ExceptionLevel == Settings.ExceptionLevel.Detail)
                 {
-                    string d = string.Empty;
-                    if (data != null && data.Length > 0)
-                    {
-                        d = TypeConverter.ByteArrayToString(data);
-                    }
-                    ZTImage.Log.Trace.Error("异步网络请求失败,请求URL:" + url + ",请求数据:" + d, ex);
+                    ZTImage.Log.Trace.Error("异步网络请求失败,请求URL:" + url, ex);
                 }
 
                 throw new HttpException(ex.Message, ex);

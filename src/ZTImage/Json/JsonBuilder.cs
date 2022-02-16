@@ -118,7 +118,7 @@ namespace ZTImage.Json
             }
 
             AppendKey(key + "", true);
-            AppendNumber(TypeConverter.DateToLong(value));
+            AppendNumber(value.ToTimeStamp());
             firstTag = true;
         }
 
