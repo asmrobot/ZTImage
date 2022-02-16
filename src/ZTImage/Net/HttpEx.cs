@@ -26,13 +26,6 @@ namespace ZTImage.Net
             DELETE
         }
 
-
-
-        /// <summary>
-        /// 请求超时时间
-        /// </summary>
-        public static Int32 RequestTimeout = 15;
-
         #region Get
         public static HttpResult Get(string url, Dictionary<string, string> headers = null, HttpSetting setting = null)
         {
