@@ -15,6 +15,27 @@ namespace ZTImage
     public static class StringExtensions
     {
 
+        //有序
+        internal static char[] ZTCodes = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+        internal static Dictionary<char, UInt64> ZTCode_Maps = new Dictionary<char, UInt64>() { { '0', 0 }, { '1', 1 }, { '2', 2 }, { '3', 3 }, { '4', 4 }, { '5', 5 }, { '6', 6 }, { '7', 7 }, { '8', 8 }, { '9', 9 }, { 'a', 10 }, { 'b', 11 }, { 'c', 12 }, { 'd', 13 }, { 'e', 14 }, { 'f', 15 }, { 'g', 16 }, { 'h', 17 }, { 'i', 18 }, { 'j', 19 }, { 'k', 20 }, { 'l', 21 }, { 'm', 22 }, { 'n', 23 }, { 'o', 24 }, { 'p', 25 }, { 'q', 26 }, { 'r', 27 }, { 's', 28 }, { 't', 29 }, { 'u', 30 }, { 'v', 31 }, { 'w', 32 }, { 'x', 33 }, { 'y', 34 }, { 'z', 35 } };
+
+        //无序
+        private const string Unorder_codes = "057dl26mekc8nzq4jypfoxrb3iwsghtv1au9";
+        internal static char[] Unorder_ZTCodes = null;
+        internal static Dictionary<char, UInt64> Unorder_ZTCode_Maps = null;
+
+
+        static StringExtensions()
+        {
+            Unorder_ZTCodes = new char[Unorder_codes.Length];
+            Unorder_ZTCode_Maps = new Dictionary<char, UInt64>();
+            for (int i = 0; i < Unorder_codes.Length; i++)
+            {
+                Unorder_ZTCodes[i] = Unorder_codes[i];
+                Unorder_ZTCode_Maps.Add(Unorder_codes[i], (UInt64)i);
+            }
+        }
+
         /// <summary>
         /// 重复字符串
         /// </summary>
@@ -202,26 +223,46 @@ namespace ZTImage
 
         #region 基础类型转换
 
-        internal static Dictionary<char, int> ZTCODE_NUMBER = new Dictionary<char, int>() { { '0', 0 }, { '1', 1 }, { '2', 2 }, { '3', 3 }, { '4', 4 }, { '5', 5 }, { '6', 6 }, { '7', 7 }, { '8', 8 }, { '9', 9 }, { 'a', 10 }, { 'b', 11 }, { 'c', 12 }, { 'd', 13 }, { 'e', 14 }, { 'f', 15 }, { 'g', 16 }, { 'h', 17 }, { 'i', 18 }, { 'j', 19 }, { 'k', 20 }, { 'l', 21 }, { 'm', 22 }, { 'n', 23 }, { 'o', 24 }, { 'p', 25 }, { 'q', 26 }, { 'r', 27 }, { 's', 28 }, { 't', 29 }, { 'u', 30 }, { 'v', 31 }, { 'w', 32 }, { 'x', 33 }, { 'y', 34 }, { 'z', 35 } };
-        
+
         /// <summary>
         /// ztcode转为int32
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static Int32 ZTCodeToInt32(this string str)
+        public static UInt64 ZTCodeToUInt64(this string str)
         {
-            uint ret = 0;
+            UInt64 ret = 0;
             for (int i = 0, len = str.Length; i < len; i++)
             {
                 checked
                 {
                     ret *= 36;
-                    ret += (UInt32)ZTCODE_NUMBER[str[i]];
+                    ret += ZTCode_Maps[str[i]];
                 }
             }
 
-            return (int)ret;
+            return ret;
+        }
+
+
+        /// <summary>
+        /// ztcode转为int32
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static UInt64 UnorderZTCodeToUInt64(this string str)
+        {
+            UInt64 ret = 0;
+            for (int i = 0, len = str.Length; i < len; i++)
+            {
+                checked
+                {
+                    ret *= 36;
+                    ret += Unorder_ZTCode_Maps[str[i]];
+                }
+            }
+
+            return ret;
         }
 
 

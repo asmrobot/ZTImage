@@ -21,7 +21,7 @@
 
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.3.8</Version>
+    <Version>2.3.10</Version>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>ztimage.sign.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>

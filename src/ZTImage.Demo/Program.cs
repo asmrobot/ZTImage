@@ -83,18 +83,40 @@ namespace ZTImage.Demo
 
         static void Main(string[] args)
         {
+            UInt64 input = 113150;
+            string no = input.ToUnorderZTCode();
+            Console.WriteLine($"no is :{no}");
 
-            DbConnectionFactoryBuilder builder = new DbConnectionFactoryBuilder();
-            var factory=builder.AddDbConnectionOption(null)
-                .AddDbConnectionOption(null)
-                .AddDbConnectionOption(null)
-                .Build();
+
+            
+            no = (input+1).ToUnorderZTCode();
+
+            Console.WriteLine($"no is :{no}");
+
+            no = (input + 2).ToUnorderZTCode();
+
+            Console.WriteLine($"no is :{no}");
+
+
+            no = (input + 3).ToUnorderZTCode();
+
+            Console.WriteLine($"no is :{no}");
+
+            UInt64 target = no.UnorderZTCodeToUInt64();
+            Console.WriteLine($"target is:{target}"); 
+
+
+            //DbConnectionFactoryBuilder builder = new DbConnectionFactoryBuilder();
+            //var factory=builder.AddDbConnectionOption(null)
+            //    .AddDbConnectionOption(null)
+            //    .AddDbConnectionOption(null)
+            //    .Build();
 
            
 
-            string name = "person_name_age";
+            //string name = "person_name_age";
 
-            Console.WriteLine(name.Replace("_", ""));
+            //Console.WriteLine(name.Replace("_", ""));
 
 
 
