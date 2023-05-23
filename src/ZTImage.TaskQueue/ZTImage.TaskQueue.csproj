@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <!--<TargetFramework>net45</TargetFramework>-->
+	  <TargetFrameworks>net45;netstandard2.0;</TargetFrameworks>
+    
+    <Title>任务队列</Title>
+    <Description>任务队列</Description>
+    <Copyright>Copyright 2016–2023</Copyright>
+    <Authors>asmrobot</Authors>
+    <AssemblyName>ZTImage.TaskQueue</AssemblyName>
+    <PackageId>ZTImage.TaskQueue</PackageId>
+    <PackageTags>ztimage;utils;TaskQueue</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+    <DefineConstants>NET45</DefineConstants>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>2.3.10</Version>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+    <DocumentationFile>bin\Release\net45\ZTImage.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+</Project>
